@@ -43,7 +43,7 @@ namespace TodoApp.Api
 
             services.AddHttpContextAccessor();
             services.AddSingleton<ContextServiceLocator>();
-            services.AddTransient<IDependencyResolver>(s =>
+            services.AddSingleton<IDependencyResolver>(s =>
                 new FuncDependencyResolver(s.GetRequiredService));
 
             services.AddSingleton<TodoAppSchema>();
