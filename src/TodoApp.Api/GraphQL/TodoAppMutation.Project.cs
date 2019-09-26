@@ -10,7 +10,7 @@ namespace TodoApp.Api.GraphQL
 {
     public partial class TodoAppMutation
     {
-        partial void AddProjectFields(IProjectRepository projectRepository)
+        partial void AddProjectFields(ContextServiceLocator contextServiceLocator)
         {
             FieldAsync<NonNullGraphType<ProjectType>>(
                 "addProject",
@@ -21,7 +21,7 @@ namespace TodoApp.Api.GraphQL
                 {
                     var project = context.GetArgument<Project>("projectInput");
 
-                    return await projectRepository.AddAsync(project);
+                    return await contextServiceLocator.ProjectRepository.AddAsync(project);
                 }
             );
 
@@ -36,12 +36,12 @@ namespace TodoApp.Api.GraphQL
                     var projectId = context.GetArgument<Guid>("projectId");
                     var projectInput = context.GetArgument<Project>("projectInput");
 
-                    var project = await projectRepository.FindAsync(projectId);
+                    var project = await contextServiceLocator.ProjectRepository.FindAsync(projectId);
                     project.Name = projectInput.Name;
                     project.Description = projectInput.Description;
                     project.Deadline = projectInput.Deadline;
 
-                    return await projectRepository.UpdateAsync(projectId, project);
+                    return await contextServiceLocator.ProjectRepository.UpdateAsync(projectId, project);
                 }
             );
 
@@ -56,7 +56,7 @@ namespace TodoApp.Api.GraphQL
 
                     try
                     {
-                        await projectRepository.DeleteAsync(projectId);
+                        await contextServiceLocator.ProjectRepository.DeleteAsync(projectId);
 
                         return $"Prject '{projectId} deleted'";
                     }

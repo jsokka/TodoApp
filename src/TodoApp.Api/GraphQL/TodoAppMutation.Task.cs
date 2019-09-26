@@ -9,7 +9,7 @@ namespace TodoApp.Api.GraphQL
 {
     public partial class TodoAppMutation
     {
-        partial void AddTaskFields(ITaskRepository taskRepository)
+        partial void AddTaskFields(ContextServiceLocator contextServiceLocator)
         {
             FieldAsync<NonNullGraphType<TaskType>>(
                 "addTask",
@@ -20,7 +20,7 @@ namespace TodoApp.Api.GraphQL
                 {
                     var task = context.GetArgument<Data.Models.Task>("taskInput");
 
-                    return await taskRepository.AddAsync(task);
+                    return await contextServiceLocator.TaskRepository.AddAsync(task);
                 }
             );
 
@@ -35,7 +35,7 @@ namespace TodoApp.Api.GraphQL
 
                     try
                     {
-                        await taskRepository.DeleteAsync(id);
+                        await contextServiceLocator.TaskRepository.DeleteAsync(id);
 
                         return $"Task {id} deleted";
                     }
@@ -58,7 +58,7 @@ namespace TodoApp.Api.GraphQL
                     var taskId = context.GetArgument<Guid>("taskId");
                     var completed = context.GetArgument<bool>("completed");
 
-                    return await taskRepository.ToggleTaskCompleted(taskId, completed);
+                    return await contextServiceLocator.TaskRepository.ToggleTaskCompleted(taskId, completed);
                 }
             );
 
@@ -73,7 +73,7 @@ namespace TodoApp.Api.GraphQL
                     var taskId = context.GetArgument<Guid>("taskId");
                     var taskInput = context.GetArgument<Data.Models.Task>("taskInput");
 
-                    var task = await taskRepository.FindAsync(taskId);
+                    var task = await contextServiceLocator.TaskRepository.FindAsync(taskId);
 
                     if (task == null)
                     {
@@ -86,7 +86,7 @@ namespace TodoApp.Api.GraphQL
                     task.Priority = taskInput.Priority;
                     task.ProjectId = taskInput.ProjectId;
 
-                    return await taskRepository.UpdateAsync(taskId, task);
+                    return await contextServiceLocator.TaskRepository.UpdateAsync(taskId, task);
                 }
             );
 
@@ -103,9 +103,9 @@ namespace TodoApp.Api.GraphQL
 
                     try
                     {
-                        if (!await taskRepository.TaskHasTagAsync(taskId, tagId))
+                        if (!await contextServiceLocator.TaskRepository.TaskHasTagAsync(taskId, tagId))
                         {
-                            await taskRepository.AddTagForTask(taskId, tagId);
+                            await contextServiceLocator.TaskRepository.AddTagForTask(taskId, tagId);
                         }
 
                         return $"Tag '{tagId}' added to task '{taskId}'";

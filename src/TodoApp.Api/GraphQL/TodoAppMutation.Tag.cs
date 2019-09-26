@@ -11,7 +11,7 @@ namespace TodoApp.Api.GraphQL
 {
     public partial class TodoAppMutation
     {
-        partial void AddTagFields(ITagRepository tagRepository)
+        partial void AddTagFields(ContextServiceLocator contextServiceLocator)
         {
             FieldAsync<NonNullGraphType<TagType>>(
                 "addTag",
@@ -29,7 +29,7 @@ namespace TodoApp.Api.GraphQL
 
                     nameInput = nameInput.Trim();
 
-                    var existingTag = await tagRepository.GetTagByName(nameInput);
+                    var existingTag = await contextServiceLocator.TagRepository.GetTagByName(nameInput);
 
                     if (existingTag != null)
                     {
@@ -42,7 +42,7 @@ namespace TodoApp.Api.GraphQL
                         return null;
                     }
 
-                    return await tagRepository.AddAsync(new Tag { Name = nameInput });
+                    return await contextServiceLocator.TagRepository.AddAsync(new Tag { Name = nameInput });
                 }
             );
 
@@ -57,7 +57,7 @@ namespace TodoApp.Api.GraphQL
 
                     try
                     {
-                        await tagRepository.DeleteAsync(id);
+                        await contextServiceLocator.TagRepository.DeleteAsync(id);
 
                         return $"Tag {id} deleted";
                     }

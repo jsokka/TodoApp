@@ -26,7 +26,7 @@ namespace TodoApp.Data
             modelBuilder.Entity<TaskTag>().HasOne(tt => tt.Task).WithMany(r => r.TaskTags).HasForeignKey(tt => tt.TaskId);
             modelBuilder.Entity<TaskTag>().HasOne(tt => tt.Tag).WithMany(r => r.TaskTags).HasForeignKey(tt => tt.TagId);
 
-            modelBuilder.Entity<Task>().Property(t => t.Priority).HasDefaultValue(TaskPriority.Normal);
+            //modelBuilder.Entity<Task>().Property(t => t.Priority).HasDefaultValue(TaskPriority.Normal);
         }
 
         public DbSet<Project> Projects { get; set; }

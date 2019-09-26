@@ -6,7 +6,7 @@ namespace TodoApp.Api.GraphQL.GraphTypes.ObjectTypes
 {
     public class ProjectType : ObjectGraphType<Project>
     {
-        public ProjectType(ITaskRepository taskRepository)
+        public ProjectType(ContextServiceLocator contextServiceLocator)
         {
             Field("id", p => p.Id, type: typeof(NonNullGraphType<IdGraphType>))
                 .Description("Id (guid) of the project");
@@ -17,7 +17,7 @@ namespace TodoApp.Api.GraphQL.GraphTypes.ObjectTypes
                 .Description("Creation time of the project");
             Field("deadline", p => p.Deadline, nullable: true).Description("Deadline of the project");
             FieldAsync<NonNullGraphType<ListGraphType<NonNullGraphType<TaskType>>>>("tasks", 
-                resolve: async context => await taskRepository.GetTasksByProjectIdAsync(context.Source.Id)
+                resolve: async context => await contextServiceLocator.TaskRepository.GetTasksByProjectIdAsync(context.Source.Id)
             );
         }
     }
