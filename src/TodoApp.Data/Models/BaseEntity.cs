@@ -6,7 +6,7 @@ using System.Text;
 
 namespace TodoApp.Data.Models
 {
-    [NotMapped]
+    //[NotMapped]
     public abstract class BaseEntity
     {
         [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
