@@ -4,14 +4,15 @@ using System;
 using TodoApp.Api.GraphQL.GraphTypes.InputTypes;
 using TodoApp.Api.GraphQL.GraphTypes.ObjectTypes;
 using TodoApp.Data.Repositories;
+using TodoApp.Data.DependencyInjection;
 
 namespace TodoApp.Api.GraphQL
 {
     public partial class TodoAppMutation
     {
-        partial void AddTaskFields(ContextServiceLocator contextServiceLocator)
+        partial void AddTaskFields(IFactory<ITaskRepository> taskRepositoryFactory)
         {
-            FieldAsync<NonNullGraphType<TaskType>>(
+            FieldAsync<TaskType>(
                 "addTask",
                 arguments: new QueryArguments(
                     new QueryArgument<NonNullGraphType<TaskInputType>> { Name = "taskInput" }
@@ -20,7 +21,7 @@ namespace TodoApp.Api.GraphQL
                 {
                     var task = context.GetArgument<Data.Models.Task>("taskInput");
 
-                    return await contextServiceLocator.TaskRepository.AddAsync(task);
+                    return await taskRepositoryFactory.Create().AddAsync(task);
                 }
             );
 
@@ -35,7 +36,7 @@ namespace TodoApp.Api.GraphQL
 
                     try
                     {
-                        await contextServiceLocator.TaskRepository.DeleteAsync(id);
+                        await taskRepositoryFactory.Create().DeleteAsync(id);
 
                         return $"Task {id} deleted";
                     }
@@ -47,7 +48,7 @@ namespace TodoApp.Api.GraphQL
                 }
             );
 
-            FieldAsync<NonNullGraphType<TaskType>>(
+            FieldAsync<TaskType>(
                 "toggleTaskCompleted",
                 arguments: new QueryArguments(
                     new QueryArgument<NonNullGraphType<IdGraphType>> { Name = "taskId" },
@@ -58,7 +59,7 @@ namespace TodoApp.Api.GraphQL
                     var taskId = context.GetArgument<Guid>("taskId");
                     var completed = context.GetArgument<bool>("completed");
 
-                    return await contextServiceLocator.TaskRepository.ToggleTaskCompleted(taskId, completed);
+                    return await taskRepositoryFactory.Create().ToggleTaskCompleted(taskId, completed);
                 }
             );
 
@@ -73,11 +74,14 @@ namespace TodoApp.Api.GraphQL
                     var taskId = context.GetArgument<Guid>("taskId");
                     var taskInput = context.GetArgument<Data.Models.Task>("taskInput");
 
-                    var task = await contextServiceLocator.TaskRepository.FindAsync(taskId);
+                    var taskRepository = taskRepositoryFactory.Create();
+
+                    var task = await taskRepository.FindAsync(taskId);
 
                     if (task == null)
                     {
                         context.Errors.Add(new ExecutionError($"Task not found with '{taskId}'"));
+                        return "Failed to update task";
                     }
 
                     task.Title = taskInput.Title;
@@ -86,7 +90,7 @@ namespace TodoApp.Api.GraphQL
                     task.Priority = taskInput.Priority;
                     task.ProjectId = taskInput.ProjectId;
 
-                    return await contextServiceLocator.TaskRepository.UpdateAsync(taskId, task);
+                    return await taskRepository.UpdateAsync(taskId, task);
                 }
             );
 
@@ -101,11 +105,13 @@ namespace TodoApp.Api.GraphQL
                     var taskId = context.GetArgument<Guid>("taskId");
                     var tagId = context.GetArgument<Guid>("tagId");
 
+                    var taskRepository = taskRepositoryFactory.Create();
+
                     try
                     {
-                        if (!await contextServiceLocator.TaskRepository.TaskHasTagAsync(taskId, tagId))
+                        if (!await taskRepository.TaskHasTagAsync(taskId, tagId))
                         {
-                            await contextServiceLocator.TaskRepository.AddTagForTask(taskId, tagId);
+                            await taskRepository.AddTagForTask(taskId, tagId);
                         }
 
                         return $"Tag '{tagId}' added to task '{taskId}'";

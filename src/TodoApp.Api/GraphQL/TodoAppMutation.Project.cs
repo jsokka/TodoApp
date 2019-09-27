@@ -5,14 +5,15 @@ using TodoApp.Api.GraphQL.GraphTypes.InputTypes;
 using TodoApp.Api.GraphQL.GraphTypes.ObjectTypes;
 using TodoApp.Data.Models;
 using TodoApp.Data.Repositories;
+using TodoApp.Data.DependencyInjection;
 
 namespace TodoApp.Api.GraphQL
 {
     public partial class TodoAppMutation
     {
-        partial void AddProjectFields(ContextServiceLocator contextServiceLocator)
+        partial void AddProjectFields(IFactory<IProjectRepository> projectRepositoryFactory)
         {
-            FieldAsync<NonNullGraphType<ProjectType>>(
+            FieldAsync<ProjectType>(
                 "addProject",
                 arguments: new QueryArguments(
                     new QueryArgument<NonNullGraphType<ProjectInputType>> { Name = "projectInput" }
@@ -21,11 +22,11 @@ namespace TodoApp.Api.GraphQL
                 {
                     var project = context.GetArgument<Project>("projectInput");
 
-                    return await contextServiceLocator.ProjectRepository.AddAsync(project);
+                    return await projectRepositoryFactory.Create().AddAsync(project);
                 }
             );
 
-            FieldAsync<NonNullGraphType<ProjectType>>(
+            FieldAsync<ProjectType>(
                 "updateProject",
                 arguments: new QueryArguments(
                     new QueryArgument<NonNullGraphType<IdGraphType>> { Name = "projectId" },
@@ -36,12 +37,14 @@ namespace TodoApp.Api.GraphQL
                     var projectId = context.GetArgument<Guid>("projectId");
                     var projectInput = context.GetArgument<Project>("projectInput");
 
-                    var project = await contextServiceLocator.ProjectRepository.FindAsync(projectId);
+                    var projectRepository = projectRepositoryFactory.Create();
+
+                    var project = await projectRepository.FindAsync(projectId);
                     project.Name = projectInput.Name;
                     project.Description = projectInput.Description;
                     project.Deadline = projectInput.Deadline;
 
-                    return await contextServiceLocator.ProjectRepository.UpdateAsync(projectId, project);
+                    return await projectRepository.UpdateAsync(projectId, project);
                 }
             );
 
@@ -56,7 +59,7 @@ namespace TodoApp.Api.GraphQL
 
                     try
                     {
-                        await contextServiceLocator.ProjectRepository.DeleteAsync(projectId);
+                        await projectRepositoryFactory.Create().DeleteAsync(projectId);
 
                         return $"Prject '{projectId} deleted'";
                     }

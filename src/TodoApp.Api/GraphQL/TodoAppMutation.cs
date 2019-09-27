@@ -8,22 +8,24 @@ using TodoApp.Api.GraphQL.GraphTypes.InputTypes;
 using TodoApp.Api.GraphQL.GraphTypes.ObjectTypes;
 using TodoApp.Data.Models;
 using TodoApp.Data.Repositories;
+using TodoApp.Data.DependencyInjection;
 
 namespace TodoApp.Api.GraphQL
 {
     public partial class TodoAppMutation : ObjectGraphType
     {
-        partial void AddProjectFields(ContextServiceLocator contextServiceLocator);
-        partial void AddTaskFields(ContextServiceLocator contextServiceLocator);
-        partial void AddTagFields(ContextServiceLocator contextServiceLocator);
+        partial void AddProjectFields(IFactory<IProjectRepository> projectRepositoryFactory);
+        partial void AddTaskFields(IFactory<ITaskRepository> taskRepositoryFactory);
+        partial void AddTagFields(IFactory<ITagRepository> tagRepositoryFactory);
 
-        public TodoAppMutation(ContextServiceLocator contextServiceLocator)
+        public TodoAppMutation(IFactory<IProjectRepository> projectRepositoryFactory,
+            IFactory<ITaskRepository> taskRepositoryFactory, IFactory<ITagRepository> tagRepositoryFactory)
         {
             Name = "Mutation";
 
-            AddProjectFields(contextServiceLocator);
-            AddTaskFields(contextServiceLocator);
-            AddTagFields(contextServiceLocator);
+            AddProjectFields(projectRepositoryFactory);
+            AddTaskFields(taskRepositoryFactory);
+            AddTagFields(tagRepositoryFactory);
         }
     }
 }

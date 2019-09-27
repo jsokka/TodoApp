@@ -6,14 +6,15 @@ using System.Linq;
 using TodoApp.Api.GraphQL.GraphTypes.ObjectTypes;
 using TodoApp.Data.Models;
 using TodoApp.Data.Repositories;
+using TodoApp.Data.DependencyInjection;
 
 namespace TodoApp.Api.GraphQL
 {
     public partial class TodoAppMutation
     {
-        partial void AddTagFields(ContextServiceLocator contextServiceLocator)
+        partial void AddTagFields(IFactory<ITagRepository> tagRepositoryFactory)
         {
-            FieldAsync<NonNullGraphType<TagType>>(
+            FieldAsync<TagType>(
                 "addTag",
                 arguments: new QueryArguments(
                     new QueryArgument<NonNullGraphType<StringGraphType>> { Name = "name" }
@@ -25,11 +26,14 @@ namespace TodoApp.Api.GraphQL
                     if (string.IsNullOrWhiteSpace(nameInput))
                     {
                         context.Errors.Add(new ExecutionError("Tag name cannot be null or empty"));
+                        return null;
                     }
 
                     nameInput = nameInput.Trim();
 
-                    var existingTag = await contextServiceLocator.TagRepository.GetTagByName(nameInput);
+                    var tagRepository = tagRepositoryFactory.Create();
+
+                    var existingTag = await tagRepository.GetTagByName(nameInput);
 
                     if (existingTag != null)
                     {
@@ -37,12 +41,7 @@ namespace TodoApp.Api.GraphQL
                         return existingTag;
                     }
 
-                    if (context.Errors.Any())
-                    {
-                        return null;
-                    }
-
-                    return await contextServiceLocator.TagRepository.AddAsync(new Tag { Name = nameInput });
+                    return await tagRepository.AddAsync(new Tag { Name = nameInput });
                 }
             );
 
@@ -57,7 +56,7 @@ namespace TodoApp.Api.GraphQL
 
                     try
                     {
-                        await contextServiceLocator.TagRepository.DeleteAsync(id);
+                        await tagRepositoryFactory.Create().DeleteAsync(id);
 
                         return $"Tag {id} deleted";
                     }

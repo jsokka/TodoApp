@@ -20,7 +20,7 @@ namespace TodoApp.Data.Repositories
 
     public abstract class BaseRepository<TEntity> : IRepository<TEntity> where TEntity : Models.BaseEntity
     {
-        private readonly DbSet<TEntity> dbSet;
+        readonly DbSet<TEntity> dbSet;
 
         protected readonly TodoAppContext Db;
 

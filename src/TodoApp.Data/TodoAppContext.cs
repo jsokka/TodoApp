@@ -7,7 +7,7 @@ namespace TodoApp.Data
 {
     public class TodoAppContext : DbContext
     {
-        public TodoAppContext(DbContextOptions<TodoAppContext> options) : base(options) { }
+        public TodoAppContext(DbContextOptions options) : base(options) { }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

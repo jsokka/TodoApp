@@ -7,18 +7,9 @@ using TodoApp.Data.Models;
 
 namespace TodoApp.Data.Repositories
 {
-    public interface ITagRepository : IRepository<Tag>
-    {
-        Task<IEnumerable<Tag>> GetTagsByTaskIdAsync(Guid taskId);
-        Task<Tag> GetTagByName(string name);
-    }
-
     public class TagRepository : BaseRepository<Tag>, ITagRepository
     {
-        public TagRepository(TodoAppContext db) : base(db)
-        {
-
-        }
+        public TagRepository(TodoAppContext db) : base(db) { }
 
         public async Task<Tag> GetTagByName(string name)
         {

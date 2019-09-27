@@ -14,6 +14,8 @@ using System.Linq;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.Extensions.Hosting;
+using System;
+using TodoApp.Data.DependencyInjection;
 
 namespace TodoApp.Api
 {
@@ -35,15 +37,14 @@ namespace TodoApp.Api
             services.Configure<KestrelServerOptions>(opt => { opt.AllowSynchronousIO = true; });
 
             services.AddDbContext<TodoAppContext>(options => 
-                options.UseSqlServer(Configuration.GetConnectionString("TodoApp")), ServiceLifetime.Transient);
+                options.UseSqlServer(Configuration.GetConnectionString("TodoApp")), 
+                contextLifetime: ServiceLifetime.Transient, optionsLifetime: ServiceLifetime.Transient);
 
-            services.AddTransient<IProjectRepository, ProjectRepository>();
-            services.AddTransient<ITaskRepository, TaskRepository>();
-            services.AddTransient<ITagRepository, TagRepository>();
+            services.AddRepositoryFactory<IProjectRepository, ProjectRepository>();
+            services.AddRepositoryFactory<ITaskRepository, TaskRepository>();
+            services.AddRepositoryFactory<ITagRepository, TagRepository>();
 
-            services.AddHttpContextAccessor();
-            services.AddSingleton<ContextServiceLocator>();
-            services.AddSingleton<IDependencyResolver>(s =>
+            services.AddSingleton<IDependencyResolver>(s => 
                 new FuncDependencyResolver(s.GetRequiredService));
 
             services.AddSingleton<TodoAppSchema>();
