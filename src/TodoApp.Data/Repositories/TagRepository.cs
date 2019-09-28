@@ -35,5 +35,14 @@ namespace TodoApp.Data.Repositories
         {
             return await Db.Tags.Where(t => t.TaskTags.Any(tt => tt.TaskId == taskId)).ToListAsync();
         }
+
+        public async Task<ILookup<Guid, Tag>> GetTagsByTaskIdsAsync(IEnumerable<Guid> ids)
+        {
+            var tasks = await Db.Tags.Where(t => t.TaskTags.Any(tt => ids.ToArray().Contains(tt.TaskId)))
+                .SelectMany(t => t.TaskTags.Select(tt => new { tt.TaskId, tt.Tag }))
+                .ToListAsync();
+            
+            return tasks.ToLookup(x => x.TaskId, x => x.Tag);
+        }
     }
 }

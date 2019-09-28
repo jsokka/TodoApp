@@ -21,6 +21,13 @@ namespace TodoApp.Data.Repositories
             return await Db.Tasks.Where(t => t.ProjectId == projectId).ToListAsync();
         }
 
+        public async Task<ILookup<Guid, Models.Task>> GetTasksByProjectIdsAsync(IEnumerable<Guid> projectIds)
+        {
+            var tasks = await Db.Tasks.Where(t => projectIds.Contains(t.ProjectId)).ToListAsync();
+
+            return tasks.ToLookup(t => t.ProjectId);
+        }
+
         public async Task<bool> TaskHasTagAsync(Guid taskId, Guid tagId)
         {
             return await Db.Tasks.Where(t => t.Id == taskId)

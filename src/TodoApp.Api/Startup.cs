@@ -1,32 +1,32 @@
 using GraphQL;
 using GraphQL.Server;
 using GraphQL.Server.Ui.Playground;
-using TodoApp.Api.GraphQL;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Server.Kestrel.Core;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using TodoApp.Data;
-using Microsoft.EntityFrameworkCore;
-using TodoApp.Data.Repositories;
-using System.Linq;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.Extensions.Hosting;
-using System;
+using TodoApp.Api.GraphQL;
+using TodoApp.Data;
 using TodoApp.Data.DependencyInjection;
+using TodoApp.Data.Repositories;
 
 namespace TodoApp.Api
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        public Startup(IConfiguration configuration, IWebHostEnvironment env)
         {
             Configuration = configuration;
+            HostEnvironment = env;
         }
 
         public IConfiguration Configuration { get; }
+        public IWebHostEnvironment HostEnvironment { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -37,25 +37,26 @@ namespace TodoApp.Api
             services.Configure<KestrelServerOptions>(opt => { opt.AllowSynchronousIO = true; });
 
             services.AddDbContext<TodoAppContext>(options => 
-                options.UseSqlServer(Configuration.GetConnectionString("TodoApp")), 
-                contextLifetime: ServiceLifetime.Transient, optionsLifetime: ServiceLifetime.Transient);
+            {
+                options.UseSqlServer(Configuration.GetConnectionString("TodoApp"));
+            }, contextLifetime: ServiceLifetime.Transient, optionsLifetime: ServiceLifetime.Transient);
 
             services.AddRepositoryFactory<IProjectRepository, ProjectRepository>();
             services.AddRepositoryFactory<ITaskRepository, TaskRepository>();
             services.AddRepositoryFactory<ITagRepository, TagRepository>();
 
-            services.AddSingleton<IDependencyResolver>(s => 
+            services.AddSingleton<IDependencyResolver>(s =>
                 new FuncDependencyResolver(s.GetRequiredService));
 
             services.AddSingleton<TodoAppSchema>();
 
             services.AddGraphQL(x =>
             {
-                x.ExposeExceptions = true;
+                x.ExposeExceptions = HostEnvironment.IsDevelopment();
             })
-            .AddGraphTypes(ServiceLifetime.Singleton);
+            .AddGraphTypes(ServiceLifetime.Singleton)
+            .AddDataLoader();
             //.AddUserContextBuilder(httpContext => httpContext.User)
-            //.AddDataLoader();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
