@@ -21,10 +21,20 @@ namespace TodoApp.Api.GraphQL.GraphTypes.ObjectTypes
                 .Description("Creation time of the project");
             Field("deadline", p => p.Deadline, nullable: true).Description("Deadline of the project");
             FieldAsync<NonNullGraphType<ListGraphType<NonNullGraphType<TaskType>>>>("tasks",
+                arguments: new QueryArguments(
+                    new QueryArgument<TaskPriorityEnum> { Name = "priority" },
+                    new QueryArgument<BooleanGraphType> { Name = "openOnly" , DefaultValue = false}
+                ),
                 resolve: async context => 
                 {
-                    var loader = dataLoderAccessor.Context.GetOrAddCollectionBatchLoader<Guid, Task>("GetTasksByProjectIds",
-                        async id => await taskRepositoryFactory.Create().GetTasksByProjectIdsAsync(id));
+                    var priority = context.GetArgument<TaskPriority?>("priority");
+                    var openOnly = context.GetArgument("openOnly", false);
+
+                    // Provide key that takes all params into account.
+                    var loaderKey = $"GetTasksByProjectIds_{priority}_{(openOnly ? "openOnly" : "all")}";
+
+                    var loader = dataLoderAccessor.Context.GetOrAddCollectionBatchLoader<Guid, Task>(loaderKey,
+                        async id => await taskRepositoryFactory.Create().GetTasksByProjectIdsAsync(id, priority, openOnly));
 
                     return await loader.LoadAsync(context.Source.Id);
                 }

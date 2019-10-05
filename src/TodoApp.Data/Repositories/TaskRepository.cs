@@ -21,11 +21,22 @@ namespace TodoApp.Data.Repositories
             return await Db.Tasks.Where(t => t.ProjectId == projectId).ToListAsync();
         }
 
-        public async Task<ILookup<Guid, Models.Task>> GetTasksByProjectIdsAsync(IEnumerable<Guid> projectIds)
+        public async Task<ILookup<Guid, Models.Task>> GetTasksByProjectIdsAsync(IEnumerable<Guid> projectIds, 
+            TaskPriority? priority = null, bool openOnly = false)
         {
-            var tasks = await Db.Tasks.Where(t => projectIds.Contains(t.ProjectId)).ToListAsync();
+            var q = Db.Tasks.Where(t => projectIds.Contains(t.ProjectId));
 
-            return tasks.ToLookup(t => t.ProjectId);
+            if (openOnly)
+            {
+                q = q.Where(t => !t.CompletedOn.HasValue);
+            }
+
+            if (priority.HasValue)
+            {
+                q = q.Where(t => t.Priority == priority);
+            }
+
+            return (await q.ToListAsync()).ToLookup(t => t.ProjectId);
         }
 
         public async Task<bool> TaskHasTagAsync(Guid taskId, Guid tagId)
@@ -71,10 +82,10 @@ namespace TodoApp.Data.Repositories
 
             if (task.TaskTags == null)
             {
-                task.TaskTags = new List<Models.TaskTag>();
+                task.TaskTags = new List<TaskTag>();
             }
 
-            task.TaskTags.Add(new Models.TaskTag { TagId = tagId });
+            task.TaskTags.Add(new TaskTag { TagId = tagId });
 
             return (await Db.SaveChangesAsync()) == 1;
         }
