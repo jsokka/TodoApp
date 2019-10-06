@@ -14,5 +14,6 @@ namespace TodoApp.Data.Repositories
         Task<bool> TaskHasTagAsync(Guid taskId, Guid tagId);
         Task<bool> AddTagForTask(Guid taskId, Guid tagId);
         Task<Models.Task> ToggleTaskCompleted(Guid taskId, bool complted);
+        Task<IEnumerable<Models.Task>> SearchTasksAsync(string searchString);
     }
 }

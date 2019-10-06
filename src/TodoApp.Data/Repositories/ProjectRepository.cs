@@ -17,5 +17,12 @@ namespace TodoApp.Data.Repositories
         {
             return await Db.Projects.Where(p => ids.Contains(p.Id)).ToDictionaryAsync(p => p.Id);
         }
+
+        public async Task<IEnumerable<Project>> SearchProjects(string searchString)
+        {
+            return await Db.Projects
+                .Where(p => p.Name.Contains(searchString) || p.Description.Contains(searchString))
+                .ToListAsync();
+        }
     }
 }

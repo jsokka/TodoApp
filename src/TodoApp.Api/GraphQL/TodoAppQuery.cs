@@ -5,6 +5,8 @@ using TodoApp.Api.GraphQL.GraphTypes.ObjectTypes;
 using TodoApp.Data.Models;
 using TodoApp.Data.Repositories;
 using TodoApp.Data.DependencyInjection;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace TodoApp.Api.GraphQL
 {
@@ -58,6 +60,32 @@ namespace TodoApp.Api.GraphQL
             FieldAsync<NonNullGraphType<ListGraphType<NonNullGraphType<TagType>>>>(
                 "tags",
                 resolve: async context => await tagRepositoryFactory.Create().GetAllAsync()
+            );
+
+            FieldAsync<NonNullGraphType<ListGraphType<NonNullGraphType<SearchResult>>>>(
+                "search",
+                arguments: new QueryArguments(
+                    new QueryArgument<StringGraphType> { Name = "searchString" }
+                ),
+                resolve: async context => 
+                {
+                    var searchString = context.GetArgument<string>("searchString");
+
+                    if (string.IsNullOrWhiteSpace(searchString))
+                    {
+                        return new List<UnionGraphType>();
+                    }
+
+                    var getTasksTask = taskRepositoryFactory.Create().SearchTasksAsync(searchString);
+                    var getProjectsTask = projectRepositoryFactory.Create().SearchProjects(searchString);
+
+                    await System.Threading.Tasks.Task.WhenAll(getTasksTask, getProjectsTask);
+
+                    var tasks = getTasksTask.Result as IEnumerable<object>;
+                    var projects = getProjectsTask.Result as IEnumerable<object>;
+
+                    return Enumerable.Concat(tasks, projects);
+                }
             );
         }
     }

@@ -89,5 +89,12 @@ namespace TodoApp.Data.Repositories
 
             return (await Db.SaveChangesAsync()) == 1;
         }
+
+        public async Task<IEnumerable<Models.Task>> SearchTasksAsync(string searchString)
+        {
+            return await Db.Tasks
+                .Where(t => t.Title.Contains(searchString) || t.Description.Contains(searchString))
+                .ToListAsync();
+        }
     }
 }

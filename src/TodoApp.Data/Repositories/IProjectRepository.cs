@@ -10,5 +10,6 @@ namespace TodoApp.Data.Repositories
     public interface IProjectRepository : IRepository<Project>
     {
         Task<Dictionary<Guid, Project>> GetProjectsByIdsAsync(IEnumerable<Guid> ids);
+        Task<IEnumerable<Project>> SearchProjects(string searchString);
     }
 }
