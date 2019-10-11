@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import { InputGroup, FormControl, Button } from "react-bootstrap";
+import { FontAwesomeIcon as Icon } from '@fortawesome/react-fontawesome';
+import { faPlus } from '@fortawesome/free-solid-svg-icons'
 
 const TaskInput = ({ onAdd }) => {
   const [value, setValue] = useState("");
@@ -7,7 +9,11 @@ const TaskInput = ({ onAdd }) => {
   const handleChange = event => setValue(event.target.value);
 
   const handleAdd = () => {
-    onAdd(value);
+    if (value.trim().length === 0) {
+      return;
+    }
+
+    onAdd(value.trim());
     setValue("");
   };
 
@@ -26,7 +32,7 @@ const TaskInput = ({ onAdd }) => {
         value={value}
       />
       <InputGroup.Append>
-        <Button variant="primary" onClick={handleAdd}>+</Button>
+        <Button variant="primary" onClick={handleAdd}><Icon icon={faPlus} /></Button>
       </InputGroup.Append>
     </InputGroup>
   );

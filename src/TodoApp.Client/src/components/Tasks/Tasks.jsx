@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from "react";
+import React, { Component } from "react";
 import { Container, Row, Col } from "react-bootstrap";
 import TaskList from "./TaskList";
 import TaskInput from "./TaskInput";
@@ -7,12 +7,8 @@ class Tasks extends Component {
   constructor(props) {
     super(props);
 
-    this.handleAddTask = this.handleAddTask.bind(this);
-    this.handleChange = this.handleChange.bind(this);
-
     this.state = {
       loadingTasks: true,
-      newTaskTitle: "",
       tasks: []
     };
   }
@@ -27,9 +23,19 @@ class Tasks extends Component {
   }
 
   handleAddTask = (title) => {
-    var tasks = this.state.tasks;
-    tasks.push({ title: title, project: "-" });
-    this.setState({ tasks, newTaskTitle: "" });
+    let tasks = this.state.tasks;
+    this.setState({ 
+      tasks: [
+        ...tasks, 
+        { title: title, project: "-" }
+      ], 
+      newTaskTitle: "" 
+    });
+  }
+
+  handleDeleteTask = (task) => {
+    let tasks = this.state.tasks;
+    this.setState({ tasks: tasks.filter(t => t !== task) });
   }
 
   handleChange = (e) => {
@@ -44,12 +50,13 @@ class Tasks extends Component {
             <h1>Tasks</h1>
             <TaskList 
               tasks={this.state.tasks} 
+              onDeleteTask={this.handleDeleteTask}
               loading={this.state.loadingTasks} 
             />
           </Col>
         </Row>
         <Row>
-          <Col fluid md={{span: 9, offset: 3}} className="fixed-bottom">
+          <Col md={{span: 9, offset: 3}} className="fixed-bottom">
             <TaskInput 
               onAdd={this.handleAddTask} 
               onChange={this.handleChange} 
