@@ -35,7 +35,7 @@ const TaskList = ({ tasks, loading, onDeleteTask }) => {
     return (  
       <div>
         <h2>Tasks</h2>           
-          <ListGroup>
+          <ListGroup className="task-list">
             <TransitionGroup>
               {taskItems}
             </TransitionGroup>

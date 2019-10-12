@@ -1,5 +1,5 @@
 import React from "react";
-import { Container, Row, Col, Button } from "react-bootstrap";
+import { Container, Row, Col } from "react-bootstrap";
 import { FontAwesomeIcon as Icon } from '@fortawesome/react-fontawesome';
 import { faTrashAlt } from '@fortawesome/free-solid-svg-icons'
 
@@ -9,15 +9,22 @@ const TaskItem = ({ task, onDelete }) => {
   }
   
   return (
-    <Container>
+    <Container className="task-item">
       <Row>
-        <Col>          
-          {onDelete && 
-            <Button variant="danger" className="float-right" onClick={handleDelete}>
-            <Icon icon={faTrashAlt} />
-          </Button>}
+        <Col xs={1}>          
+          <div class="custom-control custom-checkbox">
+            <input type="checkbox" class="custom-control-input" id="customCheck1" />
+            <label class="custom-control-label" for="customCheck1"></label>
+          </div>
+        </Col>
+        <Col>
           <div>{task.title}</div>
           <small>{task.project}</small>
+        </Col>
+        <Col xs={1}>
+          {onDelete && 
+            <Icon icon={faTrashAlt} onClick={handleDelete} />
+          }
         </Col>
       </Row>
     </Container>
