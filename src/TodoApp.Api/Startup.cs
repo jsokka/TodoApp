@@ -50,6 +50,8 @@ namespace TodoApp.Api
 
             services.AddSingleton<TodoAppSchema>();
 
+            services.AddCors();
+
             services.AddGraphQL(x =>
             {
                 x.ExposeExceptions = HostEnvironment.IsDevelopment();
@@ -75,15 +77,11 @@ namespace TodoApp.Api
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
+            app.UseCors(options => options.AllowAnyOrigin()
+                .AllowAnyMethod().AllowAnyHeader());
+
             app.UseGraphQL<TodoAppSchema>();
             app.UseGraphQLPlayground(new GraphQLPlaygroundOptions() { Path = new PathString("") });
-
-            //app.UseMvc(routes =>
-            //{
-            //    routes.MapRoute(
-            //        name: "default",
-            //        template: "{controller}/{action=Index}/{id?}");
-            //});
         }
     }
 }
