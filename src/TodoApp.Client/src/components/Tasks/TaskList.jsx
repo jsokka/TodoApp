@@ -17,14 +17,14 @@ const TaskList = ({ tasks, loading, onDeleteTask }) => {
     const taskItems = (
       tasks.map(task => 
         <CSSTransition
-          key={task.title}
+          key={task.__id}
           timeout={500}
           classNames="task"
         >
           <ListGroup.Item>
             <TaskItem 
               task={task} 
-              key={task.title} 
+              key={task.__id} 
               onDelete={onDeleteTask} 
             />
           </ListGroup.Item>

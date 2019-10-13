@@ -1,7 +1,18 @@
 import React, { Component } from "react";
+import { QueryRenderer } from "react-relay";
+import graphql from "babel-plugin-relay/macro";
 import { Container, Row, Col } from "react-bootstrap";
 import TaskList from "./TaskList";
 import TaskInput from "./TaskInput";
+import environment from "../../relayEnvironment";
+
+const TasksQuery = graphql`
+  query TasksQuery {
+    tasks {
+      ...TaskItem_task
+    }
+  }
+`;
 
 class Tasks extends Component {
   constructor(props) {
@@ -11,15 +22,6 @@ class Tasks extends Component {
       loadingTasks: true,
       tasks: []
     };
-  }
-
-  componentDidMount() {
-    setTimeout(() => {
-      this.setState({
-        tasks: [{ title: "Pese pyykit", project: "Kotityöt" }, { title: "Kirjoita johdanto", project: "Opinnäytetyö" }],
-        loadingTasks: false
-      })
-    }, 1000);
   }
 
   handleAddTask = (title) => {
@@ -48,10 +50,20 @@ class Tasks extends Component {
         <Row>
           <Col>
             <h1>Tasks</h1>
-            <TaskList 
-              tasks={this.state.tasks} 
-              onDeleteTask={this.handleDeleteTask}
-              loading={this.state.loadingTasks} 
+            <QueryRenderer 
+              environment={environment}
+              query={TasksQuery}
+              render={({error, props}) => {
+                if (error) {
+                  return <h1>{error.message}</h1>
+                } else if (props) {
+                  return <TaskList 
+                    tasks={props.tasks} 
+                    onDeleteTask={this.handleDeleteTask}
+                  />;
+                }
+                return <strong>Loading...</strong>
+              }}
             />
           </Col>
         </Row>

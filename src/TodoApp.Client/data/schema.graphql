@@ -1,0 +1,84 @@
+scalar Date
+
+scalar DateTime
+
+scalar DateTimeOffset
+
+scalar Decimal
+
+scalar Milliseconds
+
+type Mutation {
+  addProject(projectInput: ProjectInputType!): ProjectType
+  addTag(name: String!): TagType
+  addTagForTask(taskId: ID!, tagId: ID!): String!
+  addTask(taskInput: TaskInputType!): TaskType
+  deleteProject(projectId: ID!): String!
+  deleteTag(id: ID!): String!
+  deleteTask(id: ID!): String!
+  toggleTaskCompleted(taskId: ID!, completed: Boolean!): TaskType
+  updateProject(projectId: ID!, projectInput: ProjectInputType!): ProjectType
+  updateTask(taskId: ID!, taskInput: TaskInputType!): TaskType!
+}
+
+input ProjectInputType {
+  name: String!
+  description: String = null
+  deadline: Date = null
+}
+
+type ProjectType {
+  created: DateTime!
+  deadline: Date
+  description: String
+  id: ID!
+  name: String!
+  tasks(priority: TaskPriority = null, openOnly: Boolean = false): [TaskType!]!
+}
+
+type Query {
+  project(id: ID!): ProjectType!
+  projects: [ProjectType!]!
+  search(searchString: String = null): [SearchResult!]!
+  tags: [TagType!]!
+  task(id: ID!): TaskType!
+  tasks(priority: TaskPriority = null): [TaskType!]!
+}
+
+union SearchResult = ProjectType | TaskType
+scalar Seconds
+
+type TagType {
+  created: DateTime
+  id: ID
+  name: String!
+}
+
+input TaskInputType {
+  title: String!
+  projectId: ID!
+  description: String = null
+  priority: TaskPriority = null
+  deadline: DateTime = null
+}
+
+enum TaskPriority {
+  NORMAL
+  LOW
+  HIGH
+  VERY_HIGH
+}
+
+type TaskType {
+  completedOn: DateTime
+  created: DateTime!
+  deadline: Date
+  description: String
+  id: ID!
+  isCompleted: Boolean!
+  priority: TaskPriority!
+  project: ProjectType!
+  tags: [TagType!]!
+  title: String!
+}
+
