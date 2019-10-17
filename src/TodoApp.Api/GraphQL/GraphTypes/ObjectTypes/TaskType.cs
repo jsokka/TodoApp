@@ -17,7 +17,7 @@ namespace TodoApp.Api.GraphQL.GraphTypes.ObjectTypes
             Field("id", t => t.Id, type: typeof(NonNullGraphType<IdGraphType>), nullable: false).Description("Id of the task");
             Field("title", t => t.Title).Description("Title of the task");
             Field("description", t => t.Description, nullable: true).Description("Description of the task");
-            Field("deadline", t => t.Deadline, nullable: true).Description("Deadline of the task");
+            Field("deadline", t => t.Deadline, type: typeof(DateTimeGraphType)).Description("Deadline of the task");
             Field("priority", t => t.Priority, type: typeof(NonNullGraphType<TaskPriorityEnum>)).Description("Priority of the task");
             Field("isCompleted", t => t.CompletedOn.HasValue, nullable: false).Description("Indicates whether the task is completed");
             Field("completedOn", t => t.CompletedOn, type: typeof(DateTimeGraphType)).Description("Date and time the task wasc completed");
