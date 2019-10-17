@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import { InputGroup, FormControl, Button } from "react-bootstrap";
+import { InputGroup, FormControl, Button, Spinner } from "react-bootstrap";
 import { FontAwesomeIcon as Icon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/free-solid-svg-icons'
 
-const TaskInput = ({ onAdd }) => {
+const TaskInput = ({ onAdd, isLoading }) => {
   const [value, setValue] = useState("");
 
   const handleChange = event => setValue(event.target.value);
@@ -12,7 +12,6 @@ const TaskInput = ({ onAdd }) => {
     if (value.trim().length === 0) {
       return;
     }
-
     onAdd(value.trim());
     setValue("");
   };
@@ -23,6 +22,8 @@ const TaskInput = ({ onAdd }) => {
     }
   }
 
+  const disabled = isLoading || (value || "").length === 0;
+
   return (
     <InputGroup className="mb-3">
       <FormControl
@@ -32,7 +33,11 @@ const TaskInput = ({ onAdd }) => {
         value={value}
       />
       <InputGroup.Append>
-        <Button variant="primary" onClick={handleAdd}><Icon icon={faPlus} /></Button>
+        <Button variant="primary" disabled={disabled} onClick={handleAdd}>
+          {isLoading 
+            ? <Spinner animation="border" size="sm" />
+            : <Icon icon={faPlus} />}
+        </Button>
       </InputGroup.Append>
     </InputGroup>
   );

@@ -8,31 +8,37 @@
 
 /*::
 import type { ReaderFragment } from 'relay-runtime';
+export type TaskPriority = "HIGH" | "LOW" | "NORMAL" | "VERY_HIGH" | "%future added value";
 import type { FragmentReference } from "relay-runtime";
-declare export opaque type TaskItem_task$ref: FragmentReference;
-declare export opaque type TaskItem_task$fragmentType: TaskItem_task$ref;
-export type TaskItem_task = {|
+declare export opaque type TaskList_tasks$ref: FragmentReference;
+declare export opaque type TaskList_tasks$fragmentType: TaskList_tasks$ref;
+export type TaskList_tasks = $ReadOnlyArray<{|
   +id: string,
   +title: string,
   +deadline: ?any,
+  +priority: TaskPriority,
+  +completedOn: ?any,
+  +isCompleted: boolean,
   +project: {|
     +name: string
   |},
-  +$refType: TaskItem_task$ref,
-|};
-export type TaskItem_task$data = TaskItem_task;
-export type TaskItem_task$key = {
-  +$data?: TaskItem_task$data,
-  +$fragmentRefs: TaskItem_task$ref,
-};
+  +$refType: TaskList_tasks$ref,
+|}>;
+export type TaskList_tasks$data = TaskList_tasks;
+export type TaskList_tasks$key = $ReadOnlyArray<{
+  +$data?: TaskList_tasks$data,
+  +$fragmentRefs: TaskList_tasks$ref,
+}>;
 */
 
 
 const node/*: ReaderFragment*/ = {
   "kind": "Fragment",
-  "name": "TaskItem_task",
+  "name": "TaskList_tasks",
   "type": "TaskType",
-  "metadata": null,
+  "metadata": {
+    "plural": true
+  },
   "argumentDefinitions": [],
   "selections": [
     {
@@ -57,6 +63,27 @@ const node/*: ReaderFragment*/ = {
       "storageKey": null
     },
     {
+      "kind": "ScalarField",
+      "alias": null,
+      "name": "priority",
+      "args": null,
+      "storageKey": null
+    },
+    {
+      "kind": "ScalarField",
+      "alias": null,
+      "name": "completedOn",
+      "args": null,
+      "storageKey": null
+    },
+    {
+      "kind": "ScalarField",
+      "alias": null,
+      "name": "isCompleted",
+      "args": null,
+      "storageKey": null
+    },
+    {
       "kind": "LinkedField",
       "alias": null,
       "name": "project",
@@ -77,5 +104,5 @@ const node/*: ReaderFragment*/ = {
   ]
 };
 // prettier-ignore
-(node/*: any*/).hash = '6bfb2756a7af7dfb972cf1ec1b1feb8d';
+(node/*: any*/).hash = 'a85e0f402c88bfb97ef1c0d62ba70e1f';
 module.exports = node;

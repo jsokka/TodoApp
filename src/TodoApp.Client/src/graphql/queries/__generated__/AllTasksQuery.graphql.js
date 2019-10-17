@@ -1,6 +1,6 @@
 /**
  * @flow
- * @relayHash f65a638fb4f58e4abef23866cb5463d3
+ * @relayHash 73254cc0dc3d106581ae49885372b564
  */
 
 /* eslint-disable */
@@ -9,32 +9,35 @@
 
 /*::
 import type { ConcreteRequest } from 'relay-runtime';
-type TaskItem_task$ref = any;
-export type TasksQueryVariables = {||};
-export type TasksQueryResponse = {|
+type TaskList_tasks$ref = any;
+export type AllTasksQueryVariables = {||};
+export type AllTasksQueryResponse = {|
   +tasks: $ReadOnlyArray<{|
-    +$fragmentRefs: TaskItem_task$ref
+    +$fragmentRefs: TaskList_tasks$ref
   |}>
 |};
-export type TasksQuery = {|
-  variables: TasksQueryVariables,
-  response: TasksQueryResponse,
+export type AllTasksQuery = {|
+  variables: AllTasksQueryVariables,
+  response: AllTasksQueryResponse,
 |};
 */
 
 
 /*
-query TasksQuery {
+query AllTasksQuery {
   tasks {
-    ...TaskItem_task
+    ...TaskList_tasks
     id
   }
 }
 
-fragment TaskItem_task on TaskType {
+fragment TaskList_tasks on TaskType {
   id
   title
   deadline
+  priority
+  completedOn
+  isCompleted
   project {
     name
     id
@@ -54,7 +57,7 @@ return {
   "kind": "Request",
   "fragment": {
     "kind": "Fragment",
-    "name": "TasksQuery",
+    "name": "AllTasksQuery",
     "type": "Query",
     "metadata": null,
     "argumentDefinitions": [],
@@ -70,7 +73,7 @@ return {
         "selections": [
           {
             "kind": "FragmentSpread",
-            "name": "TaskItem_task",
+            "name": "TaskList_tasks",
             "args": null
           }
         ]
@@ -79,7 +82,7 @@ return {
   },
   "operation": {
     "kind": "Operation",
-    "name": "TasksQuery",
+    "name": "AllTasksQuery",
     "argumentDefinitions": [],
     "selections": [
       {
@@ -103,6 +106,27 @@ return {
             "kind": "ScalarField",
             "alias": null,
             "name": "deadline",
+            "args": null,
+            "storageKey": null
+          },
+          {
+            "kind": "ScalarField",
+            "alias": null,
+            "name": "priority",
+            "args": null,
+            "storageKey": null
+          },
+          {
+            "kind": "ScalarField",
+            "alias": null,
+            "name": "completedOn",
+            "args": null,
+            "storageKey": null
+          },
+          {
+            "kind": "ScalarField",
+            "alias": null,
+            "name": "isCompleted",
             "args": null,
             "storageKey": null
           },
@@ -131,13 +155,13 @@ return {
   },
   "params": {
     "operationKind": "query",
-    "name": "TasksQuery",
+    "name": "AllTasksQuery",
     "id": null,
-    "text": "query TasksQuery {\n  tasks {\n    ...TaskItem_task\n    id\n  }\n}\n\nfragment TaskItem_task on TaskType {\n  id\n  title\n  deadline\n  project {\n    name\n    id\n  }\n}\n",
+    "text": "query AllTasksQuery {\n  tasks {\n    ...TaskList_tasks\n    id\n  }\n}\n\nfragment TaskList_tasks on TaskType {\n  id\n  title\n  deadline\n  priority\n  completedOn\n  isCompleted\n  project {\n    name\n    id\n  }\n}\n",
     "metadata": {}
   }
 };
 })();
 // prettier-ignore
-(node/*: any*/).hash = 'abac6f1f665896d392f3a4b9e9c2d01e';
+(node/*: any*/).hash = 'a731517a2a5b60f453aade4aca1a89e8';
 module.exports = node;

@@ -1,18 +1,42 @@
-.task-item {
-  > .row  {
-    align-items: center; 
-  
-    > [class^="col-"]:first-child {
-      max-width: 3.5rem;
-    }
+.task-list {
+  .task-item {
+    > .row  {
+      align-items: center; 
     
-    .custom-control {
-      min-height: 1.75rem;
+      > [class^="col-"]:first-child {
+        max-width: 3.5rem;
+      }
+      
+      .custom-control {
+        min-height: 1.75rem;
 
-      .custom-control-label::before, 
-      .custom-control-label::after {
-        width: 1.25rem;
-        height: 1.25rem;
+        .custom-control-label::before, 
+        .custom-control-label::after {
+          width: 1.25rem;
+          height: 1.25rem;
+        }
+      }
+
+      .completed {
+        text-decoration: line-through;
+      }
+    }
+
+    .task-info {
+      small {
+        [class*="fa-"] {
+          margin-right: 0.15rem;
+        }
+      }
+
+      small:before{
+          content: "◦";
+          margin: 0 0.5rem;
+      }
+
+      small:first-child:before{
+          content: "";
+          margin: 0;
       }
     }
   }
@@ -20,13 +44,16 @@
   .task-enter {
     opacity: 0;
   }
+  
   .task-enter-active {
     opacity: 1;
     transition: opacity 500ms ease-in;
   }
+  
   .task-exit {
     opacity: 1;
   }
+  
   .task-exit-active {
     opacity: 0;
     transition: opacity 500ms ease-in;

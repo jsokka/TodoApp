@@ -1,82 +1,122 @@
-import React, { Component } from "react";
+import React, { Component, Fragment } from "react";
 import { QueryRenderer } from "react-relay";
-import graphql from "babel-plugin-relay/macro";
-import { Container, Row, Col } from "react-bootstrap";
+import { Container, Row, Col, Spinner, Alert } from "react-bootstrap";
 import TaskList from "./TaskList";
 import TaskInput from "./TaskInput";
-import environment from "../../relayEnvironment";
-
-const TasksQuery = graphql`
-  query TasksQuery {
-    tasks {
-      ...TaskItem_task
-    }
-  }
-`;
+import TaskEditModal from "./TaskEditModal";
+import environment from "../../graphql/environment";
+import {
+  AddTaskMutation, 
+  ToggleTaskCompletedMutation, 
+  DeleteTaskMutation 
+} from "../../graphql/mutations/Mutations";
+import { 
+  AllTasksQuery, 
+  EditTaskQuery 
+} from "../../graphql/queries/Queries";
 
 class Tasks extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      loadingTasks: true,
-      tasks: []
+      isLoading: false,
+      editTaskId: null
     };
   }
 
   handleAddTask = (title) => {
-    let tasks = this.state.tasks;
-    this.setState({ 
-      tasks: [
-        ...tasks, 
-        { title: title, project: "-" }
-      ], 
-      newTaskTitle: "" 
-    });
-  }
+    this.setState({ isLoading: true });
+    AddTaskMutation(title, "cc5f2627-85e0-e911-813d-f859714e7bd5",
+      (taskId) => { 
+        this.setState({ isLoading: false });
+        console.log(`Task ${taskId} added`); 
+      })
+  };
 
-  handleDeleteTask = (task) => {
-    let tasks = this.state.tasks;
-    this.setState({ tasks: tasks.filter(t => t !== task) });
-  }
+  handleToggleTaskCompleted = (taskId, completed) => {
+    ToggleTaskCompletedMutation(taskId, completed, 
+      () => console.log(`Task ${taskId} completed`));
+  };
 
-  handleChange = (e) => {
-    this.setState({ newTaskTitle: e.target.value });
-  }
+  handleDeleteTask = (taskId) => {
+    DeleteTaskMutation(taskId, () => console.log(`Task ${taskId} deleted`));
+  };
+
+  handleEditTaskClick = (taskId) => {
+    this.setState({ editTaskId: taskId });
+  };
+
+  handleCloseTaskEditModal = () => {
+    this.setState({ editTaskId: undefined });
+  };
+
+  handleSaveTaskEdit = (task) => {
+    this.handleCloseTaskEditModal();
+  };
 
   render() {
+    const showTaskEditModal = this.state.editTaskId;
+
     return (
-      <Container>
-        <Row>
-          <Col>
-            <h1>Tasks</h1>
-            <QueryRenderer 
-              environment={environment}
-              query={TasksQuery}
-              render={({error, props}) => {
-                if (error) {
-                  return <h1>{error.message}</h1>
-                } else if (props) {
-                  return <TaskList 
-                    tasks={props.tasks} 
-                    onDeleteTask={this.handleDeleteTask}
-                  />;
-                }
-                return <strong>Loading...</strong>
-              }}
-            />
-          </Col>
-        </Row>
-        <Row>
-          <Col md={{span: 9, offset: 3}} className="fixed-bottom">
-            <TaskInput 
-              onAdd={this.handleAddTask} 
-              onChange={this.handleChange} 
-              newTaskTitle={this.state.newTaskTitle} 
-            />
-          </Col>
-        </Row>
-      </Container>
+      <Fragment>
+        {showTaskEditModal && 
+          <QueryRenderer
+            environment={environment}
+            query={EditTaskQuery}
+            variables={{ 
+              id: this.state.editTaskId }
+            }
+            render={({error, props}) => {
+              if (props) {
+                return (
+                  <TaskEditModal 
+                    task={props.task}
+                    onCancelClick={this.handleCloseTaskEditModal}
+                    onSaveClick={this.handleSaveTaskEdit}
+                  />
+                )
+              }
+            }} 
+          />
+        }
+        <Container>
+          <Row>
+            <Col>
+              <h1>Tasks</h1>
+              <QueryRenderer 
+                environment={environment}
+                query={AllTasksQuery}
+                render={({error, props}) => {
+                  if (error) {
+                    return (
+                      <Alert variant="danger">
+                        <Alert.Heading>Failed to fetch tasks :(</Alert.Heading>
+                        <code>Error message: {error.message}</code>
+                      </Alert>
+                    )
+                  } else if (props) {
+                    return (
+                      <TaskList 
+                        tasks={props.tasks} 
+                        onToggleTaskCompletedClick={this.handleToggleTaskCompleted}
+                        onDeleteTaskClick={this.handleDeleteTask}
+                        onEditTaskClick={this.handleEditTaskClick} 
+                      />
+                    )
+                  }
+                  return <Spinner className="text-center" animation="grow" />;
+                }}
+              />
+            </Col>
+          </Row>
+          <Row>
+            <Col md={{span: 9, offset: 3}} className="fixed-bottom">
+              <TaskInput onAdd={this.handleAddTask} isLoading={this.state.isLoading} />
+            </Col>
+          </Row>
+        </Container>
+      </Fragment>
     );
   }
 }

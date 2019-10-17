@@ -1,45 +1,80 @@
 import React from "react";
-import { createFragmentContainer } from "react-relay";
-import graphql from "babel-plugin-relay/macro";
-import { Container, Row, Col } from "react-bootstrap";
+import { Container, Row, Col, Badge } from "react-bootstrap";
 import { FontAwesomeIcon as Icon } from '@fortawesome/react-fontawesome';
-import { faTrashAlt } from '@fortawesome/free-solid-svg-icons'
+import { faTrashAlt, faPenSquare, faCalendarDay } from '@fortawesome/free-solid-svg-icons'
 
-const TaskItem = ({ task, onDelete }) => {
-  const handleDelete = () => {
-    onDelete(task);
-  }
+const priorityMap = {
+  "LOW": { label: "Low", badgeVariant: "light" },
+  "NORMAL": { label: "Normal", badgeVariant: "primary" },
+  "HIGH": { label: "High", badgeVariant: "warning" },
+  "VERY_HIGH": { label: "Very High", badgeVariant: "danger" },
+};
+
+const TaskItem = ({ task, onEditClick, onToggleCompletedClick, onDeleteClick }) => {
+  const handleCompletedClick = (event) => {
+    onToggleCompletedClick(task.id, event.target.checked);
+  };
+
+  const handleDeleteClick = () => {
+    onDeleteClick(task.id);
+  };
   
+  const handleEditClick = () => {
+    onEditClick(task.id);
+  };
+
+  const taskInfo = [];
+
+  if (task.project) {
+    taskInfo.push({
+      label: task.project.name
+    });
+  }
+
+  if (task.deadline) {
+    taskInfo.push({ 
+      label: new Date(task.deadline).toLocaleDateString("fi"), 
+      icon: <Icon icon={faCalendarDay} />
+    });
+  } 
+
+  if (task.priority) {
+    var map = priorityMap[task.priority];
+    if (map) {
+      taskInfo.push({
+        label: <Badge variant={map.badgeVariant}>{map.label}</Badge>
+      });
+    }
+  }
+
   return (
     <Container className="task-item">
       <Row>
         <Col xs={1}>          
           <div className="custom-control custom-checkbox">
-            <input type="checkbox" className="custom-control-input" id={`checkbox_${task.id}`} />
+            <input 
+              type="checkbox" 
+              id={`checkbox_${task.id}`}
+              className="custom-control-input"  
+              onChange={handleCompletedClick} 
+              checked={task.isCompleted} 
+            />
             <label className="custom-control-label" htmlFor={`checkbox_${task.id}`}></label>
           </div>
         </Col>
         <Col>
-          <div>{task.title}</div>
-          <small>{task.project.name}</small>
+          <div className={task.isCompleted ? "completed" : ""}>{task.title}</div>
+          <div className="task-info">
+            {taskInfo.map((t, i) => <small key={i}>{t.icon} {t.label}</small>)}
+          </div>
         </Col>
         <Col xs={1}>
-          {onDelete && 
-            <Icon icon={faTrashAlt} onClick={handleDelete} />
-          }
+          <Icon icon={faTrashAlt} onClick={handleDeleteClick} />
+          <Icon icon={faPenSquare} onClick={handleEditClick} size="lg" />
         </Col>
       </Row>
     </Container>
   );
 }
 
-export default createFragmentContainer(TaskItem, { task: graphql`
-  fragment TaskItem_task on TaskType {
-    id
-    title
-    deadline
-    project {
-      name
-    }
-  }
-`});
+export default TaskItem;

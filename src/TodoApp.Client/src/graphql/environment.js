@@ -16,7 +16,7 @@ const fetchQuery = async (operation, variables) => {
       variables,
     }),
   });
-  return response.json();
+  return await response.json();
 }
 
 const environment = new Environment({
