@@ -27,7 +27,7 @@ class Tasks extends Component {
 
   handleAddTask = (title) => {
     this.setState({ isLoading: true });
-    AddTaskMutation(title, "cc5f2627-85e0-e911-813d-f859714e7bd5",
+    AddTaskMutation(title, null,
       (taskId) => { 
         this.setState({ isLoading: false });
         console.log(`Task ${taskId} added`); 

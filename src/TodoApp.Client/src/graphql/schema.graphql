@@ -56,7 +56,7 @@ type TagType {
 
 input TaskInputType {
   title: String!
-  projectId: ID!
+  projectId: ID = null
   description: String = null
   priority: TaskPriority = null
   deadline: DateTime = null
@@ -72,7 +72,7 @@ enum TaskPriority {
 type TaskType {
   completedOn: DateTime
   created: DateTime!
-  deadline: Date
+  deadline: DateTime
   description: String
   id: ID!
   isCompleted: Boolean!
@@ -81,4 +81,3 @@ type TaskType {
   tags: [TagType!]!
   title: String!
 }
-

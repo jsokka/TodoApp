@@ -24,7 +24,7 @@ namespace TodoApp.Data.Repositories
         public async Task<ILookup<Guid, Models.Task>> GetTasksByProjectIdsAsync(IEnumerable<Guid> projectIds, 
             TaskPriority? priority = null, bool openOnly = false)
         {
-            var q = Db.Tasks.Where(t => projectIds.Contains(t.ProjectId));
+            var q = Db.Tasks.Where(t => projectIds.Contains(t.ProjectId.Value));
 
             if (openOnly)
             {
@@ -36,7 +36,7 @@ namespace TodoApp.Data.Repositories
                 q = q.Where(t => t.Priority == priority);
             }
 
-            return (await q.ToListAsync()).ToLookup(t => t.ProjectId);
+            return (await q.ToListAsync()).ToLookup(t => t.ProjectId.Value);
         }
 
         public async Task<bool> TaskHasTagAsync(Guid taskId, Guid tagId)

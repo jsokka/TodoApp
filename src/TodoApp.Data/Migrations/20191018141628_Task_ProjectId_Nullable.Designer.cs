@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TodoApp.Data;
 
 namespace TodoApp.Data.Migrations
 {
     [DbContext(typeof(TodoAppContext))]
-    partial class TodoAppContextModelSnapshot : ModelSnapshot
+    [Migration("20191018141628_Task_ProjectId_Nullable")]
+    partial class Task_ProjectId_Nullable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

@@ -27,10 +27,15 @@ namespace TodoApp.Api.GraphQL.GraphTypes.ObjectTypes
             FieldAsync<NonNullGraphType<ProjectType>>("project",
                 resolve: async context => 
                 {
+                    if (!context.Source.ProjectId.HasValue)
+                    {
+                        return null;
+                    }
+
                     var loader = dataLoaderAccessor.Context.GetOrAddBatchLoader<Guid, Project>("GetProjectsByIds",
                         fetchFunc: async ids => await projectRepositoryFactory.Create().GetProjectsByIdsAsync(ids));
                     
-                    return await loader.LoadAsync(context.Source.ProjectId);
+                    return await loader.LoadAsync(context.Source.ProjectId.Value);
                 }
             );
 

@@ -16,7 +16,7 @@ namespace TodoApp.Data.Models
     [Table("Task")]
     public class Task : BaseEntity
     {
-        public Guid ProjectId { get; set; }
+        public Guid? ProjectId { get; set; }
 
         [MaxLength(50), Required]
         public string Title { get; set; }

@@ -1,6 +1,6 @@
 /**
  * @flow
- * @relayHash bc8ba6f9eab5705ec2a40129eca5925b
+ * @relayHash 8481cf7a653063854b2b19971cff5751
  */
 
 /* eslint-disable */
@@ -13,7 +13,7 @@ type TaskList_tasks$ref = any;
 export type TaskPriority = "HIGH" | "LOW" | "NORMAL" | "VERY_HIGH" | "%future added value";
 export type TaskInputType = {|
   title: string,
-  projectId: string,
+  projectId?: ?string,
   description?: ?string,
   priority?: ?TaskPriority,
   deadline?: ?any,
