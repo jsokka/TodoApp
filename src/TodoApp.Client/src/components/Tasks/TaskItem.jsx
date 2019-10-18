@@ -48,7 +48,7 @@ const TaskItem = ({ task, onEditClick, onToggleCompletedClick, onDeleteClick }) 
   }
 
   return (
-    <Container className="task-item">
+    <Container fluid className="task-item">
       <Row>
         <Col xs={1}>          
           <div className="custom-control custom-checkbox">

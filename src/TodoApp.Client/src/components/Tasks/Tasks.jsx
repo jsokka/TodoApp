@@ -80,10 +80,9 @@ class Tasks extends Component {
             }} 
           />
         }
-        <Container>
+        <Container fluid>
           <Row>
             <Col>
-              <h1>Tasks</h1>
               <QueryRenderer 
                 environment={environment}
                 query={AllTasksQuery}
@@ -111,7 +110,7 @@ class Tasks extends Component {
             </Col>
           </Row>
           <Row>
-            <Col md={{span: 9, offset: 3}} className="fixed-bottom">
+            <Col md={{span: 10, offset: 2}} className="fixed-bottom">
               <TaskInput onAdd={this.handleAddTask} isLoading={this.state.isLoading} />
             </Col>
           </Row>

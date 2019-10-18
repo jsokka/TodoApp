@@ -1,30 +1,21 @@
 ﻿import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
-import { Nav, Navbar } from 'react-bootstrap';
-import { LinkContainer } from 'react-router-bootstrap';
+import { NavLink } from 'react-router-dom';
 import "./NavMenu.scss";
 
 export class NavMenu extends Component {
   render() {
     return (
-      <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
-        <Navbar.Brand><Link to={"/"}>TodoApp</Link></Navbar.Brand>
-        <Navbar.Toggle aria-controls="responsive-navbar-nav" />
-        <Navbar.Collapse>
-          <Nav>
-            <LinkContainer to={'/tasks?day=today'}>
-              <Nav.Link>
-                Today
-              </Nav.Link>
-            </LinkContainer>
-            <LinkContainer to={'/counter2'}>
-              <Nav.Link>
-                Counter
-              </Nav.Link>
-            </LinkContainer>
-          </Nav>
-        </Navbar.Collapse>
-      </Navbar>
+      <div className="bg-light border-right" id="sidebar-wrapper">
+        <div className="sidebar-heading">Todo App</div>
+          <div className="list-group list-group-flush">
+            <NavLink to="today" className="list-group-item list-group-item-action bg-light">
+              Today
+            </NavLink>
+            <NavLink to="tomorrow" className="list-group-item list-group-item-action bg-light">
+              Today
+            </NavLink>
+          </div>
+      </div>
     );
   }
 }
