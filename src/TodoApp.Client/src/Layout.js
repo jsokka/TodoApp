@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { NavMenu } from './components/NavMenu/NavMenu';
+import { SideNav } from './components/SideNav/SideNav';
 
 export default class Layout extends Component {
   displayName = Layout.name
@@ -7,7 +7,7 @@ export default class Layout extends Component {
   render() {
     return (
       <div id="wrapper" className="d-flex">
-        <NavMenu />
+        <SideNav />
         {this.props.children}
       </div>
     );

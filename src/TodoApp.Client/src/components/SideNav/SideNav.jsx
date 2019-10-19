@@ -1,8 +1,8 @@
 ﻿import React, { Component } from 'react';
 import { NavLink } from 'react-router-dom';
-import "./NavMenu.scss";
+import "./SideNav.scss";
 
-export class NavMenu extends Component {
+export class SideNav extends Component {
   render() {
     return (
       <div className="bg-light border-right" id="sidebar-wrapper">
