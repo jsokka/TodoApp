@@ -1,12 +1,16 @@
 import React, { useState } from "react";
 import { createFragmentContainer } from "react-relay";
 import graphql from "babel-plugin-relay/macro";
-import { Modal, Button, Form, Col } from "react-bootstrap";
+import { Modal, Button, Form, Col, Spinner } from "react-bootstrap";
+import DatePicker from "../Common/DatePicker";
 
-const TaskEditModal = ({ task, onCancelClick, onSaveClick }) => {
-  const [form, setValues] = useState({
+const TaskEditModal = ({ task, priorities, onCancelClick, onSaveClick, onDeleteClick, saving }) => {
+  const [form, setForm] = useState({
+    id: task.id,
     title: task.title,
-    description: task.description
+    description: task.description,
+    deadline: task.deadline,
+    priority: task.priority
   });
 
   const handleCancelClick = () => {
@@ -14,12 +18,24 @@ const TaskEditModal = ({ task, onCancelClick, onSaveClick }) => {
   };
   
   const handleSaveClick = () => {
-    onSaveClick();
+    onSaveClick(form);
+  };
+
+  const handleDeleteClick = () => {
+    onDeleteClick(task.id);
   };
 
   const handleOnChange = (event) => {
-    setValues({ ...form, [event.target.name]: event.target.value });
+    setForm({ ...form, [event.target.name]: event.target.value });
   };
+
+  const handleDayChange = (name, day) => {
+    setForm({...form, [name]: day});
+  };
+
+  const priorityOptions = priorities.map(p => 
+    <option key={p.value} value={p.value}>{p.label}</option>
+  );
 
   return (
     <Modal show={true} backdrop="static">
@@ -29,30 +45,41 @@ const TaskEditModal = ({ task, onCancelClick, onSaveClick }) => {
       <Modal.Body>
         <Form noValidate>
           <Form.Row>
-            <Form.Group as={Col} md="6">
+            <Form.Group as={Col}>
               <Form.Label>Title</Form.Label>
               <Form.Control
-                required
                 name="title"
                 type="text"
                 placeholder="Task title..."
-                onChange={handleOnChange}
                 defaultValue={task.title}
+                onChange={handleOnChange}
               />
             </Form.Group>
+          </Form.Row>
+          <Form.Row>
             <Form.Group as={Col} md="6">
               <Form.Label>Priority</Form.Label>
               <Form.Control as="select"
-                required
                 name="priority"
+                defaultValue={task.priority}
                 onChange={handleOnChange}
+              >
+                {priorityOptions}
+              </Form.Control>
+            </Form.Group>
+            <Form.Group as={Col} md="6">
+              <Form.Label>Deadline</Form.Label>
+              <DatePicker
+                style={{ display: "block" }}
+                name="deadline"
+                onChange={handleDayChange}
+                value={task.deadline}
               />
             </Form.Group>
           </Form.Row>
           <Form.Row>
             <Form.Label>Description</Form.Label>
             <Form.Control as="textarea"
-              required
               name="description"
               placeholder="Task description..."
               rows="4"
@@ -63,8 +90,28 @@ const TaskEditModal = ({ task, onCancelClick, onSaveClick }) => {
         </Form>
       </Modal.Body>
       <Modal.Footer>
-        <Button variant="secondary" onClick={handleCancelClick}>Cancel</Button>
-        <Button variant="primary" onClick={handleSaveClick}>Save</Button>
+        <Button 
+          variant="danger"
+          className="mr-auto" 
+          disabled={saving} 
+          onClick={handleDeleteClick}>
+            Delete
+        </Button>
+        <Button 
+          variant="secondary" 
+          disabled={saving} 
+          onClick={handleCancelClick}>
+            Cancel
+          </Button>
+        <Button 
+          variant="primary" 
+          disabled={saving} 
+          onClick={handleSaveClick}>
+            {saving 
+              ? <Spinner animation="border" size="sm" />
+              : "Save"
+            }
+        </Button>
       </Modal.Footer>
     </Modal>
   );

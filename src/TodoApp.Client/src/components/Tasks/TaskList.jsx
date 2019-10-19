@@ -1,15 +1,16 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import { TransitionGroup, CSSTransition } from 'react-transition-group'
 import { ListGroup } from 'react-bootstrap';
 import { createFragmentContainer } from "react-relay";
 import graphql from "babel-plugin-relay/macro";
-import "./tasks.scss";
+import "./Tasks.scss";
 import TaskItem from './TaskItem';
 
-const TaskList = ({ tasks, onEditTaskClick, onDeleteTaskClick, onToggleTaskCompletedClick }) => {
+const TaskList = ({ tasks, onEditTaskClick, onToggleTaskCompletedClick }) => {
     if ((tasks || []).length === 0) {
       return <strong>No tasks</strong>;
     }
+    
     const taskItems = (
       tasks.map(task => {
         return <CSSTransition
@@ -20,8 +21,7 @@ const TaskList = ({ tasks, onEditTaskClick, onDeleteTaskClick, onToggleTaskCompl
           <ListGroup.Item>
             <TaskItem 
               task={task} 
-              onEditClick={onEditTaskClick} 
-              onDeleteClick={onDeleteTaskClick}
+              onEditClick={onEditTaskClick}
               onToggleCompletedClick={onToggleTaskCompletedClick}
             />
           </ListGroup.Item>
@@ -30,14 +30,14 @@ const TaskList = ({ tasks, onEditTaskClick, onDeleteTaskClick, onToggleTaskCompl
     );
 
     return (  
-      <div>
-        <h2>Tasks</h2>           
+      <Fragment>
+          <h2>Tasks</h2>           
           <ListGroup className="task-list">
             <TransitionGroup>
               {taskItems}
             </TransitionGroup>
           </ListGroup>
-      </div>
+      </Fragment>
     );
 }
 

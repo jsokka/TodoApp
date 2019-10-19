@@ -25,7 +25,7 @@ const TaskInput = ({ onAdd, isLoading }) => {
   const disabled = isLoading || (value || "").length === 0;
 
   return (
-    <InputGroup className="mb-3">
+    <InputGroup>
       <FormControl
         placeholder="Add new task..."
         onKeyDown={handleKeyDown}

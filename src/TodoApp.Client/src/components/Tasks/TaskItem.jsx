@@ -1,22 +1,12 @@
 import React from "react";
 import { Container, Row, Col, Badge } from "react-bootstrap";
 import { FontAwesomeIcon as Icon } from '@fortawesome/react-fontawesome';
-import { faTrashAlt, faPenSquare, faCalendarDay } from '@fortawesome/free-solid-svg-icons'
+import { faPencilAlt, faCalendarDay } from '@fortawesome/free-solid-svg-icons'
+import { priorityMap } from "./Tasks";
 
-const priorityMap = {
-  "LOW": { label: "Low", badgeVariant: "light" },
-  "NORMAL": { label: "Normal", badgeVariant: "primary" },
-  "HIGH": { label: "High", badgeVariant: "warning" },
-  "VERY_HIGH": { label: "Very High", badgeVariant: "danger" },
-};
-
-const TaskItem = ({ task, onEditClick, onToggleCompletedClick, onDeleteClick }) => {
+const TaskItem = ({ task, onEditClick, onToggleCompletedClick }) => {
   const handleCompletedClick = (event) => {
     onToggleCompletedClick(task.id, event.target.checked);
-  };
-
-  const handleDeleteClick = () => {
-    onDeleteClick(task.id);
   };
   
   const handleEditClick = () => {
@@ -47,8 +37,14 @@ const TaskItem = ({ task, onEditClick, onToggleCompletedClick, onDeleteClick }) 
     }
   }
 
+  let itemClasses = ["task-item"];
+
+  if (task.isCompleted) {
+    itemClasses.push("completed");
+  }
+
   return (
-    <Container fluid className="task-item">
+    <Container fluid className={itemClasses.join(" ")}>
       <Row>
         <Col xs={1}>          
           <div className="custom-control custom-checkbox">
@@ -63,14 +59,13 @@ const TaskItem = ({ task, onEditClick, onToggleCompletedClick, onDeleteClick }) 
           </div>
         </Col>
         <Col>
-          <div className={task.isCompleted ? "completed" : ""}>{task.title}</div>
+          <div className="title">{task.title}</div>
           <div className="task-info">
             {taskInfo.map((t, i) => <small key={i}>{t.icon} {t.label}</small>)}
           </div>
         </Col>
-        <Col xs={1}>
-          <Icon icon={faTrashAlt} onClick={handleDeleteClick} />
-          <Icon icon={faPenSquare} onClick={handleEditClick} size="lg" />
+        <Col xs={1} className="actions">
+          <Icon icon={faPencilAlt} onClick={handleEditClick} size="lg" />
         </Col>
       </Row>
     </Container>

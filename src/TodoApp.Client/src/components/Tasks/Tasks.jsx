@@ -7,7 +7,8 @@ import TaskEditModal from "./TaskEditModal";
 import environment from "../../graphql/environment";
 import {
   AddTaskMutation, 
-  ToggleTaskCompletedMutation, 
+  ToggleTaskCompletedMutation,
+  UpdateTaskMutation,
   DeleteTaskMutation 
 } from "../../graphql/mutations/Mutations";
 import { 
@@ -15,13 +16,21 @@ import {
   EditTaskQuery 
 } from "../../graphql/queries/Queries";
 
+export const priorityMap = {
+  "LOW": { label: "Low", badgeVariant: "light" },
+  "NORMAL": { label: "Normal", badgeVariant: "primary" },
+  "HIGH": { label: "High", badgeVariant: "warning" },
+  "VERY_HIGH": { label: "Very High", badgeVariant: "danger" },
+};
+
 class Tasks extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
       isLoading: false,
-      editTaskId: null
+      editTaskId: null,
+      editTaskSaving: false,
     };
   }
 
@@ -48,11 +57,30 @@ class Tasks extends Component {
   };
 
   handleCloseTaskEditModal = () => {
-    this.setState({ editTaskId: undefined });
+    this.setState({ editTaskId: undefined, editTaskSaving: false });
   };
 
   handleSaveTaskEdit = (task) => {
-    this.handleCloseTaskEditModal();
+    this.setState({ editTaskSaving: true });
+    UpdateTaskMutation(task, () => {
+      console.log(`${task.id} updated`);
+      this.handleCloseTaskEditModal();
+    })
+  };
+
+  handleDeleteTask = (taskId) => {
+    this.setState({ editTaskSaving: true });
+    DeleteTaskMutation(taskId, () => {
+      console.log(`${taskId} deleted`);
+      this.handleCloseTaskEditModal();
+    });
+  };
+
+  getPriorities = (enumValues) => {
+    return enumValues.map(p => ({ 
+      value: p.name, 
+      label: priorityMap[p.name] ? priorityMap[p.name].label : p.name
+    }));
   };
 
   render() {
@@ -65,22 +93,26 @@ class Tasks extends Component {
             environment={environment}
             query={EditTaskQuery}
             variables={{ 
-              id: this.state.editTaskId }
-            }
+              id: this.state.editTaskId,
+              enumTypeName: "TaskPriority"
+            }}
             render={({error, props}) => {
-              if (props) {
+              if (props && props.task) {
+                var priorities = this.getPriorities(props.taskPriorities.enumValues);
                 return (
                   <TaskEditModal 
                     task={props.task}
+                    priorities={priorities}
                     onCancelClick={this.handleCloseTaskEditModal}
                     onSaveClick={this.handleSaveTaskEdit}
+                    onDeleteClick={this.handleDeleteTask}
                   />
                 )
               }
             }} 
           />
         }
-        <Container fluid>
+        <Container fluid className="tasks-container">
           <Row>
             <Col>
               <QueryRenderer 
@@ -99,18 +131,21 @@ class Tasks extends Component {
                       <TaskList 
                         tasks={props.tasks} 
                         onToggleTaskCompletedClick={this.handleToggleTaskCompleted}
-                        onDeleteTaskClick={this.handleDeleteTask}
                         onEditTaskClick={this.handleEditTaskClick} 
                       />
                     )
                   }
-                  return <Spinner className="text-center" animation="grow" />;
+                  return (
+                    <div className="text-center" style={{ marginTop: "40px" }}>
+                      <Spinner animation="grow" />
+                    </div>
+                  );
                 }}
               />
             </Col>
           </Row>
-          <Row>
-            <Col md={{span: 10, offset: 2}} className="fixed-bottom">
+          <Row className="sticky-input fixed-bottom">
+            <Col>
               <TaskInput onAdd={this.handleAddTask} isLoading={this.state.isLoading} />
             </Col>
           </Row>

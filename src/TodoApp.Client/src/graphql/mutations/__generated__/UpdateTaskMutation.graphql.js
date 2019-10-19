@@ -1,6 +1,6 @@
 /**
  * @flow
- * @relayHash e13d251c6f1897c96de9107878b427bf
+ * @relayHash 71e2d9bab807bb9f8f9f5a350f192634
  */
 
 /* eslint-disable */
@@ -10,38 +10,38 @@
 /*::
 import type { ConcreteRequest } from 'relay-runtime';
 type TaskEditModal_task$ref = any;
-export type EditTaskQueryVariables = {|
-  id: string
+export type TaskPriority = "HIGH" | "LOW" | "NORMAL" | "VERY_HIGH" | "%future added value";
+export type TaskInputType = {|
+  title: string,
+  projectId?: ?string,
+  description?: ?string,
+  priority?: ?TaskPriority,
+  deadline?: ?any,
 |};
-export type EditTaskQueryResponse = {|
-  +task: {|
+export type UpdateTaskMutationVariables = {|
+  taskId: string,
+  taskInput: TaskInputType,
+|};
+export type UpdateTaskMutationResponse = {|
+  +updateTask: {|
     +$fragmentRefs: TaskEditModal_task$ref
-  |},
-  +taskPriorities: ?{|
-    +enumValues: ?$ReadOnlyArray<{|
-      +name: string
-    |}>
-  |},
+  |}
 |};
-export type EditTaskQuery = {|
-  variables: EditTaskQueryVariables,
-  response: EditTaskQueryResponse,
+export type UpdateTaskMutation = {|
+  variables: UpdateTaskMutationVariables,
+  response: UpdateTaskMutationResponse,
 |};
 */
 
 
 /*
-query EditTaskQuery(
-  $id: ID!
+mutation UpdateTaskMutation(
+  $taskId: ID!
+  $taskInput: TaskInputType!
 ) {
-  task(id: $id) {
+  updateTask(taskId: $taskId, taskInput: $taskInput) {
     ...TaskEditModal_task
     id
-  }
-  taskPriorities: __type(name: "TaskPriority") {
-    enumValues {
-      name
-    }
   }
 }
 
@@ -58,66 +58,42 @@ const node/*: ConcreteRequest*/ = (function(){
 var v0 = [
   {
     "kind": "LocalArgument",
-    "name": "id",
+    "name": "taskId",
     "type": "ID!",
+    "defaultValue": null
+  },
+  {
+    "kind": "LocalArgument",
+    "name": "taskInput",
+    "type": "TaskInputType!",
     "defaultValue": null
   }
 ],
 v1 = [
   {
     "kind": "Variable",
-    "name": "id",
-    "variableName": "id"
+    "name": "taskId",
+    "variableName": "taskId"
+  },
+  {
+    "kind": "Variable",
+    "name": "taskInput",
+    "variableName": "taskInput"
   }
-],
-v2 = {
-  "kind": "LinkedField",
-  "alias": "taskPriorities",
-  "name": "__type",
-  "storageKey": "__type(name:\"TaskPriority\")",
-  "args": [
-    {
-      "kind": "Literal",
-      "name": "name",
-      "value": "TaskPriority"
-    }
-  ],
-  "concreteType": "__Type",
-  "plural": false,
-  "selections": [
-    {
-      "kind": "LinkedField",
-      "alias": null,
-      "name": "enumValues",
-      "storageKey": null,
-      "args": null,
-      "concreteType": "__EnumValue",
-      "plural": true,
-      "selections": [
-        {
-          "kind": "ScalarField",
-          "alias": null,
-          "name": "name",
-          "args": null,
-          "storageKey": null
-        }
-      ]
-    }
-  ]
-};
+];
 return {
   "kind": "Request",
   "fragment": {
     "kind": "Fragment",
-    "name": "EditTaskQuery",
-    "type": "Query",
+    "name": "UpdateTaskMutation",
+    "type": "Mutation",
     "metadata": null,
     "argumentDefinitions": (v0/*: any*/),
     "selections": [
       {
         "kind": "LinkedField",
         "alias": null,
-        "name": "task",
+        "name": "updateTask",
         "storageKey": null,
         "args": (v1/*: any*/),
         "concreteType": "TaskType",
@@ -129,19 +105,18 @@ return {
             "args": null
           }
         ]
-      },
-      (v2/*: any*/)
+      }
     ]
   },
   "operation": {
     "kind": "Operation",
-    "name": "EditTaskQuery",
+    "name": "UpdateTaskMutation",
     "argumentDefinitions": (v0/*: any*/),
     "selections": [
       {
         "kind": "LinkedField",
         "alias": null,
-        "name": "task",
+        "name": "updateTask",
         "storageKey": null,
         "args": (v1/*: any*/),
         "concreteType": "TaskType",
@@ -183,19 +158,18 @@ return {
             "storageKey": null
           }
         ]
-      },
-      (v2/*: any*/)
+      }
     ]
   },
   "params": {
-    "operationKind": "query",
-    "name": "EditTaskQuery",
+    "operationKind": "mutation",
+    "name": "UpdateTaskMutation",
     "id": null,
-    "text": "query EditTaskQuery(\n  $id: ID!\n) {\n  task(id: $id) {\n    ...TaskEditModal_task\n    id\n  }\n  taskPriorities: __type(name: \"TaskPriority\") {\n    enumValues {\n      name\n    }\n  }\n}\n\nfragment TaskEditModal_task on TaskType {\n  id\n  title\n  description\n  priority\n  deadline\n}\n",
+    "text": "mutation UpdateTaskMutation(\n  $taskId: ID!\n  $taskInput: TaskInputType!\n) {\n  updateTask(taskId: $taskId, taskInput: $taskInput) {\n    ...TaskEditModal_task\n    id\n  }\n}\n\nfragment TaskEditModal_task on TaskType {\n  id\n  title\n  description\n  priority\n  deadline\n}\n",
     "metadata": {}
   }
 };
 })();
 // prettier-ignore
-(node/*: any*/).hash = 'e03951beb6967984376ae4089c7ec3bd';
+(node/*: any*/).hash = 'c9cb28d6323b1d2c8bae5c9f1c39e545';
 module.exports = node;
