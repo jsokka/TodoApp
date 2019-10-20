@@ -1,20 +1,19 @@
 import React, { Component, Fragment } from "react";
+import { withRouter } from 'react-router'
 import { QueryRenderer } from "react-relay";
 import { Container, Row, Col, Spinner, Alert } from "react-bootstrap";
 import TaskList from "./TaskList";
 import TaskInput from "./TaskInput";
 import TaskEditModal from "./TaskEditModal";
+import "./Tasks.scss";
 import environment from "../../graphql/environment";
+import graphql from "babel-plugin-relay/macro";
 import {
   AddTaskMutation, 
   ToggleTaskCompletedMutation,
   UpdateTaskMutation,
   DeleteTaskMutation 
 } from "../../graphql/mutations/Mutations";
-import { 
-  AllTasksQuery, 
-  EditTaskQuery 
-} from "../../graphql/queries/Queries";
 
 export const priorityMap = {
   "LOW": { label: "Low", badgeVariant: "light" },
@@ -22,6 +21,38 @@ export const priorityMap = {
   "HIGH": { label: "High", badgeVariant: "warning" },
   "VERY_HIGH": { label: "Very High", badgeVariant: "danger" },
 };
+
+const TodayTasksQuery = graphql`
+  query TasksQuery {
+    tasks {
+      ...TaskList_tasks
+    }
+  }
+`;
+
+const ProjectTasksQuery = graphql`
+  query TasksProjectTasksQuery($projectId: ID!) {
+    project(id: $projectId) {
+      name
+      tasks {
+        ...TaskList_tasks
+      }
+    }
+  }
+`;
+
+const EditTaskQuery = graphql`
+  query TasksEditTaskQuery($id: ID!) {
+    task(id: $id) {
+      ...TaskEditModal_task
+    }
+    taskPriorities: __type(name: "TaskPriority") {
+      enumValues {
+        name
+      }
+    }
+  }
+`
 
 class Tasks extends Component {
   constructor(props) {
@@ -34,9 +65,9 @@ class Tasks extends Component {
     };
   }
 
-  handleAddTask = (title) => {
+  handleAddTask = (title, projectId) => {
     this.setState({ isLoading: true });
-    AddTaskMutation(title, null,
+    AddTaskMutation(title, projectId,
       (taskId) => { 
         this.setState({ isLoading: false });
         console.log(`Task ${taskId} added`); 
@@ -86,6 +117,20 @@ class Tasks extends Component {
   render() {
     const showTaskEditModal = this.state.editTaskId;
 
+    let tasksQueryVariables;
+    let tasksQuery = TodayTasksQuery;
+    let projectId;
+
+    const { params } = this.props.match;
+
+    if (params && params.projectId) {
+      projectId = params.projectId;
+      tasksQuery = ProjectTasksQuery;
+      tasksQueryVariables = {
+        projectId: params.projectId
+      };
+    }
+
     return (
       <Fragment>
         {showTaskEditModal && 
@@ -117,7 +162,8 @@ class Tasks extends Component {
             <Col>
               <QueryRenderer 
                 environment={environment}
-                query={AllTasksQuery}
+                query={tasksQuery}
+                variables={tasksQueryVariables}
                 render={({error, props}) => {
                   if (error) {
                     return (
@@ -127,9 +173,12 @@ class Tasks extends Component {
                       </Alert>
                     )
                   } else if (props) {
+                    var tasks = props.project ? props.project.tasks : props.tasks;
+                    var listTitle = props.project ? props.project.name : "Tasks today";
                     return (
                       <TaskList 
-                        tasks={props.tasks} 
+                        title={listTitle}
+                        tasks={tasks} 
                         onToggleTaskCompletedClick={this.handleToggleTaskCompleted}
                         onEditTaskClick={this.handleEditTaskClick} 
                       />
@@ -146,7 +195,7 @@ class Tasks extends Component {
           </Row>
           <Row className="sticky-input fixed-bottom">
             <Col>
-              <TaskInput onAdd={this.handleAddTask} isLoading={this.state.isLoading} />
+              <TaskInput projectId={projectId} onAdd={this.handleAddTask} isLoading={this.state.isLoading} />
             </Col>
           </Row>
         </Container>
@@ -155,4 +204,4 @@ class Tasks extends Component {
   }
 }
 
-export default Tasks;
+export default withRouter(Tasks);

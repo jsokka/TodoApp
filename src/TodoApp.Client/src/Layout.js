@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { SideNav } from './components/SideNav/SideNav';
+import SideNav from './components/SideNav/SideNav';
 
 export default class Layout extends Component {
   displayName = Layout.name

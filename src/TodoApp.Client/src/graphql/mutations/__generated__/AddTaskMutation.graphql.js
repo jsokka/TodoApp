@@ -1,6 +1,6 @@
 /**
  * @flow
- * @relayHash 8481cf7a653063854b2b19971cff5751
+ * @relayHash 56bcaa2bdfcec5418d3fe9622ce66a2e
  */
 
 /* eslint-disable */
@@ -23,7 +23,10 @@ export type AddTaskMutationVariables = {|
 |};
 export type AddTaskMutationResponse = {|
   +addTask: ?{|
-    +$fragmentRefs: TaskList_tasks$ref
+    +project: ?{|
+      +uncompletedTaskCount: number
+    |},
+    +$fragmentRefs: TaskList_tasks$ref,
   |}
 |};
 export type AddTaskMutation = {|
@@ -39,6 +42,10 @@ mutation AddTaskMutation(
 ) {
   addTask(taskInput: $taskInput) {
     ...TaskList_tasks
+    project {
+      uncompletedTaskCount
+      id
+    }
     id
   }
 }
@@ -76,6 +83,13 @@ v1 = [
 v2 = {
   "kind": "ScalarField",
   "alias": null,
+  "name": "uncompletedTaskCount",
+  "args": null,
+  "storageKey": null
+},
+v3 = {
+  "kind": "ScalarField",
+  "alias": null,
   "name": "id",
   "args": null,
   "storageKey": null
@@ -99,6 +113,18 @@ return {
         "plural": false,
         "selections": [
           {
+            "kind": "LinkedField",
+            "alias": null,
+            "name": "project",
+            "storageKey": null,
+            "args": null,
+            "concreteType": "ProjectType",
+            "plural": false,
+            "selections": [
+              (v2/*: any*/)
+            ]
+          },
+          {
             "kind": "FragmentSpread",
             "name": "TaskList_tasks",
             "args": null
@@ -121,7 +147,7 @@ return {
         "concreteType": "TaskType",
         "plural": false,
         "selections": [
-          (v2/*: any*/),
+          (v3/*: any*/),
           {
             "kind": "ScalarField",
             "alias": null,
@@ -173,6 +199,7 @@ return {
                 "args": null,
                 "storageKey": null
               },
+              (v3/*: any*/),
               (v2/*: any*/)
             ]
           }
@@ -184,11 +211,11 @@ return {
     "operationKind": "mutation",
     "name": "AddTaskMutation",
     "id": null,
-    "text": "mutation AddTaskMutation(\n  $taskInput: TaskInputType!\n) {\n  addTask(taskInput: $taskInput) {\n    ...TaskList_tasks\n    id\n  }\n}\n\nfragment TaskList_tasks on TaskType {\n  id\n  title\n  deadline\n  priority\n  completedOn\n  isCompleted\n  project {\n    name\n    id\n  }\n}\n",
+    "text": "mutation AddTaskMutation(\n  $taskInput: TaskInputType!\n) {\n  addTask(taskInput: $taskInput) {\n    ...TaskList_tasks\n    project {\n      uncompletedTaskCount\n      id\n    }\n    id\n  }\n}\n\nfragment TaskList_tasks on TaskType {\n  id\n  title\n  deadline\n  priority\n  completedOn\n  isCompleted\n  project {\n    name\n    id\n  }\n}\n",
     "metadata": {}
   }
 };
 })();
 // prettier-ignore
-(node/*: any*/).hash = 'cd78f461db4df6c62fa9b2ec8d389d81';
+(node/*: any*/).hash = '0d5b6249fb435cf4c99eff5a389dd243';
 module.exports = node;

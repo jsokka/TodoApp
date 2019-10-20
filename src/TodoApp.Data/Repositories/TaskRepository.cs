@@ -16,7 +16,7 @@ namespace TodoApp.Data.Repositories
             return await Db.Tasks.Where(t => t.Priority == priority).ToListAsync();
         }
 
-        public async Task<IEnumerable<Models.Task>> GetTasksByProjectIdAsync(Guid projectId)
+        public async Task<IEnumerable<Models.Task>> GetTasksByProjectIdAsync(Guid? projectId)
         {
             return await Db.Tasks.Where(t => t.ProjectId == projectId).ToListAsync();
         }

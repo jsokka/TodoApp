@@ -1,6 +1,6 @@
 /**
  * @flow
- * @relayHash 735b01fcf18a5ec850f5598bee344f7e
+ * @relayHash 32c43cf07550cfe3d2a9b9e0fbdd48db
  */
 
 /* eslint-disable */
@@ -18,6 +18,10 @@ export type ToggleTaskCompletedMutationResponse = {|
     +id: string,
     +completedOn: ?any,
     +isCompleted: boolean,
+    +project: ?{|
+      +id: string,
+      +uncompletedTaskCount: number,
+    |},
   |}
 |};
 export type ToggleTaskCompletedMutation = {|
@@ -36,6 +40,10 @@ mutation ToggleTaskCompletedMutation(
     id
     completedOn
     isCompleted
+    project {
+      id
+      uncompletedTaskCount
+    }
   }
 }
 */
@@ -55,7 +63,14 @@ var v0 = [
     "defaultValue": null
   }
 ],
-v1 = [
+v1 = {
+  "kind": "ScalarField",
+  "alias": null,
+  "name": "id",
+  "args": null,
+  "storageKey": null
+},
+v2 = [
   {
     "kind": "LinkedField",
     "alias": null,
@@ -76,13 +91,7 @@ v1 = [
     "concreteType": "TaskType",
     "plural": false,
     "selections": [
-      {
-        "kind": "ScalarField",
-        "alias": null,
-        "name": "id",
-        "args": null,
-        "storageKey": null
-      },
+      (v1/*: any*/),
       {
         "kind": "ScalarField",
         "alias": null,
@@ -96,6 +105,25 @@ v1 = [
         "name": "isCompleted",
         "args": null,
         "storageKey": null
+      },
+      {
+        "kind": "LinkedField",
+        "alias": null,
+        "name": "project",
+        "storageKey": null,
+        "args": null,
+        "concreteType": "ProjectType",
+        "plural": false,
+        "selections": [
+          (v1/*: any*/),
+          {
+            "kind": "ScalarField",
+            "alias": null,
+            "name": "uncompletedTaskCount",
+            "args": null,
+            "storageKey": null
+          }
+        ]
       }
     ]
   }
@@ -108,23 +136,23 @@ return {
     "type": "Mutation",
     "metadata": null,
     "argumentDefinitions": (v0/*: any*/),
-    "selections": (v1/*: any*/)
+    "selections": (v2/*: any*/)
   },
   "operation": {
     "kind": "Operation",
     "name": "ToggleTaskCompletedMutation",
     "argumentDefinitions": (v0/*: any*/),
-    "selections": (v1/*: any*/)
+    "selections": (v2/*: any*/)
   },
   "params": {
     "operationKind": "mutation",
     "name": "ToggleTaskCompletedMutation",
     "id": null,
-    "text": "mutation ToggleTaskCompletedMutation(\n  $taskId: ID!\n  $completed: Boolean!\n) {\n  toggleTaskCompleted(taskId: $taskId, completed: $completed) {\n    id\n    completedOn\n    isCompleted\n  }\n}\n",
+    "text": "mutation ToggleTaskCompletedMutation(\n  $taskId: ID!\n  $completed: Boolean!\n) {\n  toggleTaskCompleted(taskId: $taskId, completed: $completed) {\n    id\n    completedOn\n    isCompleted\n    project {\n      id\n      uncompletedTaskCount\n    }\n  }\n}\n",
     "metadata": {}
   }
 };
 })();
 // prettier-ignore
-(node/*: any*/).hash = '93c9fde934db4a5d82dfe724f18eff05';
+(node/*: any*/).hash = '16299cb57902ff62fb789b1af2245b27';
 module.exports = node;

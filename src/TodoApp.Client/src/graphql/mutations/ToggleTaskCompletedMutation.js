@@ -8,6 +8,10 @@ const mutation = graphql`
       id
       completedOn
       isCompleted
+      project {
+        id
+        uncompletedTaskCount
+      }
     }
   }
 `
@@ -18,11 +22,18 @@ export default (taskId, completed, callback) => {
     completed
   }
 
-  const optimisticResponse = {
-    toggleTaskCompleted: {
-      id: taskId,
-      completedOn: completed ? new Date().toISOString() : null,
-      isCompleted: completed
+  const optimisticUpdater = (store) => {
+    var task = store.get(taskId);
+    var project = task.getLinkedRecord("project");
+
+    task.setValue(completed, "isCompleted");
+    task.setValue(completed ? new Date().toISOString() : null, "completedOn");
+
+    if (project) {
+      const uncompletedTaskCount = project.getValue("uncompletedTaskCount")
+        + (completed ? -1 : 1);
+      
+      project.setValue(uncompletedTaskCount, "uncompletedTaskCount");
     }
   };
 
@@ -31,7 +42,7 @@ export default (taskId, completed, callback) => {
     {
       mutation,
       variables,
-      optimisticResponse: optimisticResponse,
+      optimisticUpdater: optimisticUpdater,
       onCompleted: () => {
         callback()
       },

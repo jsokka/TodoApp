@@ -24,5 +24,20 @@ namespace TodoApp.Data.Repositories
                 .Where(p => p.Name.Contains(searchString) || p.Description.Contains(searchString))
                 .ToListAsync();
         }
+
+        public async Task<Dictionary<Guid, int>> GetTaskCountByProjects(IEnumerable<Guid> ids, bool uncompletedOnly = false)
+        {
+            return await Db.Projects.Where(p => ids.Contains(p.Id))
+                .Select(p => new 
+                { 
+                    p.Id, 
+                    TaskCount = p.Tasks.Where(t => !uncompletedOnly || !t.CompletedOn.HasValue).Count() 
+                }).ToDictionaryAsync(p => p.Id, p => p.TaskCount);
+        }
+
+        public async Task<Project> GetProjectByTaskId(Guid taskId)
+        {
+            return await Db.Projects.Where(t => t.Tasks.Any(t => t.Id == taskId)).FirstOrDefaultAsync();
+        }
     }
 }

@@ -10,7 +10,8 @@ export default class App extends Component {
   render() {
     return (
       <Layout>
-        <Route path='/today' component={Tasks} />
+        <Route path="/today" component={Tasks} />
+        <Route path="/project/:projectId" component={Tasks} />
       </Layout>
     );
   }

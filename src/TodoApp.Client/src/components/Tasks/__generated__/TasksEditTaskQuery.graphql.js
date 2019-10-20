@@ -1,6 +1,6 @@
 /**
  * @flow
- * @relayHash e13d251c6f1897c96de9107878b427bf
+ * @relayHash 0fa55b74e1dd4843ee7abae937bfdc77
  */
 
 /* eslint-disable */
@@ -10,10 +10,10 @@
 /*::
 import type { ConcreteRequest } from 'relay-runtime';
 type TaskEditModal_task$ref = any;
-export type EditTaskQueryVariables = {|
+export type TasksEditTaskQueryVariables = {|
   id: string
 |};
-export type EditTaskQueryResponse = {|
+export type TasksEditTaskQueryResponse = {|
   +task: {|
     +$fragmentRefs: TaskEditModal_task$ref
   |},
@@ -23,15 +23,15 @@ export type EditTaskQueryResponse = {|
     |}>
   |},
 |};
-export type EditTaskQuery = {|
-  variables: EditTaskQueryVariables,
-  response: EditTaskQueryResponse,
+export type TasksEditTaskQuery = {|
+  variables: TasksEditTaskQueryVariables,
+  response: TasksEditTaskQueryResponse,
 |};
 */
 
 
 /*
-query EditTaskQuery(
+query TasksEditTaskQuery(
   $id: ID!
 ) {
   task(id: $id) {
@@ -109,7 +109,7 @@ return {
   "kind": "Request",
   "fragment": {
     "kind": "Fragment",
-    "name": "EditTaskQuery",
+    "name": "TasksEditTaskQuery",
     "type": "Query",
     "metadata": null,
     "argumentDefinitions": (v0/*: any*/),
@@ -135,7 +135,7 @@ return {
   },
   "operation": {
     "kind": "Operation",
-    "name": "EditTaskQuery",
+    "name": "TasksEditTaskQuery",
     "argumentDefinitions": (v0/*: any*/),
     "selections": [
       {
@@ -189,13 +189,13 @@ return {
   },
   "params": {
     "operationKind": "query",
-    "name": "EditTaskQuery",
+    "name": "TasksEditTaskQuery",
     "id": null,
-    "text": "query EditTaskQuery(\n  $id: ID!\n) {\n  task(id: $id) {\n    ...TaskEditModal_task\n    id\n  }\n  taskPriorities: __type(name: \"TaskPriority\") {\n    enumValues {\n      name\n    }\n  }\n}\n\nfragment TaskEditModal_task on TaskType {\n  id\n  title\n  description\n  priority\n  deadline\n}\n",
+    "text": "query TasksEditTaskQuery(\n  $id: ID!\n) {\n  task(id: $id) {\n    ...TaskEditModal_task\n    id\n  }\n  taskPriorities: __type(name: \"TaskPriority\") {\n    enumValues {\n      name\n    }\n  }\n}\n\nfragment TaskEditModal_task on TaskType {\n  id\n  title\n  description\n  priority\n  deadline\n}\n",
     "metadata": {}
   }
 };
 })();
 // prettier-ignore
-(node/*: any*/).hash = 'e03951beb6967984376ae4089c7ec3bd';
+(node/*: any*/).hash = '76540c8c8d766180f73316cae1a2db65';
 module.exports = node;

@@ -10,7 +10,8 @@ namespace TodoApp.Api.GraphQL
 {
     public partial class TodoAppMutation
     {
-        partial void AddTaskFields(IFactory<ITaskRepository> taskRepositoryFactory)
+        partial void AddTaskFields(IFactory<ITaskRepository> taskRepositoryFactory,
+            IFactory<IProjectRepository> projectRepositoryFactory)
         {
             FieldAsync<TaskType>(
                 "addTask",
@@ -25,7 +26,7 @@ namespace TodoApp.Api.GraphQL
                 }
             );
 
-            FieldAsync<NonNullGraphType<StringGraphType>>(
+            FieldAsync<ProjectType>(
                 "deleteTask",
                 arguments: new QueryArguments(
                     new QueryArgument<NonNullGraphType<IdGraphType>> { Name = "id" }
@@ -36,9 +37,11 @@ namespace TodoApp.Api.GraphQL
 
                     try
                     {
+                        var project = await projectRepositoryFactory.Create().GetProjectByTaskId(id);
+
                         await taskRepositoryFactory.Create().DeleteAsync(id);
 
-                        return $"Task {id} deleted";
+                        return project;
                     }
                     catch (Exception ex)
                     {

@@ -15,7 +15,8 @@ namespace TodoApp.Api.GraphQL
     public partial class TodoAppMutation : ObjectGraphType
     {
         partial void AddProjectFields(IFactory<IProjectRepository> projectRepositoryFactory);
-        partial void AddTaskFields(IFactory<ITaskRepository> taskRepositoryFactory);
+        partial void AddTaskFields(IFactory<ITaskRepository> taskRepositoryFactory, 
+            IFactory<IProjectRepository> projectRepositoryFactory);
         partial void AddTagFields(IFactory<ITagRepository> tagRepositoryFactory);
 
         public TodoAppMutation(IFactory<IProjectRepository> projectRepositoryFactory,
@@ -24,7 +25,7 @@ namespace TodoApp.Api.GraphQL
             Name = "Mutation";
 
             AddProjectFields(projectRepositoryFactory);
-            AddTaskFields(taskRepositoryFactory);
+            AddTaskFields(taskRepositoryFactory, projectRepositoryFactory);
             AddTagFields(tagRepositoryFactory);
         }
     }

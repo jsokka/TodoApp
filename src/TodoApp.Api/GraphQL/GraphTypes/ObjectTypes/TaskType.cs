@@ -24,7 +24,7 @@ namespace TodoApp.Api.GraphQL.GraphTypes.ObjectTypes
             Field("created", t => t.CreatedOn, type: typeof(NonNullGraphType<DateTimeGraphType>))
                 .Description("Creation time of the task");
 
-            FieldAsync<NonNullGraphType<ProjectType>>("project",
+            FieldAsync<ProjectType>("project",
                 resolve: async context => 
                 {
                     if (!context.Source.ProjectId.HasValue)

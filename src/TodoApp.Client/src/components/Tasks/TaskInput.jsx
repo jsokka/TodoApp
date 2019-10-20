@@ -3,7 +3,7 @@ import { InputGroup, FormControl, Button, Spinner } from "react-bootstrap";
 import { FontAwesomeIcon as Icon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/free-solid-svg-icons'
 
-const TaskInput = ({ onAdd, isLoading }) => {
+const TaskInput = ({ projectId, onAdd, isLoading }) => {
   const [value, setValue] = useState("");
 
   const handleChange = event => setValue(event.target.value);
@@ -12,7 +12,7 @@ const TaskInput = ({ onAdd, isLoading }) => {
     if (value.trim().length === 0) {
       return;
     }
-    onAdd(value.trim());
+    onAdd(value.trim(), projectId);
     setValue("");
   };
 

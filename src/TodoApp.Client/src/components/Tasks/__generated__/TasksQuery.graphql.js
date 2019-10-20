@@ -1,6 +1,6 @@
 /**
  * @flow
- * @relayHash 73254cc0dc3d106581ae49885372b564
+ * @relayHash a50644648025664abb3e666dd33a6ba4
  */
 
 /* eslint-disable */
@@ -10,21 +10,21 @@
 /*::
 import type { ConcreteRequest } from 'relay-runtime';
 type TaskList_tasks$ref = any;
-export type AllTasksQueryVariables = {||};
-export type AllTasksQueryResponse = {|
+export type TasksQueryVariables = {||};
+export type TasksQueryResponse = {|
   +tasks: $ReadOnlyArray<{|
     +$fragmentRefs: TaskList_tasks$ref
   |}>
 |};
-export type AllTasksQuery = {|
-  variables: AllTasksQueryVariables,
-  response: AllTasksQueryResponse,
+export type TasksQuery = {|
+  variables: TasksQueryVariables,
+  response: TasksQueryResponse,
 |};
 */
 
 
 /*
-query AllTasksQuery {
+query TasksQuery {
   tasks {
     ...TaskList_tasks
     id
@@ -57,7 +57,7 @@ return {
   "kind": "Request",
   "fragment": {
     "kind": "Fragment",
-    "name": "AllTasksQuery",
+    "name": "TasksQuery",
     "type": "Query",
     "metadata": null,
     "argumentDefinitions": [],
@@ -82,7 +82,7 @@ return {
   },
   "operation": {
     "kind": "Operation",
-    "name": "AllTasksQuery",
+    "name": "TasksQuery",
     "argumentDefinitions": [],
     "selections": [
       {
@@ -155,13 +155,13 @@ return {
   },
   "params": {
     "operationKind": "query",
-    "name": "AllTasksQuery",
+    "name": "TasksQuery",
     "id": null,
-    "text": "query AllTasksQuery {\n  tasks {\n    ...TaskList_tasks\n    id\n  }\n}\n\nfragment TaskList_tasks on TaskType {\n  id\n  title\n  deadline\n  priority\n  completedOn\n  isCompleted\n  project {\n    name\n    id\n  }\n}\n",
+    "text": "query TasksQuery {\n  tasks {\n    ...TaskList_tasks\n    id\n  }\n}\n\nfragment TaskList_tasks on TaskType {\n  id\n  title\n  deadline\n  priority\n  completedOn\n  isCompleted\n  project {\n    name\n    id\n  }\n}\n",
     "metadata": {}
   }
 };
 })();
 // prettier-ignore
-(node/*: any*/).hash = 'a731517a2a5b60f453aade4aca1a89e8';
+(node/*: any*/).hash = '40b9924ec89d2f016a59bcf5b12a52a7';
 module.exports = node;

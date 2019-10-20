@@ -15,7 +15,7 @@ type Mutation {
   addTask(taskInput: TaskInputType!): TaskType
   deleteProject(projectId: ID!): String!
   deleteTag(id: ID!): String!
-  deleteTask(id: ID!): String!
+  deleteTask(id: ID!): ProjectType
   toggleTaskCompleted(taskId: ID!, completed: Boolean!): TaskType
   updateProject(projectId: ID!, projectInput: ProjectInputType!): ProjectType
   updateTask(taskId: ID!, taskInput: TaskInputType!): TaskType!
@@ -33,7 +33,9 @@ type ProjectType {
   description: String
   id: ID!
   name: String!
+  taskCount: Int!
   tasks(priority: TaskPriority = null, openOnly: Boolean = false): [TaskType!]!
+  uncompletedTaskCount: Int!
 }
 
 type Query {
@@ -42,7 +44,10 @@ type Query {
   search(searchString: String = null): [SearchResult!]!
   tags: [TagType!]!
   task(id: ID!): TaskType!
-  tasks(priority: TaskPriority = null): [TaskType!]!
+  tasks(
+    projectId: ID = null
+    onlyTasksWithoutProject: Boolean = null
+  ): [TaskType!]!
 }
 
 union SearchResult = ProjectType | TaskType
@@ -77,7 +82,7 @@ type TaskType {
   id: ID!
   isCompleted: Boolean!
   priority: TaskPriority!
-  project: ProjectType!
+  project: ProjectType
   tags: [TagType!]!
   title: String!
 }

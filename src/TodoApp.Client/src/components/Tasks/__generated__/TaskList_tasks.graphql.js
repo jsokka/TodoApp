@@ -19,7 +19,7 @@ export type TaskList_tasks = $ReadOnlyArray<{|
   +priority: TaskPriority,
   +completedOn: ?any,
   +isCompleted: boolean,
-  +project: {|
+  +project: ?{|
     +name: string
   |},
   +$refType: TaskList_tasks$ref,

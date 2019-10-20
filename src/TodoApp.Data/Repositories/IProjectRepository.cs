@@ -11,5 +11,7 @@ namespace TodoApp.Data.Repositories
     {
         Task<Dictionary<Guid, Project>> GetProjectsByIdsAsync(IEnumerable<Guid> ids);
         Task<IEnumerable<Project>> SearchProjects(string searchString);
+        Task<Dictionary<Guid, int>> GetTaskCountByProjects(IEnumerable<Guid> ids, bool uncompletedOnly = false);
+        Task<Project> GetProjectByTaskId(Guid taskId);
     }
 }

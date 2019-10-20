@@ -20,16 +20,23 @@ namespace TodoApp.Api.GraphQL
             FieldAsync<NonNullGraphType<ListGraphType<NonNullGraphType<TaskType>>>>(
                 "tasks",
                 arguments: new QueryArguments(
-                    new QueryArgument<TaskPriorityEnum> { Name = "priority" }
+                    new QueryArgument<IdGraphType> { Name = "projectId" },
+                    new QueryArgument<BooleanGraphType> { Name = "onlyTasksWithoutProject" }
                 ),
                 resolve: async context =>
                 {
                     var taskRepository = taskRepositoryFactory.Create();
 
-                    var priority = context.GetArgument<TaskPriority?>("priority");
-                    if (priority.HasValue)
+                    var projectId = context.GetArgument<Guid?>("projectId");
+
+                    if (projectId.HasValue)
                     {
-                        return await taskRepository.GetTasksByPriority(priority.Value);
+                        return await taskRepository.GetTasksByProjectIdAsync(projectId.Value);
+                    }
+
+                    if (context.GetArgument("onlyTasksWithoutProject", false))
+                    {
+                        return await taskRepository.GetTasksByProjectIdAsync(null);
                     }
 
                     return await taskRepository.GetAllAsync();

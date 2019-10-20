@@ -6,6 +6,9 @@ const mutation = graphql`
   mutation AddTaskMutation($taskInput: TaskInputType!) {
     addTask(taskInput: $taskInput) {
       ...TaskList_tasks
+      project {
+        uncompletedTaskCount
+      }
     }
   }
 `
@@ -24,10 +27,20 @@ export default (title, projectId, callback) => {
       return;
     }
 
-    let tasks = store.getRoot().getLinkedRecords("tasks");
-    tasks.push(payload);
-    
-    store.getRoot().setLinkedRecords(tasks, "tasks");
+    var root = store.getRoot();
+
+    if (projectId) {
+      const project = root.getLinkedRecord("project", { id: projectId });
+      let tasks = project.getLinkedRecords("tasks");
+      tasks.push(payload);
+      project.setLinkedRecords(tasks, "tasks");
+    }
+    else {
+      let tasks = root.getLinkedRecords("tasks");
+      tasks.push(payload);
+      
+      root.setLinkedRecords(tasks, "tasks"); 
+    }
   };
 
   commitMutation(
