@@ -46,6 +46,10 @@ const EditTaskQuery = graphql`
     task(id: $id) {
       ...TaskEditModal_task
     }
+    projects {
+      id
+      name
+    }
     taskPriorities: __type(name: "TaskPriority") {
       enumValues {
         name
@@ -148,6 +152,7 @@ class Tasks extends Component {
                   <TaskEditModal 
                     task={props.task}
                     priorities={priorities}
+                    projects={props.projects}
                     onCancelClick={this.handleCloseTaskEditModal}
                     onSaveClick={this.handleSaveTaskEdit}
                     onDeleteClick={this.handleDeleteTask}

@@ -18,6 +18,9 @@ export type TaskEditModal_task = {|
   +description: ?string,
   +priority: TaskPriority,
   +deadline: ?any,
+  +project: ?{|
+    +id: string
+  |},
   +$refType: TaskEditModal_task$ref,
 |};
 export type TaskEditModal_task$data = TaskEditModal_task;
@@ -28,20 +31,22 @@ export type TaskEditModal_task$key = {
 */
 
 
-const node/*: ReaderFragment*/ = {
+const node/*: ReaderFragment*/ = (function(){
+var v0 = {
+  "kind": "ScalarField",
+  "alias": null,
+  "name": "id",
+  "args": null,
+  "storageKey": null
+};
+return {
   "kind": "Fragment",
   "name": "TaskEditModal_task",
   "type": "TaskType",
   "metadata": null,
   "argumentDefinitions": [],
   "selections": [
-    {
-      "kind": "ScalarField",
-      "alias": null,
-      "name": "id",
-      "args": null,
-      "storageKey": null
-    },
+    (v0/*: any*/),
     {
       "kind": "ScalarField",
       "alias": null,
@@ -69,9 +74,22 @@ const node/*: ReaderFragment*/ = {
       "name": "deadline",
       "args": null,
       "storageKey": null
+    },
+    {
+      "kind": "LinkedField",
+      "alias": null,
+      "name": "project",
+      "storageKey": null,
+      "args": null,
+      "concreteType": "ProjectType",
+      "plural": false,
+      "selections": [
+        (v0/*: any*/)
+      ]
     }
   ]
 };
+})();
 // prettier-ignore
-(node/*: any*/).hash = '2c4d87b4533dca8f636330b856c0cfa4';
+(node/*: any*/).hash = '16bfb2d069d84b9efc5868b9b3ac9684';
 module.exports = node;

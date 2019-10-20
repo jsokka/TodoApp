@@ -4,9 +4,10 @@ import graphql from "babel-plugin-relay/macro";
 import { Modal, Button, Form, Col, Spinner } from "react-bootstrap";
 import DatePicker from "../Common/DatePicker";
 
-const TaskEditModal = ({ task, priorities, onCancelClick, onSaveClick, onDeleteClick, saving }) => {
+const TaskEditModal = ({ task, priorities, projects, onCancelClick, onSaveClick, onDeleteClick, saving }) => {
   const [form, setForm] = useState({
     id: task.id,
+    projectId: task.project ? task.project.id : null,
     title: task.title,
     description: task.description,
     deadline: task.deadline,
@@ -26,7 +27,7 @@ const TaskEditModal = ({ task, priorities, onCancelClick, onSaveClick, onDeleteC
   };
 
   const handleOnChange = (event) => {
-    setForm({ ...form, [event.target.name]: event.target.value });
+    setForm({ ...form, [event.target.name]: event.target.value || null });
   };
 
   const handleDayChange = (name, day) => {
@@ -37,6 +38,12 @@ const TaskEditModal = ({ task, priorities, onCancelClick, onSaveClick, onDeleteC
     <option key={p.value} value={p.value}>{p.label}</option>
   );
 
+  const projectOptions = projects.map(p => 
+    <option key={p.id} value={p.id}>{p.name}</option>  
+  ); 
+
+  projectOptions.unshift(<option key="-1" value="">No project</option>);
+
   return (
     <Modal show={true} backdrop="static">
       <Modal.Header>
@@ -45,7 +52,7 @@ const TaskEditModal = ({ task, priorities, onCancelClick, onSaveClick, onDeleteC
       <Modal.Body>
         <Form noValidate>
           <Form.Row>
-            <Form.Group as={Col}>
+            <Form.Group as={Col} md="6">
               <Form.Label>Title</Form.Label>
               <Form.Control
                 name="title"
@@ -54,6 +61,16 @@ const TaskEditModal = ({ task, priorities, onCancelClick, onSaveClick, onDeleteC
                 defaultValue={task.title}
                 onChange={handleOnChange}
               />
+            </Form.Group>
+            <Form.Group as={Col} md="6">
+              <Form.Label>Project</Form.Label>
+              <Form.Control as="select"
+                name="projectId"
+                defaultValue={task.project ? task.project.id : undefined}
+                onChange={handleOnChange}
+              >
+                {projectOptions}
+              </Form.Control>
             </Form.Group>
           </Form.Row>
           <Form.Row>
@@ -124,5 +141,8 @@ export default createFragmentContainer(TaskEditModal, { task: graphql`
     description
     priority
     deadline
+    project {
+      id
+    }
   }
 `});

@@ -1,6 +1,6 @@
 /**
  * @flow
- * @relayHash 71e2d9bab807bb9f8f9f5a350f192634
+ * @relayHash c06c9d4f3ce4a84c01058f75900b427b
  */
 
 /* eslint-disable */
@@ -51,6 +51,9 @@ fragment TaskEditModal_task on TaskType {
   description
   priority
   deadline
+  project {
+    id
+  }
 }
 */
 
@@ -80,7 +83,14 @@ v1 = [
     "name": "taskInput",
     "variableName": "taskInput"
   }
-];
+],
+v2 = {
+  "kind": "ScalarField",
+  "alias": null,
+  "name": "id",
+  "args": null,
+  "storageKey": null
+};
 return {
   "kind": "Request",
   "fragment": {
@@ -122,13 +132,7 @@ return {
         "concreteType": "TaskType",
         "plural": false,
         "selections": [
-          {
-            "kind": "ScalarField",
-            "alias": null,
-            "name": "id",
-            "args": null,
-            "storageKey": null
-          },
+          (v2/*: any*/),
           {
             "kind": "ScalarField",
             "alias": null,
@@ -156,6 +160,18 @@ return {
             "name": "deadline",
             "args": null,
             "storageKey": null
+          },
+          {
+            "kind": "LinkedField",
+            "alias": null,
+            "name": "project",
+            "storageKey": null,
+            "args": null,
+            "concreteType": "ProjectType",
+            "plural": false,
+            "selections": [
+              (v2/*: any*/)
+            ]
           }
         ]
       }
@@ -165,7 +181,7 @@ return {
     "operationKind": "mutation",
     "name": "UpdateTaskMutation",
     "id": null,
-    "text": "mutation UpdateTaskMutation(\n  $taskId: ID!\n  $taskInput: TaskInputType!\n) {\n  updateTask(taskId: $taskId, taskInput: $taskInput) {\n    ...TaskEditModal_task\n    id\n  }\n}\n\nfragment TaskEditModal_task on TaskType {\n  id\n  title\n  description\n  priority\n  deadline\n}\n",
+    "text": "mutation UpdateTaskMutation(\n  $taskId: ID!\n  $taskInput: TaskInputType!\n) {\n  updateTask(taskId: $taskId, taskInput: $taskInput) {\n    ...TaskEditModal_task\n    id\n  }\n}\n\nfragment TaskEditModal_task on TaskType {\n  id\n  title\n  description\n  priority\n  deadline\n  project {\n    id\n  }\n}\n",
     "metadata": {}
   }
 };
