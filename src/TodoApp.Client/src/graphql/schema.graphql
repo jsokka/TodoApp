@@ -13,12 +13,16 @@ type Mutation {
   addTag(name: String!): TagType
   addTagForTask(taskId: ID!, tagId: ID!): String!
   addTask(taskInput: TaskInputType!): TaskType
-  deleteProject(projectId: ID!): String!
-  deleteTag(id: ID!): String!
-  deleteTask(id: ID!): ProjectType
+  deleteProject(projectId: ID!): ProjectDeletePayloadType
+  deleteTag(id: ID!): TagDeletePayloadType
+  deleteTask(id: ID!): TaskDeletePayloadType
   toggleTaskCompleted(taskId: ID!, completed: Boolean!): TaskType
   updateProject(projectId: ID!, projectInput: ProjectInputType!): ProjectType
-  updateTask(taskId: ID!, taskInput: TaskInputType!): TaskType!
+  updateTask(taskId: ID!, taskInput: TaskInputType!): TaskType
+}
+
+type ProjectDeletePayloadType {
+  deletedProjectId: ID
 }
 
 input ProjectInputType {
@@ -53,10 +57,19 @@ type Query {
 union SearchResult = ProjectType | TaskType
 scalar Seconds
 
+type TagDeletePayloadType {
+  deletedTagId: ID
+}
+
 type TagType {
   created: DateTime
   id: ID
   name: String!
+}
+
+type TaskDeletePayloadType {
+  deletedTaskId: ID
+  project: ProjectType
 }
 
 input TaskInputType {

@@ -5,6 +5,7 @@ using TodoApp.Api.GraphQL.GraphTypes.InputTypes;
 using TodoApp.Api.GraphQL.GraphTypes.ObjectTypes;
 using TodoApp.Data.Repositories;
 using TodoApp.Data.DependencyInjection;
+using TodoApp.Api.Models;
 
 namespace TodoApp.Api.GraphQL
 {
@@ -26,7 +27,7 @@ namespace TodoApp.Api.GraphQL
                 }
             );
 
-            FieldAsync<ProjectType>(
+            FieldAsync<TaskDeletePayloadType>(
                 "deleteTask",
                 arguments: new QueryArguments(
                     new QueryArgument<NonNullGraphType<IdGraphType>> { Name = "id" }
@@ -41,12 +42,16 @@ namespace TodoApp.Api.GraphQL
 
                         await taskRepositoryFactory.Create().DeleteAsync(id);
 
-                        return project;
+                        return new TaskDeletePayload
+                        {
+                            DeletedTaskId = id,
+                            Project = project
+                        };
                     }
                     catch (Exception ex)
                     {
                         context.Errors.Add(new ExecutionError(ex.Message, ex));
-                        return $"Failed to delete task '{id}'";
+                        return null;
                     }
                 }
             );
@@ -66,7 +71,7 @@ namespace TodoApp.Api.GraphQL
                 }
             );
 
-            FieldAsync<NonNullGraphType<TaskType>>(
+            FieldAsync<TaskType>(
                 "updateTask",
                 arguments: new QueryArguments(
                     new QueryArgument<NonNullGraphType<IdGraphType>> { Name = "taskId" },
@@ -84,7 +89,7 @@ namespace TodoApp.Api.GraphQL
                     if (task == null)
                     {
                         context.Errors.Add(new ExecutionError($"Task not found with '{taskId}'"));
-                        return "Failed to update task";
+                        return null;
                     }
 
                     task.Title = taskInput.Title;

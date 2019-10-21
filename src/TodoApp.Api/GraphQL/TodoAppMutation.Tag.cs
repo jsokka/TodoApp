@@ -7,6 +7,7 @@ using TodoApp.Api.GraphQL.GraphTypes.ObjectTypes;
 using TodoApp.Data.Models;
 using TodoApp.Data.Repositories;
 using TodoApp.Data.DependencyInjection;
+using TodoApp.Api.Models;
 
 namespace TodoApp.Api.GraphQL
 {
@@ -45,7 +46,7 @@ namespace TodoApp.Api.GraphQL
                 }
             );
 
-            FieldAsync<NonNullGraphType<StringGraphType>>(
+            FieldAsync<TagDeletePayloadType>(
                 "deleteTag",
                 arguments: new QueryArguments(
                     new QueryArgument<NonNullGraphType<IdGraphType>> { Name = "id" }
@@ -58,12 +59,15 @@ namespace TodoApp.Api.GraphQL
                     {
                         await tagRepositoryFactory.Create().DeleteAsync(id);
 
-                        return $"Tag {id} deleted";
+                        return new TagDeletePayload
+                        {
+                            DeletedTagId = id
+                        };
                     }
                     catch (Exception ex)
                     {
                         context.Errors.Add(new ExecutionError($"{ex.Message}", ex));
-                        return $"Failed to delete tag '{id}'";
+                        return null;
                     }
                 }
             );

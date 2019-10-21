@@ -6,6 +6,7 @@ using TodoApp.Api.GraphQL.GraphTypes.ObjectTypes;
 using TodoApp.Data.Models;
 using TodoApp.Data.Repositories;
 using TodoApp.Data.DependencyInjection;
+using TodoApp.Api.Models;
 
 namespace TodoApp.Api.GraphQL
 {
@@ -48,7 +49,7 @@ namespace TodoApp.Api.GraphQL
                 }
             );
 
-            FieldAsync<NonNullGraphType<StringGraphType>>(
+            FieldAsync<ProjectDeletePayloadType>(
                 "deleteProject",
                 arguments: new QueryArguments(
                     new QueryArgument<NonNullGraphType<IdGraphType>> { Name = "projectId" }
@@ -61,12 +62,15 @@ namespace TodoApp.Api.GraphQL
                     {
                         await projectRepositoryFactory.Create().DeleteAsync(projectId);
 
-                        return $"Prject '{projectId} deleted'";
+                        return new ProjectDeletePayload
+                        {
+                            DeletedProjectId = projectId
+                        };
                     }
                     catch (Exception ex)
                     {
                         context.Errors.Add(new ExecutionError($"{ex.Message}", ex));
-                        return $"Failed to delete project '{projectId}'";
+                        return null;
                     }
                 }
             );
