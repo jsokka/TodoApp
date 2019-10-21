@@ -10,12 +10,25 @@ const mutation = graphql`
   }
 `
 
-export default (id, callback) => {
+export default (id, projectId, callback) => {
   const variables = {
     id
   }
 
   const sharedUpdater = (store) => {
+    const root = store.getRoot();
+
+    if (projectId) {
+      let project = root.getLinkedRecord("project", { id: projectId });
+      let tasks = project.getLinkedRecords("tasks");
+      tasks = tasks.filter(t => t.getDataID() !== id);
+      project.setLinkedRecords(tasks, "tasks");
+    }
+    else {
+      let tasks = root.getLinkedRecords("tasks");
+      tasks = tasks.filter(t => t.getDataID() !== id);
+      root.setLinkedRecords(tasks, "tasks");
+    }
     store.delete(id);
   }
 

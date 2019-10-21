@@ -83,10 +83,6 @@ class Tasks extends Component {
       () => console.log(`Task ${taskId} completed`));
   };
 
-  handleDeleteTask = (taskId) => {
-    DeleteTaskMutation(taskId, () => console.log(`Task ${taskId} deleted`));
-  };
-
   handleEditTaskClick = (taskId) => {
     this.setState({ editTaskId: taskId });
   };
@@ -105,7 +101,7 @@ class Tasks extends Component {
 
   handleDeleteTask = (taskId) => {
     this.setState({ editTaskSaving: true });
-    DeleteTaskMutation(taskId, () => {
+    DeleteTaskMutation(taskId, this.getProjectId(), () => {
       console.log(`${taskId} deleted`);
       this.handleCloseTaskEditModal();
     });
@@ -118,20 +114,21 @@ class Tasks extends Component {
     }));
   };
 
+  getProjectId = () => {
+    return this.props.match && this.props.match.params.projectId;
+  };
+
   render() {
     const showTaskEditModal = this.state.editTaskId;
 
     let tasksQueryVariables;
     let tasksQuery = TodayTasksQuery;
-    let projectId;
+    let projectId = this.getProjectId();
 
-    const { params } = this.props.match;
-
-    if (params && params.projectId) {
-      projectId = params.projectId;
+    if (projectId) {
       tasksQuery = ProjectTasksQuery;
       tasksQueryVariables = {
-        projectId: params.projectId
+        projectId: projectId
       };
     }
 
