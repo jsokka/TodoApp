@@ -5,7 +5,9 @@ import environment from '../environment'
 const mutation = graphql`
   mutation DeleteTaskMutation($id: ID!) {
     deleteTask(id: $id) {
-      uncompletedTaskCount
+      project {
+        uncompletedTaskCount
+      }
     }
   }
 `

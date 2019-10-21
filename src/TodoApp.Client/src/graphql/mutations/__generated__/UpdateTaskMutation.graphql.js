@@ -1,6 +1,6 @@
 /**
  * @flow
- * @relayHash c06c9d4f3ce4a84c01058f75900b427b
+ * @relayHash db6de5b8b1089215038c4fdc74dfabc4
  */
 
 /* eslint-disable */
@@ -23,7 +23,7 @@ export type UpdateTaskMutationVariables = {|
   taskInput: TaskInputType,
 |};
 export type UpdateTaskMutationResponse = {|
-  +updateTask: {|
+  +updateTask: ?{|
     +$fragmentRefs: TaskEditModal_task$ref
   |}
 |};

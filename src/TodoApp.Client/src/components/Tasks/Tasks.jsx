@@ -5,6 +5,7 @@ import { Container, Row, Col, Spinner, Alert } from "react-bootstrap";
 import TaskList from "./TaskList";
 import TaskInput from "./TaskInput";
 import TaskEditModal from "./TaskEditModal";
+import ProjectEditModal from "../Projects/ProjectEditModal";
 import "./Tasks.scss";
 import environment from "../../graphql/environment";
 import graphql from "babel-plugin-relay/macro";
@@ -12,7 +13,9 @@ import {
   AddTaskMutation, 
   ToggleTaskCompletedMutation,
   UpdateTaskMutation,
-  DeleteTaskMutation 
+  DeleteTaskMutation, 
+  UpdateProjectMutation,
+  DeleteProjectMutation
 } from "../../graphql/mutations/Mutations";
 
 export const priorityMap = {
@@ -22,8 +25,8 @@ export const priorityMap = {
   "VERY_HIGH": { label: "Very High", badgeVariant: "danger" },
 };
 
-const TodayTasksQuery = graphql`
-  query TasksQuery {
+const AllTasksQuery = graphql`
+  query TasksAllTasksQuery {
     tasks {
       ...TaskList_tasks
     }
@@ -33,7 +36,9 @@ const TodayTasksQuery = graphql`
 const ProjectTasksQuery = graphql`
   query TasksProjectTasksQuery($projectId: ID!) {
     project(id: $projectId) {
+      id
       name
+      description
       tasks {
         ...TaskList_tasks
       }
@@ -58,14 +63,24 @@ const EditTaskQuery = graphql`
   }
 `
 
+const EditProjectQuery = graphql`
+  query TasksEditProjectQuery($projectId: ID!) {
+    project(id: $projectId) {
+      ...ProjectEditModal_project
+    }
+  }
+`;
+
 class Tasks extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
       isLoading: false,
-      editTaskId: null,
+      editTaskId: undefined,
       editTaskSaving: false,
+      editProjectId: undefined,
+      editProjectSaving: false,
     };
   }
 
@@ -102,8 +117,34 @@ class Tasks extends Component {
   handleDeleteTask = (taskId) => {
     this.setState({ editTaskSaving: true });
     DeleteTaskMutation(taskId, this.getProjectId(), () => {
-      console.log(`${taskId} deleted`);
+      console.log(`Project ${taskId} deleted`);
       this.handleCloseTaskEditModal();
+    });
+  };
+
+  handleEditProjectClick = (projectId) => {
+    this.setState({ editProjectId: projectId });
+  };
+
+  handleCloseProjectEditModal = () => {
+    this.setState({ editProjectId: undefined, editProjectSaving: false });
+  };
+
+  handleSaveProject = (project) => {
+    this.setState({ editProjectSaving: true });
+    UpdateProjectMutation(project.id, project.name, 
+      project.description, project.deadline, () => {
+        console.log(`${project.id} updated`);
+        this.handleCloseProjectEditModal();
+      });
+  };
+
+  handleDeleteProject = (projectId) => {
+    this.setState({ editProjectSaving: true });
+    DeleteProjectMutation(projectId, () => {
+      console.log(`Project ${projectId} deleted`);
+      this.handleCloseProjectEditModal();
+      this.props.history.push('/all');
     });
   };
 
@@ -122,7 +163,7 @@ class Tasks extends Component {
     const showTaskEditModal = this.state.editTaskId;
 
     let tasksQueryVariables;
-    let tasksQuery = TodayTasksQuery;
+    let tasksQuery = AllTasksQuery;
     let projectId = this.getProjectId();
 
     if (projectId) {
@@ -159,6 +200,27 @@ class Tasks extends Component {
             }} 
           />
         }
+        {projectId && this.state.editProjectId &&
+          <QueryRenderer 
+            environment={environment}
+            query={EditProjectQuery}
+            variables={{
+              projectId: this.getProjectId()
+            }}
+            render={({ error, props }) => {
+              if (props && props.project) {
+                return (
+                  <ProjectEditModal 
+                    project={props.project} 
+                    onCancelClick={this.handleCloseProjectEditModal}
+                    onSaveClick={this.handleSaveProject}
+                    onDeleteClick={this.handleDeleteProject} 
+                  />
+                )
+              }
+            }}
+          />
+        }
         <Container fluid className="tasks-container">
           <Row>
             <Col>
@@ -176,13 +238,15 @@ class Tasks extends Component {
                     )
                   } else if (props) {
                     var tasks = props.project ? props.project.tasks : props.tasks;
-                    var listTitle = props.project ? props.project.name : "Tasks today";
+                    var listTitle = props.project ? props.project.name : "All tasks";
                     return (
                       <TaskList 
                         title={listTitle}
-                        tasks={tasks} 
+                        tasks={tasks}
+                        project={props.project}
                         onToggleTaskCompletedClick={this.handleToggleTaskCompleted}
-                        onEditTaskClick={this.handleEditTaskClick} 
+                        onEditTaskClick={this.handleEditTaskClick}
+                        onEditProjectClick={this.handleEditProjectClick}
                       />
                     )
                   }

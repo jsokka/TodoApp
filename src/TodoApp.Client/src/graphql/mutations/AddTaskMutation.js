@@ -23,10 +23,6 @@ export default (title, projectId, callback) => {
 
   const updater = store => {
     const payload = store.getRootField('addTask');
-    if (!payload) {
-      return;
-    }
-
     var root = store.getRoot();
 
     if (projectId) {

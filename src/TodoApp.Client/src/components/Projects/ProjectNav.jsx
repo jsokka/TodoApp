@@ -7,7 +7,7 @@ import { FontAwesomeIcon as Icon } from '@fortawesome/react-fontawesome';
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import "./ProjectNav.scss";
 
-const ProjectNav = ({ projects }) => {
+const ProjectNav = ({ projects, onAddProjectClick }) => {
   if ((projects || []).length === 0) {
     return null;
   }
@@ -16,7 +16,7 @@ const ProjectNav = ({ projects }) => {
     <div className="project-nav">
       <Container className="title text-center">
         Projects
-        <Button size="sm" variant="light" className="float-right">
+        <Button size="sm" variant="light" className="float-right" onClick={onAddProjectClick}>
           <Icon icon={faPlus} /> 
         </Button>
       </Container>

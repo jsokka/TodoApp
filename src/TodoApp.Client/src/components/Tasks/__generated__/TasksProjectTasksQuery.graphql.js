@@ -1,6 +1,6 @@
 /**
  * @flow
- * @relayHash da3ca1b5489579f841054c4eac671a76
+ * @relayHash 223014003e316c6570e0105ee6375269
  */
 
 /* eslint-disable */
@@ -15,7 +15,9 @@ export type TasksProjectTasksQueryVariables = {|
 |};
 export type TasksProjectTasksQueryResponse = {|
   +project: {|
+    +id: string,
     +name: string,
+    +description: ?string,
     +tasks: $ReadOnlyArray<{|
       +$fragmentRefs: TaskList_tasks$ref
     |}>,
@@ -33,12 +35,13 @@ query TasksProjectTasksQuery(
   $projectId: ID!
 ) {
   project(id: $projectId) {
+    id
     name
+    description
     tasks {
       ...TaskList_tasks
       id
     }
-    id
   }
 }
 
@@ -75,14 +78,21 @@ v1 = [
 v2 = {
   "kind": "ScalarField",
   "alias": null,
-  "name": "name",
+  "name": "id",
   "args": null,
   "storageKey": null
 },
 v3 = {
   "kind": "ScalarField",
   "alias": null,
-  "name": "id",
+  "name": "name",
+  "args": null,
+  "storageKey": null
+},
+v4 = {
+  "kind": "ScalarField",
+  "alias": null,
+  "name": "description",
   "args": null,
   "storageKey": null
 };
@@ -105,6 +115,8 @@ return {
         "plural": false,
         "selections": [
           (v2/*: any*/),
+          (v3/*: any*/),
+          (v4/*: any*/),
           {
             "kind": "LinkedField",
             "alias": null,
@@ -140,6 +152,8 @@ return {
         "plural": false,
         "selections": [
           (v2/*: any*/),
+          (v3/*: any*/),
+          (v4/*: any*/),
           {
             "kind": "LinkedField",
             "alias": null,
@@ -149,7 +163,7 @@ return {
             "concreteType": "TaskType",
             "plural": true,
             "selections": [
-              (v3/*: any*/),
+              (v2/*: any*/),
               {
                 "kind": "ScalarField",
                 "alias": null,
@@ -194,13 +208,12 @@ return {
                 "concreteType": "ProjectType",
                 "plural": false,
                 "selections": [
-                  (v2/*: any*/),
-                  (v3/*: any*/)
+                  (v3/*: any*/),
+                  (v2/*: any*/)
                 ]
               }
             ]
-          },
-          (v3/*: any*/)
+          }
         ]
       }
     ]
@@ -209,11 +222,11 @@ return {
     "operationKind": "query",
     "name": "TasksProjectTasksQuery",
     "id": null,
-    "text": "query TasksProjectTasksQuery(\n  $projectId: ID!\n) {\n  project(id: $projectId) {\n    name\n    tasks {\n      ...TaskList_tasks\n      id\n    }\n    id\n  }\n}\n\nfragment TaskList_tasks on TaskType {\n  id\n  title\n  deadline\n  priority\n  completedOn\n  isCompleted\n  project {\n    name\n    id\n  }\n}\n",
+    "text": "query TasksProjectTasksQuery(\n  $projectId: ID!\n) {\n  project(id: $projectId) {\n    id\n    name\n    description\n    tasks {\n      ...TaskList_tasks\n      id\n    }\n  }\n}\n\nfragment TaskList_tasks on TaskType {\n  id\n  title\n  deadline\n  priority\n  completedOn\n  isCompleted\n  project {\n    name\n    id\n  }\n}\n",
     "metadata": {}
   }
 };
 })();
 // prettier-ignore
-(node/*: any*/).hash = 'd1071611548ec326c51bedc9063cf814';
+(node/*: any*/).hash = 'd51266c06d0fff4deb8085fcf1d34ffc';
 module.exports = node;

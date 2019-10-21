@@ -1,6 +1,6 @@
 /**
  * @flow
- * @relayHash a50644648025664abb3e666dd33a6ba4
+ * @relayHash 1d7eafda40f90b4c497b4fa51babd499
  */
 
 /* eslint-disable */
@@ -10,21 +10,21 @@
 /*::
 import type { ConcreteRequest } from 'relay-runtime';
 type TaskList_tasks$ref = any;
-export type TasksQueryVariables = {||};
-export type TasksQueryResponse = {|
+export type TasksAllTasksQueryVariables = {||};
+export type TasksAllTasksQueryResponse = {|
   +tasks: $ReadOnlyArray<{|
     +$fragmentRefs: TaskList_tasks$ref
   |}>
 |};
-export type TasksQuery = {|
-  variables: TasksQueryVariables,
-  response: TasksQueryResponse,
+export type TasksAllTasksQuery = {|
+  variables: TasksAllTasksQueryVariables,
+  response: TasksAllTasksQueryResponse,
 |};
 */
 
 
 /*
-query TasksQuery {
+query TasksAllTasksQuery {
   tasks {
     ...TaskList_tasks
     id
@@ -57,7 +57,7 @@ return {
   "kind": "Request",
   "fragment": {
     "kind": "Fragment",
-    "name": "TasksQuery",
+    "name": "TasksAllTasksQuery",
     "type": "Query",
     "metadata": null,
     "argumentDefinitions": [],
@@ -82,7 +82,7 @@ return {
   },
   "operation": {
     "kind": "Operation",
-    "name": "TasksQuery",
+    "name": "TasksAllTasksQuery",
     "argumentDefinitions": [],
     "selections": [
       {
@@ -155,13 +155,13 @@ return {
   },
   "params": {
     "operationKind": "query",
-    "name": "TasksQuery",
+    "name": "TasksAllTasksQuery",
     "id": null,
-    "text": "query TasksQuery {\n  tasks {\n    ...TaskList_tasks\n    id\n  }\n}\n\nfragment TaskList_tasks on TaskType {\n  id\n  title\n  deadline\n  priority\n  completedOn\n  isCompleted\n  project {\n    name\n    id\n  }\n}\n",
+    "text": "query TasksAllTasksQuery {\n  tasks {\n    ...TaskList_tasks\n    id\n  }\n}\n\nfragment TaskList_tasks on TaskType {\n  id\n  title\n  deadline\n  priority\n  completedOn\n  isCompleted\n  project {\n    name\n    id\n  }\n}\n",
     "metadata": {}
   }
 };
 })();
 // prettier-ignore
-(node/*: any*/).hash = '40b9924ec89d2f016a59bcf5b12a52a7';
+(node/*: any*/).hash = '5b41cb3ff49847719974b70f4374b3d6';
 module.exports = node;

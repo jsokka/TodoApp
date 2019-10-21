@@ -1,6 +1,6 @@
 /**
  * @flow
- * @relayHash 0eee5bdb2260a69e268c9ce6197cece6
+ * @relayHash 098dfc23c60a23d6ef24f347b2e5a906
  */
 
 /* eslint-disable */
@@ -14,7 +14,9 @@ export type DeleteTaskMutationVariables = {|
 |};
 export type DeleteTaskMutationResponse = {|
   +deleteTask: ?{|
-    +uncompletedTaskCount: number
+    +project: ?{|
+      +uncompletedTaskCount: number
+    |}
   |}
 |};
 export type DeleteTaskMutation = {|
@@ -29,8 +31,10 @@ mutation DeleteTaskMutation(
   $id: ID!
 ) {
   deleteTask(id: $id) {
-    uncompletedTaskCount
-    id
+    project {
+      uncompletedTaskCount
+      id
+    }
   }
 }
 */
@@ -73,10 +77,21 @@ return {
         "name": "deleteTask",
         "storageKey": null,
         "args": (v1/*: any*/),
-        "concreteType": "ProjectType",
+        "concreteType": "TaskDeletePayloadType",
         "plural": false,
         "selections": [
-          (v2/*: any*/)
+          {
+            "kind": "LinkedField",
+            "alias": null,
+            "name": "project",
+            "storageKey": null,
+            "args": null,
+            "concreteType": "ProjectType",
+            "plural": false,
+            "selections": [
+              (v2/*: any*/)
+            ]
+          }
         ]
       }
     ]
@@ -92,16 +107,27 @@ return {
         "name": "deleteTask",
         "storageKey": null,
         "args": (v1/*: any*/),
-        "concreteType": "ProjectType",
+        "concreteType": "TaskDeletePayloadType",
         "plural": false,
         "selections": [
-          (v2/*: any*/),
           {
-            "kind": "ScalarField",
+            "kind": "LinkedField",
             "alias": null,
-            "name": "id",
+            "name": "project",
+            "storageKey": null,
             "args": null,
-            "storageKey": null
+            "concreteType": "ProjectType",
+            "plural": false,
+            "selections": [
+              (v2/*: any*/),
+              {
+                "kind": "ScalarField",
+                "alias": null,
+                "name": "id",
+                "args": null,
+                "storageKey": null
+              }
+            ]
           }
         ]
       }
@@ -111,11 +137,11 @@ return {
     "operationKind": "mutation",
     "name": "DeleteTaskMutation",
     "id": null,
-    "text": "mutation DeleteTaskMutation(\n  $id: ID!\n) {\n  deleteTask(id: $id) {\n    uncompletedTaskCount\n    id\n  }\n}\n",
+    "text": "mutation DeleteTaskMutation(\n  $id: ID!\n) {\n  deleteTask(id: $id) {\n    project {\n      uncompletedTaskCount\n      id\n    }\n  }\n}\n",
     "metadata": {}
   }
 };
 })();
 // prettier-ignore
-(node/*: any*/).hash = 'e44581a50d5fc0271664090c296a6dfb';
+(node/*: any*/).hash = '3dd79b2efee5a5431f08d485cc990132';
 module.exports = node;

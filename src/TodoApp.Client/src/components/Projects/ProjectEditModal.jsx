@@ -4,14 +4,12 @@ import graphql from "babel-plugin-relay/macro";
 import { Modal, Button, Form, Col, Spinner } from "react-bootstrap";
 import DatePicker from "../Common/DatePicker";
 
-const TaskEditModal = ({ task, priorities, projects, onCancelClick, onSaveClick, onDeleteClick, saving }) => {
+const ProjectEditModal = ({ project, onCancelClick, onSaveClick, onDeleteClick, saving }) => {
   const [form, setForm] = useState({
-    id: task.id,
-    projectId: task.project ? task.project.id : null,
-    title: task.title,
-    description: task.description,
-    deadline: task.deadline,
-    priority: task.priority
+    id: project.id,
+    name: project.name,
+    description: project.description,
+    deadline: project.deadline
   });
 
   const handleCancelClick = () => {
@@ -23,7 +21,7 @@ const TaskEditModal = ({ task, priorities, projects, onCancelClick, onSaveClick,
   };
 
   const handleDeleteClick = () => {
-    onDeleteClick(task.id);
+    onDeleteClick(project.id);
   };
 
   const handleOnChange = (event) => {
@@ -34,64 +32,31 @@ const TaskEditModal = ({ task, priorities, projects, onCancelClick, onSaveClick,
     setForm({...form, [name]: day});
   };
 
-  const priorityOptions = priorities.map(p => 
-    <option key={p.value} value={p.value}>{p.label}</option>
-  );
-
-  const projectOptions = projects.map(p => 
-    <option key={p.id} value={p.id}>{p.name}</option>  
-  ); 
-
-  projectOptions.unshift(<option key="-1" value="">No project</option>);
-
   return (
     <Modal show={true} backdrop="static">
       <Modal.Header>
-        <Modal.Title>Edit task</Modal.Title>
+        <Modal.Title>Edit project</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <Form noValidate>
           <Form.Row>
             <Form.Group as={Col} md="6">
-              <Form.Label>Title</Form.Label>
+              <Form.Label>Name</Form.Label>
               <Form.Control
-                name="title"
+                name="name"
                 type="text"
-                placeholder="Task title..."
-                defaultValue={task.title}
+                placeholder="project name..."
+                defaultValue={project.name}
                 onChange={handleOnChange}
               />
             </Form.Group>
             <Form.Group as={Col} md="6">
-              <Form.Label>Project</Form.Label>
-              <Form.Control as="select"
-                disabled
-                name="projectId"
-                defaultValue={task.project ? task.project.id : undefined}
-                onChange={handleOnChange}
-              >
-                {projectOptions}
-              </Form.Control>
-            </Form.Group>
-          </Form.Row>
-          <Form.Row>
-            <Form.Group as={Col} md="6">
-              <Form.Label>Priority</Form.Label>
-              <Form.Control as="select"
-                name="priority"
-                defaultValue={task.priority}
-                onChange={handleOnChange}
-              >
-                {priorityOptions}
-              </Form.Control>
-            </Form.Group>
-            <Form.Group as={Col} md="6">
-              <Form.Label>Deadline</Form.Label>
+            <Form.Label>Deadline</Form.Label>
               <DatePicker
                 style={{ display: "block" }}
                 name="deadline"
                 onChange={handleDayChange}
-                value={task.deadline}
+                value={project.deadline}
               />
             </Form.Group>
           </Form.Row>
@@ -99,22 +64,22 @@ const TaskEditModal = ({ task, priorities, projects, onCancelClick, onSaveClick,
             <Form.Label>Description</Form.Label>
             <Form.Control as="textarea"
               name="description"
-              placeholder="Task description..."
+              placeholder="Project description..."
               rows="4"
-              defaultValue={task.description}
+              defaultValue={project.description}
               onChange={handleOnChange}
             />
           </Form.Row>
         </Form>
       </Modal.Body>
       <Modal.Footer>
-        <Button 
+        {onDeleteClick && <Button 
           variant="danger"
           className="mr-auto" 
           disabled={saving} 
           onClick={handleDeleteClick}>
             Delete
-        </Button>
+        </Button>}
         <Button 
           variant="secondary" 
           disabled={saving} 
@@ -135,15 +100,11 @@ const TaskEditModal = ({ task, priorities, projects, onCancelClick, onSaveClick,
   );
 }
 
-export default createFragmentContainer(TaskEditModal, { task: graphql`
-  fragment TaskEditModal_task on TaskType {
+export default createFragmentContainer(ProjectEditModal, { project: graphql`
+  fragment ProjectEditModal_project on ProjectType {
     id
-    title
+    name
     description
-    priority
     deadline
-    project {
-      id
-    }
   }
 `});
