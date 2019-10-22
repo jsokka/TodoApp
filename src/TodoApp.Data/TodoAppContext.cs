@@ -22,6 +22,8 @@ namespace TodoApp.Data
                 });
             }
 
+            modelBuilder.Entity<Task>().HasOne(t => t.Project).WithMany(p => p.Tasks).OnDelete(DeleteBehavior.Cascade);
+
             modelBuilder.Entity<TaskTag>().HasKey(tt => new { tt.TaskId, tt.TagId });
             modelBuilder.Entity<TaskTag>().HasOne(tt => tt.Task).WithMany(r => r.TaskTags).HasForeignKey(tt => tt.TaskId);
             modelBuilder.Entity<TaskTag>().HasOne(tt => tt.Tag).WithMany(r => r.TaskTags).HasForeignKey(tt => tt.TagId);
