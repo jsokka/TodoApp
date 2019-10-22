@@ -3,6 +3,16 @@
 
   h2 {
     margin-bottom: 1rem;
+
+    .sub {
+      font-size: 0.8rem;
+      display: block;
+      margin-top: 0.5rem;
+
+      svg {
+        margin-right: 0.35rem;
+      }
+    }
   }
 }
 

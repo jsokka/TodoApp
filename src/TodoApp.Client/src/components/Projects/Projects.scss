@@ -1,0 +1,29 @@
+.project-nav {
+  .title {
+    margin: 1rem 0 0.5rem 0;
+    text-align: center;
+    font-weight: 600;
+
+    button {
+      padding: 0.1rem 0.5rem;
+    }
+  }
+} 
+
+.project-enter {
+  opacity: 0;
+}
+
+.project-enter-active {
+  opacity: 1;
+  transition: opacity 500ms ease-in;
+}
+
+.project-exit {
+  opacity: 1;
+}
+
+.project-exit-active {
+  opacity: 0;
+  transition: opacity 500ms ease-in;
+}

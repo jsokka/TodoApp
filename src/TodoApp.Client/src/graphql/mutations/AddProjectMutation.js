@@ -19,11 +19,22 @@ export default (name, description, deadline, callback) => {
     }
   }
 
+  const updater = (store) => {
+    const root = store.getRoot();
+    const payload = store.getRootField("addProject");
+
+    let projects = root.getLinkedRecords("projects");
+    projects.push(payload)
+    
+    root.setLinkedRecords(projects,"projects");
+  };
+
   commitMutation(
     environment,
     {
       mutation,
       variables,
+      updater: updater,
       onCompleted: (response) => {
         callback(response.addProject.__id)
       },

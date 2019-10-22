@@ -5,7 +5,7 @@ import { Container, Row, Col, Spinner, Alert } from "react-bootstrap";
 import TaskList from "./TaskList";
 import TaskInput from "./TaskInput";
 import TaskEditModal from "./TaskEditModal";
-import ProjectEditModal from "../Projects/ProjectEditModal";
+import { ProjectEditModalWithFragment } from "../Projects/ProjectEditModal";
 import "./Tasks.scss";
 import environment from "../../graphql/environment";
 import graphql from "babel-plugin-relay/macro";
@@ -39,6 +39,7 @@ const ProjectTasksQuery = graphql`
       id
       name
       description
+      deadline
       tasks {
         ...TaskList_tasks
       }
@@ -79,7 +80,7 @@ class Tasks extends Component {
       isLoading: false,
       editTaskId: undefined,
       editTaskSaving: false,
-      editProjectId: undefined,
+      showEditProjectModal: false,
       editProjectSaving: false,
     };
   }
@@ -123,11 +124,11 @@ class Tasks extends Component {
   };
 
   handleEditProjectClick = (projectId) => {
-    this.setState({ editProjectId: projectId });
+    this.setState({ showEditProjectModal: true });
   };
 
   handleCloseProjectEditModal = () => {
-    this.setState({ editProjectId: undefined, editProjectSaving: false });
+    this.setState({ showEditProjectModal: false, editProjectSaving: false });
   };
 
   handleSaveProject = (project) => {
@@ -144,7 +145,9 @@ class Tasks extends Component {
     DeleteProjectMutation(projectId, () => {
       console.log(`Project ${projectId} deleted`);
       this.handleCloseProjectEditModal();
-      this.props.history.push('/all');
+      setTimeout(() => {
+        this.props.history.push('/all');
+      }, 500);
     });
   };
 
@@ -160,8 +163,6 @@ class Tasks extends Component {
   };
 
   render() {
-    const showTaskEditModal = this.state.editTaskId;
-
     let tasksQueryVariables;
     let tasksQuery = AllTasksQuery;
     let projectId = this.getProjectId();
@@ -172,6 +173,9 @@ class Tasks extends Component {
         projectId: projectId
       };
     }
+
+    const showTaskEditModal = this.state.editTaskId;
+    const showProjectEditModal = projectId && this.state.showEditProjectModal;
 
     return (
       <Fragment>
@@ -200,17 +204,17 @@ class Tasks extends Component {
             }} 
           />
         }
-        {projectId && this.state.editProjectId &&
+        {showProjectEditModal &&
           <QueryRenderer 
             environment={environment}
             query={EditProjectQuery}
             variables={{
-              projectId: this.getProjectId()
+              projectId: projectId
             }}
             render={({ error, props }) => {
               if (props && props.project) {
                 return (
-                  <ProjectEditModal 
+                  <ProjectEditModalWithFragment 
                     project={props.project} 
                     onCancelClick={this.handleCloseProjectEditModal}
                     onSaveClick={this.handleSaveProject}

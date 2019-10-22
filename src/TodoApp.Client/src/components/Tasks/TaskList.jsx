@@ -2,8 +2,10 @@ import React, { Fragment } from 'react';
 import { TransitionGroup, CSSTransition } from 'react-transition-group'
 import { ListGroup } from 'react-bootstrap';
 import { FontAwesomeIcon as Icon } from '@fortawesome/react-fontawesome';
-import { faPencilAlt } from '@fortawesome/free-solid-svg-icons'
+import { faPencilAlt, faCalendarDay } from '@fortawesome/free-solid-svg-icons'
 import { createFragmentContainer } from "react-relay";
+import { format } from "date-fns";
+import { fi } from 'date-fns/locale'
 import graphql from "babel-plugin-relay/macro";
 import TaskItem from './TaskItem';
 
@@ -34,19 +36,24 @@ const TaskList = ({ tasks, project, title, onEditTaskClick, onToggleTaskComplete
       <Fragment>
           <h2>
             {title || (project && project.name)}
-            {project && 
+            {project &&
               <Icon 
                 size="sm" 
                 style={{ cursor: "pointer", marginLeft: "0.5rem" }} 
                 icon={faPencilAlt} 
                 onClick={onEditProjectClick}
-              />}
-          </h2>
-            {project &&
-              <div>
-                <p>{project.description}</p>
-              </div>
+              />
             }
+            {project && project.deadline && 
+              <div className="sub">
+                <Icon icon={faCalendarDay} />
+                {format(new Date(project.deadline), "PPP", { locale: fi })}
+              </div>
+            }  
+          </h2>
+          {project &&
+            <p>{project.description}</p>
+          }
                     
           {!hasTasks 
             ? <strong>No tasks</strong>

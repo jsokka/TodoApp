@@ -2,6 +2,8 @@ import React from "react";
 import { Container, Row, Col, Badge } from "react-bootstrap";
 import { FontAwesomeIcon as Icon } from '@fortawesome/react-fontawesome';
 import { faPencilAlt, faCalendarDay } from '@fortawesome/free-solid-svg-icons'
+import { format } from "date-fns";
+import { fi } from 'date-fns/locale'
 import { priorityMap } from "./Tasks";
 
 const TaskItem = ({ task, onEditClick, onToggleCompletedClick }) => {
@@ -23,7 +25,7 @@ const TaskItem = ({ task, onEditClick, onToggleCompletedClick }) => {
 
   if (task.deadline) {
     taskInfo.push({ 
-      label: new Date(task.deadline).toLocaleDateString("fi"), 
+      label: format(new Date(task.deadline), "PPP", { locale: fi }), 
       icon: <Icon icon={faCalendarDay} />
     });
   } 

@@ -6,10 +6,10 @@ import DatePicker from "../Common/DatePicker";
 
 const ProjectEditModal = ({ project, onCancelClick, onSaveClick, onDeleteClick, saving }) => {
   const [form, setForm] = useState({
-    id: project.id,
-    name: project.name,
-    description: project.description,
-    deadline: project.deadline
+    id: project && project.id,
+    name: project && project.name,
+    description: project && project.description,
+    deadline: project && project.deadline
   });
 
   const handleCancelClick = () => {
@@ -45,8 +45,8 @@ const ProjectEditModal = ({ project, onCancelClick, onSaveClick, onDeleteClick, 
               <Form.Control
                 name="name"
                 type="text"
-                placeholder="project name..."
-                defaultValue={project.name}
+                placeholder="Project name..."
+                defaultValue={form.name}
                 onChange={handleOnChange}
               />
             </Form.Group>
@@ -56,7 +56,7 @@ const ProjectEditModal = ({ project, onCancelClick, onSaveClick, onDeleteClick, 
                 style={{ display: "block" }}
                 name="deadline"
                 onChange={handleDayChange}
-                value={project.deadline}
+                value={form.deadline}
               />
             </Form.Group>
           </Form.Row>
@@ -66,7 +66,7 @@ const ProjectEditModal = ({ project, onCancelClick, onSaveClick, onDeleteClick, 
               name="description"
               placeholder="Project description..."
               rows="4"
-              defaultValue={project.description}
+              defaultValue={form.description}
               onChange={handleOnChange}
             />
           </Form.Row>
@@ -100,7 +100,7 @@ const ProjectEditModal = ({ project, onCancelClick, onSaveClick, onDeleteClick, 
   );
 }
 
-export default createFragmentContainer(ProjectEditModal, { project: graphql`
+const ProjectEditModalWithFragment = createFragmentContainer(ProjectEditModal, { project: graphql`
   fragment ProjectEditModal_project on ProjectType {
     id
     name
@@ -108,3 +108,8 @@ export default createFragmentContainer(ProjectEditModal, { project: graphql`
     deadline
   }
 `});
+
+export { 
+  ProjectEditModal,
+  ProjectEditModalWithFragment
+}

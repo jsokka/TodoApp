@@ -1,6 +1,6 @@
 /**
  * @flow
- * @relayHash 223014003e316c6570e0105ee6375269
+ * @relayHash a26b23dcee291fc71d18b28a56614c82
  */
 
 /* eslint-disable */
@@ -18,6 +18,7 @@ export type TasksProjectTasksQueryResponse = {|
     +id: string,
     +name: string,
     +description: ?string,
+    +deadline: ?any,
     +tasks: $ReadOnlyArray<{|
       +$fragmentRefs: TaskList_tasks$ref
     |}>,
@@ -38,6 +39,7 @@ query TasksProjectTasksQuery(
     id
     name
     description
+    deadline
     tasks {
       ...TaskList_tasks
       id
@@ -95,6 +97,13 @@ v4 = {
   "name": "description",
   "args": null,
   "storageKey": null
+},
+v5 = {
+  "kind": "ScalarField",
+  "alias": null,
+  "name": "deadline",
+  "args": null,
+  "storageKey": null
 };
 return {
   "kind": "Request",
@@ -117,6 +126,7 @@ return {
           (v2/*: any*/),
           (v3/*: any*/),
           (v4/*: any*/),
+          (v5/*: any*/),
           {
             "kind": "LinkedField",
             "alias": null,
@@ -154,6 +164,7 @@ return {
           (v2/*: any*/),
           (v3/*: any*/),
           (v4/*: any*/),
+          (v5/*: any*/),
           {
             "kind": "LinkedField",
             "alias": null,
@@ -171,13 +182,7 @@ return {
                 "args": null,
                 "storageKey": null
               },
-              {
-                "kind": "ScalarField",
-                "alias": null,
-                "name": "deadline",
-                "args": null,
-                "storageKey": null
-              },
+              (v5/*: any*/),
               {
                 "kind": "ScalarField",
                 "alias": null,
@@ -222,11 +227,11 @@ return {
     "operationKind": "query",
     "name": "TasksProjectTasksQuery",
     "id": null,
-    "text": "query TasksProjectTasksQuery(\n  $projectId: ID!\n) {\n  project(id: $projectId) {\n    id\n    name\n    description\n    tasks {\n      ...TaskList_tasks\n      id\n    }\n  }\n}\n\nfragment TaskList_tasks on TaskType {\n  id\n  title\n  deadline\n  priority\n  completedOn\n  isCompleted\n  project {\n    name\n    id\n  }\n}\n",
+    "text": "query TasksProjectTasksQuery(\n  $projectId: ID!\n) {\n  project(id: $projectId) {\n    id\n    name\n    description\n    deadline\n    tasks {\n      ...TaskList_tasks\n      id\n    }\n  }\n}\n\nfragment TaskList_tasks on TaskType {\n  id\n  title\n  deadline\n  priority\n  completedOn\n  isCompleted\n  project {\n    name\n    id\n  }\n}\n",
     "metadata": {}
   }
 };
 })();
 // prettier-ignore
-(node/*: any*/).hash = 'd51266c06d0fff4deb8085fcf1d34ffc';
+(node/*: any*/).hash = '7b4f118a66f6c47a04531f5fb4e921ab';
 module.exports = node;
