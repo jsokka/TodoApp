@@ -41,6 +41,13 @@ namespace TodoApp.Api.GraphQL
                     var projectRepository = projectRepositoryFactory.Create();
 
                     var project = await projectRepository.FindAsync(projectId);
+
+                    if (project == null)
+                    {
+                        context.Errors.Add(new ExecutionError($"Cannot fin project with id '{projectId}'"));
+                        return null;
+                    }
+
                     project.Name = projectInput.Name;
                     project.Description = projectInput.Description;
                     project.Deadline = projectInput.Deadline;

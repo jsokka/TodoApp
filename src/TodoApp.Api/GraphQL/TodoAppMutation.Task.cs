@@ -88,7 +88,7 @@ namespace TodoApp.Api.GraphQL
 
                     if (task == null)
                     {
-                        context.Errors.Add(new ExecutionError($"Task not found with '{taskId}'"));
+                        context.Errors.Add(new ExecutionError($"Cannot found task with id '{taskId}'"));
                         return null;
                     }
 
