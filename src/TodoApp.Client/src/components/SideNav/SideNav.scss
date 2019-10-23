@@ -43,6 +43,7 @@
 
 #page-content-wrapper {
   min-width: 100vw;
+  padding-right: 1rem;
 }
 
 #wrapper.toggled #sidebar-wrapper {
@@ -56,6 +57,7 @@
 
   #page-content-wrapper {
     min-width: 0;
+    padding-right: 0;
     width: 100%;
   }
 

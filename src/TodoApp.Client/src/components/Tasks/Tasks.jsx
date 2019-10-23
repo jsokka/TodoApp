@@ -5,6 +5,7 @@ import { Container, Row, Col, Spinner, Alert } from "react-bootstrap";
 import TaskList from "./TaskList";
 import TaskInput from "./TaskInput";
 import TaskEditModal from "./TaskEditModal";
+import ProjectHeader from "../Projects/ProjectHeader";
 import { ProjectEditModalWithFragment } from "../Projects/ProjectEditModal";
 import "./Tasks.scss";
 import environment from "../../graphql/environment";
@@ -262,16 +263,21 @@ class Tasks extends Component {
                     )
                   } else if (props) {
                     var tasks = props.project ? props.project.tasks : props.tasks;
-                    var listTitle = props.project ? props.project.name : "All tasks";
                     return (
-                      <TaskList 
-                        title={listTitle}
-                        tasks={tasks}
-                        project={props.project}
-                        onToggleTaskCompletedClick={this.handleToggleTaskCompleted}
-                        onEditTaskClick={this.handleEditTaskClick}
-                        onEditProjectClick={this.handleEditProjectClick}
-                      />
+                      <Fragment>
+                        {props.project ? 
+                          <ProjectHeader
+                            project={props.project}
+                            onEditProjectClick={this.handleEditProjectClick}
+                          />
+                          : <h2>All tasks</h2>
+                        }
+                        <TaskList 
+                          tasks={tasks}
+                          onToggleTaskCompletedClick={this.handleToggleTaskCompleted}
+                          onEditTaskClick={this.handleEditTaskClick}
+                        />
+                      </Fragment>
                     )
                   }
                   return (

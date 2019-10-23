@@ -8,7 +8,9 @@ export default class Layout extends Component {
     return (
       <div id="wrapper" className="d-flex">
         <SideNav />
-        {this.props.children}
+        <div id="page-content-wrapper">
+          {this.props.children}
+        </div>
       </div>
     );
   }
