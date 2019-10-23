@@ -164,7 +164,7 @@ class Tasks extends Component {
       console.log(`Project ${projectId} deleted`);
       this.handleCloseProjectEditModal();
       setTimeout(() => {
-        this.props.history.push('/all');
+        this.props.history.push('/');
       }, 500);
     });
   };
@@ -267,7 +267,7 @@ class Tasks extends Component {
                             project={props.project}
                             onEditProjectClick={this.handleEditProjectClick}
                           />
-                          : <h2>All tasks</h2>
+                          : <h2 className="page-title">All tasks</h2>
                         }
                         <TaskList 
                           tasks={tasks}

@@ -9,7 +9,7 @@ import { fi } from 'date-fns/locale'
 const ProjectHeader = ({ project, onEditProjectClick }) => {
   return (
     <div>
-      <h2>
+      <h2 className="page-title">
         {project.name}
         <Icon 
           size="sm" 

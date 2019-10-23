@@ -34,7 +34,7 @@ const ProjectNav = ({ projects, onAddProjectClick }) => {
                   <Col className="p-0">
                     {p.name}
                   </Col>
-                  <Col md="1">
+                  <Col className="p-0" xs="1">
                     {p.uncompletedTaskCount > 0 
                       ? <Badge className="" variant="secondary">{p.uncompletedTaskCount}</Badge>
                       : null}

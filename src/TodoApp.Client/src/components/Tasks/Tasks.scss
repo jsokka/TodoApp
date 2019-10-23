@@ -16,6 +16,14 @@
   }
 }
 
+#wrapper {
+  &.toggled {
+    .sticky-input {
+      margin-left: 16rem;;
+    }
+  }
+}
+
 .sticky-input {
   margin-left: 16rem;
   margin-right: 0;
@@ -24,7 +32,7 @@
   -o-transition: margin .25s ease-out;
   transition: margin .25s ease-out;
 
-  @media (max-width: 768px) { 
+  @media (max-width: 767px) { 
     margin-left: 0;
   }
 

@@ -8,6 +8,7 @@
 }
 
 #sidebar-wrapper {
+  position: relative;
   min-height: 100vh;
   margin-left: -16rem;
   -webkit-transition: margin .25s ease-out;
@@ -41,9 +42,20 @@
   }
 }
 
+#toggle-nav-button {
+  display: block;
+  right: -3rem;
+  top: 1rem;
+  position: absolute;
+  z-index: 999;
+}
+
 #page-content-wrapper {
-  min-width: 100vw;
-  padding-right: 1rem;
+  min-width: 100%;
+  
+  .page-title {
+    margin-left: 3rem; 
+  }
 }
 
 #wrapper.toggled #sidebar-wrapper {
@@ -55,10 +67,18 @@
     margin-left: 0;
   }
 
+  #toggle-nav-button {
+    display: none;
+  }
+
   #page-content-wrapper {
     min-width: 0;
     padding-right: 0;
     width: 100%;
+
+    .page-title {
+      margin-left: 0; 
+    }
   }
 
   #wrapper.toggled #sidebar-wrapper {

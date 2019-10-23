@@ -10,8 +10,8 @@ export default class App extends Component {
   render() {
     return (
       <Layout>
-        <Route path="/all" component={Tasks} />
-        <Route path="/project/:projectId" component={Tasks} />
+        <Route path="/" exact component={Tasks} />
+        <Route path="/project/:projectId" exact component={Tasks} />
       </Layout>
     );
   }
