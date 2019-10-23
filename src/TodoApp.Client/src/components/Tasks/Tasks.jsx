@@ -37,10 +37,7 @@ const AllTasksQuery = graphql`
 const ProjectTasksQuery = graphql`
   query TasksProjectTasksQuery($projectId: ID!) {
     project(id: $projectId) {
-      id
-      name
-      description
-      deadline
+      ...ProjectHeader_project
       tasks {
         ...TaskList_tasks
       }
@@ -144,7 +141,7 @@ class Tasks extends Component {
     });
   };
 
-  handleEditProjectClick = (projectId) => {
+  handleEditProjectClick = () => {
     this.setState({ showEditProjectModal: true });
   };
 

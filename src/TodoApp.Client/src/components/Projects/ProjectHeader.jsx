@@ -1,4 +1,6 @@
 import React from "react";
+import { createFragmentContainer } from "react-relay";
+import { graphql } from "babel-plugin-relay/macro";
 import { FontAwesomeIcon as Icon } from '@fortawesome/react-fontawesome';
 import { faPencilAlt, faCalendarDay } from '@fortawesome/free-solid-svg-icons'
 import { format } from "date-fns";
@@ -26,4 +28,11 @@ const ProjectHeader = ({ project, onEditProjectClick }) => {
   );
 }
 
-export default ProjectHeader;
+export default createFragmentContainer(ProjectHeader, { project : graphql`
+  fragment ProjectHeader_project on ProjectType {
+    name
+    description
+    deadline
+  }
+`
+});
