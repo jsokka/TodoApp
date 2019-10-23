@@ -85,6 +85,26 @@ class Tasks extends Component {
     };
   }
 
+  componentDidMount = () => {
+    this.historyListen();
+  }
+
+  componentWillUnmount = () => {
+    this.historyUnlisten();
+  }
+
+  historyListen = () => {
+    let prevLocation = {};
+    this.historyUnlisten = this.props.history.listen(location => {
+      const pathChanged = prevLocation.pathname !== location.pathname;
+      const hashChanged = prevLocation.hash !== location.hash;
+      if (pathChanged || hashChanged) {
+        window.scrollTo({top: 0, left: 0, behavior: 'smooth' });
+      }
+      prevLocation = location;
+    });
+  }
+
   handleAddTask = (title, projectId) => {
     this.setState({ isLoading: true });
     AddTaskMutation(title, projectId,
