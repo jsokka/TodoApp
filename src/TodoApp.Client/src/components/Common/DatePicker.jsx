@@ -8,7 +8,10 @@ import dateFnsParse from 'date-fns/parse';
 class DatePicker extends Component {
   handleDayChange = (date) => {
     const { name, onChange } = this.props;
-    var d = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
+    let d = undefined;
+    if (date) {
+      d = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate())); 
+    }
     onChange(name, d);
   };
 
