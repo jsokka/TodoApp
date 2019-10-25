@@ -2,9 +2,9 @@
 import { NavLink, withRouter } from "react-router-dom";
 import { QueryRenderer } from "react-relay";
 import graphql from "babel-plugin-relay/macro";
-import { Spinner, Alert, Button } from "react-bootstrap";
+import { Container, Spinner, Alert, Button } from "react-bootstrap";
 import { FontAwesomeIcon as Icon } from '@fortawesome/react-fontawesome';
-import { faArrowLeft, faBars } from "@fortawesome/free-solid-svg-icons";
+import { faArrowLeft, faBars, faPlus } from "@fortawesome/free-solid-svg-icons";
 import ProjectNav from "../Projects/ProjectNav";
 import { ProjectEditModal } from "../Projects/ProjectEditModal";
 import environment from "../../graphql/environment";
@@ -66,6 +66,12 @@ class SideNav extends Component {
             <NavLink to="/" exact className="list-group-item list-group-item-action bg-light">
               All tasks
             </NavLink>
+            <Container className="separator text-center">
+              Projects
+              <Button size="sm" variant="light" className="float-right" onClick={this.handleAddProjectClick}>
+                <Icon icon={faPlus} /> 
+              </Button>
+            </Container>
             <QueryRenderer 
               environment={environment}
               query={ProjectsQuery}

@@ -39,6 +39,16 @@
         color: #000;
       }
     }
+
+    .separator {
+      margin: 1rem 0 0.5rem 0;
+      text-align: center;
+      font-weight: 600;
+  
+      button {
+        padding: 0.1rem 0.5rem;
+      }
+    }
   }
 }
 

@@ -2,27 +2,19 @@ import React from "react";
 import graphql from "babel-plugin-relay/macro";
 import { createFragmentContainer } from "react-relay";
 import { TransitionGroup, CSSTransition } from 'react-transition-group'
-import { Container, Button } from "react-bootstrap";
-import { FontAwesomeIcon as Icon } from '@fortawesome/react-fontawesome';
-import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import "./Projects.scss";
 import ProjectNavItem from "./ProjectNavItem";
 
-const ProjectNav = ({ projects, onAddProjectClick }) => {
-  const hasProjects = (projects || []).length > 0;
+const ProjectNav = ({ projects }) => {
+
+  projects = projects || [];
 
   return (
     <div className="project-nav">
-      <Container className="title text-center">
-        Projects
-        <Button size="sm" variant="light" className="float-right" onClick={onAddProjectClick}>
-          <Icon icon={faPlus} /> 
-        </Button>
-      </Container>
       <TransitionGroup>
-        {hasProjects && projects.map(project => 
+        {projects.map(project => 
           <CSSTransition
-            key={project.__id}
+            key={project.id}
             timeout={500}
             classNames="project"
           >

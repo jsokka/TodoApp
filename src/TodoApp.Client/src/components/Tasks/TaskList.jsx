@@ -9,7 +9,7 @@ const TaskList = ({ tasks, onEditTaskClick, onToggleTaskCompletedClick }) => {
     const hasTasks = (tasks || []).length > 0;
     
     const taskItems = (
-      tasks.map(task => {
+      (tasks || []).map(task => {
         return (
           <CSSTransition
             key={task.id}
