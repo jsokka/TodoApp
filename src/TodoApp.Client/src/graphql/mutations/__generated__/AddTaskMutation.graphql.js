@@ -1,6 +1,6 @@
 /**
  * @flow
- * @relayHash 56bcaa2bdfcec5418d3fe9622ce66a2e
+ * @relayHash e15ef0dac651e7614a43eb216aa9fd23
  */
 
 /* eslint-disable */
@@ -9,7 +9,7 @@
 
 /*::
 import type { ConcreteRequest } from 'relay-runtime';
-type TaskList_tasks$ref = any;
+type TaskItem_task$ref = any;
 export type TaskPriority = "HIGH" | "LOW" | "NORMAL" | "VERY_HIGH" | "%future added value";
 export type TaskInputType = {|
   title: string,
@@ -26,7 +26,7 @@ export type AddTaskMutationResponse = {|
     +project: ?{|
       +uncompletedTaskCount: number
     |},
-    +$fragmentRefs: TaskList_tasks$ref,
+    +$fragmentRefs: TaskItem_task$ref,
   |}
 |};
 export type AddTaskMutation = {|
@@ -41,7 +41,7 @@ mutation AddTaskMutation(
   $taskInput: TaskInputType!
 ) {
   addTask(taskInput: $taskInput) {
-    ...TaskList_tasks
+    ...TaskItem_task
     project {
       uncompletedTaskCount
       id
@@ -50,7 +50,7 @@ mutation AddTaskMutation(
   }
 }
 
-fragment TaskList_tasks on TaskType {
+fragment TaskItem_task on TaskType {
   id
   title
   deadline
@@ -126,7 +126,7 @@ return {
           },
           {
             "kind": "FragmentSpread",
-            "name": "TaskList_tasks",
+            "name": "TaskItem_task",
             "args": null
           }
         ]
@@ -211,11 +211,11 @@ return {
     "operationKind": "mutation",
     "name": "AddTaskMutation",
     "id": null,
-    "text": "mutation AddTaskMutation(\n  $taskInput: TaskInputType!\n) {\n  addTask(taskInput: $taskInput) {\n    ...TaskList_tasks\n    project {\n      uncompletedTaskCount\n      id\n    }\n    id\n  }\n}\n\nfragment TaskList_tasks on TaskType {\n  id\n  title\n  deadline\n  priority\n  completedOn\n  isCompleted\n  project {\n    name\n    id\n  }\n}\n",
+    "text": "mutation AddTaskMutation(\n  $taskInput: TaskInputType!\n) {\n  addTask(taskInput: $taskInput) {\n    ...TaskItem_task\n    project {\n      uncompletedTaskCount\n      id\n    }\n    id\n  }\n}\n\nfragment TaskItem_task on TaskType {\n  id\n  title\n  deadline\n  priority\n  completedOn\n  isCompleted\n  project {\n    name\n    id\n  }\n}\n",
     "metadata": {}
   }
 };
 })();
 // prettier-ignore
-(node/*: any*/).hash = '0d5b6249fb435cf4c99eff5a389dd243';
+(node/*: any*/).hash = 'c89c07e35787f74423b94c9307a2ee88';
 module.exports = node;

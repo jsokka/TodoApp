@@ -8,20 +8,13 @@
 
 /*::
 import type { ReaderFragment } from 'relay-runtime';
-export type TaskPriority = "HIGH" | "LOW" | "NORMAL" | "VERY_HIGH" | "%future added value";
+type TaskItem_task$ref = any;
 import type { FragmentReference } from "relay-runtime";
 declare export opaque type TaskList_tasks$ref: FragmentReference;
 declare export opaque type TaskList_tasks$fragmentType: TaskList_tasks$ref;
 export type TaskList_tasks = $ReadOnlyArray<{|
   +id: string,
-  +title: string,
-  +deadline: ?any,
-  +priority: TaskPriority,
-  +completedOn: ?any,
-  +isCompleted: boolean,
-  +project: ?{|
-    +name: string
-  |},
+  +$fragmentRefs: TaskItem_task$ref,
   +$refType: TaskList_tasks$ref,
 |}>;
 export type TaskList_tasks$data = TaskList_tasks;
@@ -49,60 +42,12 @@ const node/*: ReaderFragment*/ = {
       "storageKey": null
     },
     {
-      "kind": "ScalarField",
-      "alias": null,
-      "name": "title",
-      "args": null,
-      "storageKey": null
-    },
-    {
-      "kind": "ScalarField",
-      "alias": null,
-      "name": "deadline",
-      "args": null,
-      "storageKey": null
-    },
-    {
-      "kind": "ScalarField",
-      "alias": null,
-      "name": "priority",
-      "args": null,
-      "storageKey": null
-    },
-    {
-      "kind": "ScalarField",
-      "alias": null,
-      "name": "completedOn",
-      "args": null,
-      "storageKey": null
-    },
-    {
-      "kind": "ScalarField",
-      "alias": null,
-      "name": "isCompleted",
-      "args": null,
-      "storageKey": null
-    },
-    {
-      "kind": "LinkedField",
-      "alias": null,
-      "name": "project",
-      "storageKey": null,
-      "args": null,
-      "concreteType": "ProjectType",
-      "plural": false,
-      "selections": [
-        {
-          "kind": "ScalarField",
-          "alias": null,
-          "name": "name",
-          "args": null,
-          "storageKey": null
-        }
-      ]
+      "kind": "FragmentSpread",
+      "name": "TaskItem_task",
+      "args": null
     }
   ]
 };
 // prettier-ignore
-(node/*: any*/).hash = 'a85e0f402c88bfb97ef1c0d62ba70e1f';
+(node/*: any*/).hash = '6cdd3f9024fec8daf27e1e191dce7ed1';
 module.exports = node;

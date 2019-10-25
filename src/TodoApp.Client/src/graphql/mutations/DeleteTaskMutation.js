@@ -31,7 +31,11 @@ export default (id, projectId, callback) => {
       tasks = tasks.filter(t => t.getDataID() !== id);
       root.setLinkedRecords(tasks, "tasks");
     }
-    store.delete(id);
+
+    // Without timeout CSSTransitions cause problems when re-rendering. 
+    setTimeout(() => {
+      store.delete(id);
+    }, 0);
   }
 
   commitMutation(
@@ -39,7 +43,6 @@ export default (id, projectId, callback) => {
     {
       mutation,
       variables,
-      optimisticUpdater: sharedUpdater,
       updater: sharedUpdater,
       onCompleted: () => {
         callback()

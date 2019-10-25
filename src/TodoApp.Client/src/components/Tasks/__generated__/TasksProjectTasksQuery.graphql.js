@@ -1,6 +1,6 @@
 /**
  * @flow
- * @relayHash 3b02b092de84d7e22b384f5704d1dbc9
+ * @relayHash feb7dcc12c7dd068a09b43c00b4ae86f
  */
 
 /* eslint-disable */
@@ -49,7 +49,7 @@ fragment ProjectHeader_project on ProjectType {
   deadline
 }
 
-fragment TaskList_tasks on TaskType {
+fragment TaskItem_task on TaskType {
   id
   title
   deadline
@@ -60,6 +60,11 @@ fragment TaskList_tasks on TaskType {
     name
     id
   }
+}
+
+fragment TaskList_tasks on TaskType {
+  id
+  ...TaskItem_task
 }
 */
 
@@ -229,7 +234,7 @@ return {
     "operationKind": "query",
     "name": "TasksProjectTasksQuery",
     "id": null,
-    "text": "query TasksProjectTasksQuery(\n  $projectId: ID!\n) {\n  project(id: $projectId) {\n    ...ProjectHeader_project\n    tasks {\n      ...TaskList_tasks\n      id\n    }\n    id\n  }\n}\n\nfragment ProjectHeader_project on ProjectType {\n  name\n  description\n  deadline\n}\n\nfragment TaskList_tasks on TaskType {\n  id\n  title\n  deadline\n  priority\n  completedOn\n  isCompleted\n  project {\n    name\n    id\n  }\n}\n",
+    "text": "query TasksProjectTasksQuery(\n  $projectId: ID!\n) {\n  project(id: $projectId) {\n    ...ProjectHeader_project\n    tasks {\n      ...TaskList_tasks\n      id\n    }\n    id\n  }\n}\n\nfragment ProjectHeader_project on ProjectType {\n  name\n  description\n  deadline\n}\n\nfragment TaskItem_task on TaskType {\n  id\n  title\n  deadline\n  priority\n  completedOn\n  isCompleted\n  project {\n    name\n    id\n  }\n}\n\nfragment TaskList_tasks on TaskType {\n  id\n  ...TaskItem_task\n}\n",
     "metadata": {}
   }
 };

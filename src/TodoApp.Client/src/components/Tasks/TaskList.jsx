@@ -5,7 +5,7 @@ import { createFragmentContainer } from "react-relay";
 import graphql from "babel-plugin-relay/macro";
 import TaskItem from "./TaskItem";
 
-const TaskList = ({ tasks, onEditTaskClick, onToggleTaskCompletedClick, onEditProjectClick }) => {
+const TaskList = ({ tasks, onEditTaskClick, onToggleTaskCompletedClick }) => {
     const hasTasks = (tasks || []).length > 0;
     
     const taskItems = (
@@ -44,13 +44,6 @@ const TaskList = ({ tasks, onEditTaskClick, onToggleTaskCompletedClick, onEditPr
 export default createFragmentContainer(TaskList, { tasks: graphql`
   fragment TaskList_tasks on TaskType @relay(plural: true) {
     id
-    title
-    deadline
-    priority
-    completedOn
-    isCompleted
-    project {
-      name
-    }
+    ...TaskItem_task
   }
 `});

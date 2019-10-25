@@ -1,6 +1,6 @@
 /**
  * @flow
- * @relayHash 1d7eafda40f90b4c497b4fa51babd499
+ * @relayHash 00a04fa3253190bf4e2a7d6a0cd07fee
  */
 
 /* eslint-disable */
@@ -31,7 +31,7 @@ query TasksAllTasksQuery {
   }
 }
 
-fragment TaskList_tasks on TaskType {
+fragment TaskItem_task on TaskType {
   id
   title
   deadline
@@ -42,6 +42,11 @@ fragment TaskList_tasks on TaskType {
     name
     id
   }
+}
+
+fragment TaskList_tasks on TaskType {
+  id
+  ...TaskItem_task
 }
 */
 
@@ -157,7 +162,7 @@ return {
     "operationKind": "query",
     "name": "TasksAllTasksQuery",
     "id": null,
-    "text": "query TasksAllTasksQuery {\n  tasks {\n    ...TaskList_tasks\n    id\n  }\n}\n\nfragment TaskList_tasks on TaskType {\n  id\n  title\n  deadline\n  priority\n  completedOn\n  isCompleted\n  project {\n    name\n    id\n  }\n}\n",
+    "text": "query TasksAllTasksQuery {\n  tasks {\n    ...TaskList_tasks\n    id\n  }\n}\n\nfragment TaskItem_task on TaskType {\n  id\n  title\n  deadline\n  priority\n  completedOn\n  isCompleted\n  project {\n    name\n    id\n  }\n}\n\nfragment TaskList_tasks on TaskType {\n  id\n  ...TaskItem_task\n}\n",
     "metadata": {}
   }
 };

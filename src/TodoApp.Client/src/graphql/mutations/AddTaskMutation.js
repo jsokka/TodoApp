@@ -5,7 +5,7 @@ import environment from '../environment'
 const mutation = graphql`
   mutation AddTaskMutation($taskInput: TaskInputType!) {
     addTask(taskInput: $taskInput) {
-      ...TaskList_tasks
+      ...TaskItem_task
       project {
         uncompletedTaskCount
       }

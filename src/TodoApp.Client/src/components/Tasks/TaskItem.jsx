@@ -1,4 +1,6 @@
 import React from "react";
+import { createFragmentContainer } from "react-relay";
+import graphql from "babel-plugin-relay/macro";
 import { Container, Row, Col, Badge } from "react-bootstrap";
 import { FontAwesomeIcon as Icon } from '@fortawesome/react-fontawesome';
 import { faPencilAlt, faCalendarDay } from '@fortawesome/free-solid-svg-icons'
@@ -14,9 +16,9 @@ const TaskItem = ({ task, onEditClick, onToggleCompletedClick }) => {
   const handleEditClick = () => {
     onEditClick(task.id);
   };
-
+  
   const taskInfo = [];
-
+  
   if (task.project) {
     taskInfo.push({
       label: task.project.name
@@ -74,4 +76,16 @@ const TaskItem = ({ task, onEditClick, onToggleCompletedClick }) => {
   );
 }
 
-export default TaskItem;
+export default createFragmentContainer(TaskItem, { task: graphql`
+  fragment TaskItem_task on TaskType {
+    id
+    title
+    deadline
+    priority
+    completedOn
+    isCompleted
+    project {
+      name
+    }
+  }
+`});

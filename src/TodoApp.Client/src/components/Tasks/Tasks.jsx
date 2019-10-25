@@ -53,11 +53,6 @@ const EditTaskQuery = graphql`
     projects {
       ...TaskEditModal_projects
     }
-    #taskPriorities: __type(name: "TaskPriority") {
-    #  enumValues {
-    #    name
-    #  }
-    #}
   }
 `
 
@@ -135,7 +130,7 @@ class Tasks extends Component {
   handleDeleteTask = (taskId) => {
     this.setState({ editTaskSaving: true });
     DeleteTaskMutation(taskId, this.getProjectId(), () => {
-      console.log(`Project ${taskId} deleted`);
+      console.log(`Task ${taskId} deleted`);
       this.handleCloseTaskEditModal();
     });
   };
