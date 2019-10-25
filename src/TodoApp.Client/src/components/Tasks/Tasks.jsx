@@ -54,11 +54,11 @@ const EditTaskQuery = graphql`
       id
       name
     }
-    taskPriorities: __type(name: "TaskPriority") {
-      enumValues {
-        name
-      }
-    }
+    #taskPriorities: __type(name: "TaskPriority") {
+    #  enumValues {
+    #    name
+    #  }
+    #}
   }
 `
 
@@ -169,10 +169,10 @@ class Tasks extends Component {
     });
   };
 
-  getPriorities = (enumValues) => {
-    return enumValues.map(p => ({ 
-      value: p.name, 
-      label: priorityMap[p.name] ? priorityMap[p.name].label : p.name
+  getPriorities = () => {
+    return Object.keys(priorityMap).map(p => ({
+      value: p, 
+      label: priorityMap[p] ? priorityMap[p].label : p
     }));
   };
 
@@ -202,12 +202,11 @@ class Tasks extends Component {
             environment={environment}
             query={EditTaskQuery}
             variables={{ 
-              id: this.state.editTaskId,
-              enumTypeName: "TaskPriority"
+              id: this.state.editTaskId
             }}
             render={({error, props}) => {
               if (props && props.task) {
-                var priorities = this.getPriorities(props.taskPriorities.enumValues);
+                const priorities = this.getPriorities();
                 return (
                   <TaskEditModal 
                     task={props.task}

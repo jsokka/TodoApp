@@ -1,6 +1,6 @@
 /**
  * @flow
- * @relayHash 54419aa1c32748ea2596d7415bff1190
+ * @relayHash 50af177e28e4b90eadafe77de236d9be
  */
 
 /* eslint-disable */
@@ -21,11 +21,6 @@ export type TasksEditTaskQueryResponse = {|
     +id: string,
     +name: string,
   |}>,
-  +taskPriorities: ?{|
-    +enumValues: ?$ReadOnlyArray<{|
-      +name: string
-    |}>
-  |},
 |};
 export type TasksEditTaskQuery = {|
   variables: TasksEditTaskQueryVariables,
@@ -45,11 +40,6 @@ query TasksEditTaskQuery(
   projects {
     id
     name
-  }
-  taskPriorities: __type(name: "TaskPriority") {
-    enumValues {
-      name
-    }
   }
 }
 
@@ -89,13 +79,6 @@ v2 = {
   "storageKey": null
 },
 v3 = {
-  "kind": "ScalarField",
-  "alias": null,
-  "name": "name",
-  "args": null,
-  "storageKey": null
-},
-v4 = {
   "kind": "LinkedField",
   "alias": null,
   "name": "projects",
@@ -105,35 +88,12 @@ v4 = {
   "plural": true,
   "selections": [
     (v2/*: any*/),
-    (v3/*: any*/)
-  ]
-},
-v5 = {
-  "kind": "LinkedField",
-  "alias": "taskPriorities",
-  "name": "__type",
-  "storageKey": "__type(name:\"TaskPriority\")",
-  "args": [
     {
-      "kind": "Literal",
-      "name": "name",
-      "value": "TaskPriority"
-    }
-  ],
-  "concreteType": "__Type",
-  "plural": false,
-  "selections": [
-    {
-      "kind": "LinkedField",
+      "kind": "ScalarField",
       "alias": null,
-      "name": "enumValues",
-      "storageKey": null,
+      "name": "name",
       "args": null,
-      "concreteType": "__EnumValue",
-      "plural": true,
-      "selections": [
-        (v3/*: any*/)
-      ]
+      "storageKey": null
     }
   ]
 };
@@ -162,8 +122,7 @@ return {
           }
         ]
       },
-      (v4/*: any*/),
-      (v5/*: any*/)
+      (v3/*: any*/)
     ]
   },
   "operation": {
@@ -223,19 +182,18 @@ return {
           }
         ]
       },
-      (v4/*: any*/),
-      (v5/*: any*/)
+      (v3/*: any*/)
     ]
   },
   "params": {
     "operationKind": "query",
     "name": "TasksEditTaskQuery",
     "id": null,
-    "text": "query TasksEditTaskQuery(\n  $id: ID!\n) {\n  task(id: $id) {\n    ...TaskEditModal_task\n    id\n  }\n  projects {\n    id\n    name\n  }\n  taskPriorities: __type(name: \"TaskPriority\") {\n    enumValues {\n      name\n    }\n  }\n}\n\nfragment TaskEditModal_task on TaskType {\n  id\n  title\n  description\n  priority\n  deadline\n  project {\n    id\n  }\n}\n",
+    "text": "query TasksEditTaskQuery(\n  $id: ID!\n) {\n  task(id: $id) {\n    ...TaskEditModal_task\n    id\n  }\n  projects {\n    id\n    name\n  }\n}\n\nfragment TaskEditModal_task on TaskType {\n  id\n  title\n  description\n  priority\n  deadline\n  project {\n    id\n  }\n}\n",
     "metadata": {}
   }
 };
 })();
 // prettier-ignore
-(node/*: any*/).hash = '929c979ef1718f76767d4e248b7b4b92';
+(node/*: any*/).hash = '4f10a3570aca33085abb9c24ee2ed2be';
 module.exports = node;
