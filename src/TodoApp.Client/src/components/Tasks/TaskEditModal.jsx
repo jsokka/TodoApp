@@ -146,4 +146,10 @@ export default createFragmentContainer(TaskEditModal, { task: graphql`
       id
     }
   }
-`});
+`, projects: graphql`
+  fragment TaskEditModal_projects on ProjectType @relay(plural: true) {
+    id
+    name
+  }
+`
+});

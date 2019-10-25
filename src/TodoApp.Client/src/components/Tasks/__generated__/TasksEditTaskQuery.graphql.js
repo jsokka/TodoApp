@@ -1,6 +1,6 @@
 /**
  * @flow
- * @relayHash 50af177e28e4b90eadafe77de236d9be
+ * @relayHash 06e66a2ba46ed5b361a58f023c08d68f
  */
 
 /* eslint-disable */
@@ -9,6 +9,7 @@
 
 /*::
 import type { ConcreteRequest } from 'relay-runtime';
+type TaskEditModal_projects$ref = any;
 type TaskEditModal_task$ref = any;
 export type TasksEditTaskQueryVariables = {|
   id: string
@@ -18,8 +19,7 @@ export type TasksEditTaskQueryResponse = {|
     +$fragmentRefs: TaskEditModal_task$ref
   |},
   +projects: $ReadOnlyArray<{|
-    +id: string,
-    +name: string,
+    +$fragmentRefs: TaskEditModal_projects$ref
   |}>,
 |};
 export type TasksEditTaskQuery = {|
@@ -38,9 +38,14 @@ query TasksEditTaskQuery(
     id
   }
   projects {
+    ...TaskEditModal_projects
     id
-    name
   }
+}
+
+fragment TaskEditModal_projects on ProjectType {
+  id
+  name
 }
 
 fragment TaskEditModal_task on TaskType {
@@ -77,25 +82,6 @@ v2 = {
   "name": "id",
   "args": null,
   "storageKey": null
-},
-v3 = {
-  "kind": "LinkedField",
-  "alias": null,
-  "name": "projects",
-  "storageKey": null,
-  "args": null,
-  "concreteType": "ProjectType",
-  "plural": true,
-  "selections": [
-    (v2/*: any*/),
-    {
-      "kind": "ScalarField",
-      "alias": null,
-      "name": "name",
-      "args": null,
-      "storageKey": null
-    }
-  ]
 };
 return {
   "kind": "Request",
@@ -122,7 +108,22 @@ return {
           }
         ]
       },
-      (v3/*: any*/)
+      {
+        "kind": "LinkedField",
+        "alias": null,
+        "name": "projects",
+        "storageKey": null,
+        "args": null,
+        "concreteType": "ProjectType",
+        "plural": true,
+        "selections": [
+          {
+            "kind": "FragmentSpread",
+            "name": "TaskEditModal_projects",
+            "args": null
+          }
+        ]
+      }
     ]
   },
   "operation": {
@@ -182,18 +183,36 @@ return {
           }
         ]
       },
-      (v3/*: any*/)
+      {
+        "kind": "LinkedField",
+        "alias": null,
+        "name": "projects",
+        "storageKey": null,
+        "args": null,
+        "concreteType": "ProjectType",
+        "plural": true,
+        "selections": [
+          (v2/*: any*/),
+          {
+            "kind": "ScalarField",
+            "alias": null,
+            "name": "name",
+            "args": null,
+            "storageKey": null
+          }
+        ]
+      }
     ]
   },
   "params": {
     "operationKind": "query",
     "name": "TasksEditTaskQuery",
     "id": null,
-    "text": "query TasksEditTaskQuery(\n  $id: ID!\n) {\n  task(id: $id) {\n    ...TaskEditModal_task\n    id\n  }\n  projects {\n    id\n    name\n  }\n}\n\nfragment TaskEditModal_task on TaskType {\n  id\n  title\n  description\n  priority\n  deadline\n  project {\n    id\n  }\n}\n",
+    "text": "query TasksEditTaskQuery(\n  $id: ID!\n) {\n  task(id: $id) {\n    ...TaskEditModal_task\n    id\n  }\n  projects {\n    ...TaskEditModal_projects\n    id\n  }\n}\n\nfragment TaskEditModal_projects on ProjectType {\n  id\n  name\n}\n\nfragment TaskEditModal_task on TaskType {\n  id\n  title\n  description\n  priority\n  deadline\n  project {\n    id\n  }\n}\n",
     "metadata": {}
   }
 };
 })();
 // prettier-ignore
-(node/*: any*/).hash = '4f10a3570aca33085abb9c24ee2ed2be';
+(node/*: any*/).hash = '121122735cea7d4ab4875b61cb6d7a13';
 module.exports = node;

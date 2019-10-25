@@ -51,8 +51,7 @@ const EditTaskQuery = graphql`
       ...TaskEditModal_task
     }
     projects {
-      id
-      name
+      ...TaskEditModal_projects
     }
     #taskPriorities: __type(name: "TaskPriority") {
     #  enumValues {
