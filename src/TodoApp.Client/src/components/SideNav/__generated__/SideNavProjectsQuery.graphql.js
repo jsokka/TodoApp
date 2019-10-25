@@ -1,6 +1,6 @@
 /**
  * @flow
- * @relayHash 542030886b7b0257c1be2f36cf93927b
+ * @relayHash ba8a3e7938936c9b37f0a1c37f31b905
  */
 
 /* eslint-disable */
@@ -31,10 +31,15 @@ query SideNavProjectsQuery {
   }
 }
 
-fragment ProjectNav_projects on ProjectType {
+fragment ProjectNavItem_project on ProjectType {
   id
   name
   uncompletedTaskCount
+}
+
+fragment ProjectNav_projects on ProjectType {
+  id
+  ...ProjectNavItem_project
 }
 */
 
@@ -108,7 +113,7 @@ const node/*: ConcreteRequest*/ = {
     "operationKind": "query",
     "name": "SideNavProjectsQuery",
     "id": null,
-    "text": "query SideNavProjectsQuery {\n  projects {\n    ...ProjectNav_projects\n    id\n  }\n}\n\nfragment ProjectNav_projects on ProjectType {\n  id\n  name\n  uncompletedTaskCount\n}\n",
+    "text": "query SideNavProjectsQuery {\n  projects {\n    ...ProjectNav_projects\n    id\n  }\n}\n\nfragment ProjectNavItem_project on ProjectType {\n  id\n  name\n  uncompletedTaskCount\n}\n\nfragment ProjectNav_projects on ProjectType {\n  id\n  ...ProjectNavItem_project\n}\n",
     "metadata": {}
   }
 };

@@ -20,7 +20,9 @@ export default (id, callback) => {
     let projects = root.getLinkedRecords("projects");
     projects = projects.filter(p => p.getDataID() !== id);
     root.setLinkedRecords(projects, "projects");
-    //store.delete(id);
+    setTimeout(() => {
+      store.delete(id);
+    }, 0);
   }
 
   commitMutation(

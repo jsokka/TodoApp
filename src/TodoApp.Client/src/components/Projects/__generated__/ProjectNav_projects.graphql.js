@@ -8,13 +8,13 @@
 
 /*::
 import type { ReaderFragment } from 'relay-runtime';
+type ProjectNavItem_project$ref = any;
 import type { FragmentReference } from "relay-runtime";
 declare export opaque type ProjectNav_projects$ref: FragmentReference;
 declare export opaque type ProjectNav_projects$fragmentType: ProjectNav_projects$ref;
 export type ProjectNav_projects = $ReadOnlyArray<{|
   +id: string,
-  +name: string,
-  +uncompletedTaskCount: number,
+  +$fragmentRefs: ProjectNavItem_project$ref,
   +$refType: ProjectNav_projects$ref,
 |}>;
 export type ProjectNav_projects$data = ProjectNav_projects;
@@ -42,21 +42,12 @@ const node/*: ReaderFragment*/ = {
       "storageKey": null
     },
     {
-      "kind": "ScalarField",
-      "alias": null,
-      "name": "name",
-      "args": null,
-      "storageKey": null
-    },
-    {
-      "kind": "ScalarField",
-      "alias": null,
-      "name": "uncompletedTaskCount",
-      "args": null,
-      "storageKey": null
+      "kind": "FragmentSpread",
+      "name": "ProjectNavItem_project",
+      "args": null
     }
   ]
 };
 // prettier-ignore
-(node/*: any*/).hash = '3a7af3176b736c2554638734577a25e0';
+(node/*: any*/).hash = '92934aa754cd787d1d22f5fbd0bad85a';
 module.exports = node;

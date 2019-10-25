@@ -1,12 +1,12 @@
 import React from "react";
-import { TransitionGroup, CSSTransition } from 'react-transition-group'
 import graphql from "babel-plugin-relay/macro";
 import { createFragmentContainer } from "react-relay";
-import { NavLink } from "react-router-dom";
-import { Badge, Container, Row, Col, Button } from "react-bootstrap";
+import { TransitionGroup, CSSTransition } from 'react-transition-group'
+import { Container, Button } from "react-bootstrap";
 import { FontAwesomeIcon as Icon } from '@fortawesome/react-fontawesome';
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import "./Projects.scss";
+import ProjectNavItem from "./ProjectNavItem";
 
 const ProjectNav = ({ projects, onAddProjectClick }) => {
   const hasProjects = (projects || []).length > 0;
@@ -20,28 +20,15 @@ const ProjectNav = ({ projects, onAddProjectClick }) => {
         </Button>
       </Container>
       <TransitionGroup>
-        {hasProjects && projects.map(p => 
+        {hasProjects && projects.map(project => 
           <CSSTransition
-              key={p.id}
-              timeout={500}
-              classNames="project">
-            <NavLink 
-              key={p.id} 
-              to={"/project/" + p.id} 
-              className="list-group-item list-group-item-action bg-light">
-              <Container fluid>
-                <Row>
-                  <Col className="p-0">
-                    {p.name}
-                  </Col>
-                  <Col className="p-0" xs="1">
-                    {p.uncompletedTaskCount > 0 
-                      ? <Badge className="" variant="secondary">{p.uncompletedTaskCount}</Badge>
-                      : null}
-                      </Col>
-                  </Row>
-              </Container>
-            </NavLink>
+            key={project.__id}
+            timeout={500}
+            classNames="project"
+          >
+            <ProjectNavItem 
+              project={project}
+            />     
           </CSSTransition>
         )}
       </TransitionGroup>
@@ -52,7 +39,6 @@ const ProjectNav = ({ projects, onAddProjectClick }) => {
 export default createFragmentContainer(ProjectNav, { projects: graphql`
   fragment ProjectNav_projects on ProjectType @relay(plural: true) {
     id
-    name
-    uncompletedTaskCount
+    ...ProjectNavItem_project
   } 
 `});
