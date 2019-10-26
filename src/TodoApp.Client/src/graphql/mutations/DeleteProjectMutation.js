@@ -1,5 +1,6 @@
 import { commitMutation } from 'react-relay'
 import graphql from "babel-plugin-relay/macro";
+import { toast } from "react-toastify";
 import environment from '../environment'
 
 const mutation = graphql`
@@ -32,10 +33,16 @@ export default (id, callback) => {
       variables,
       optimisticUpdater: sharedUpdater,
       updater: sharedUpdater,
-      onCompleted: () => {
-        callback()
+      onCompleted: (response) => {
+        callback(response.deleteProject.deletedProjectId)
       },
-      onError: err => console.error(err)
+      onError: err => {
+        console.error(err); 
+        toast.error(`Failed to delete project ${id}`, {
+          toastId: `DeleteProject${id}` 
+        });
+        callback(undefined, err);
+      }
     }
   )
 }

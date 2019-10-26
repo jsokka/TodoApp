@@ -1,6 +1,7 @@
-import { commitMutation } from 'react-relay'
+import { commitMutation } from "react-relay";
 import graphql from "babel-plugin-relay/macro";
-import environment from '../environment'
+import { toast } from "react-toastify";
+import environment from "../environment"
 
 const mutation = graphql`
   mutation AddProjectMutation($projectInput: ProjectInputType!) {
@@ -38,7 +39,13 @@ export default (name, description, deadline, callback) => {
       onCompleted: (response) => {
         callback(response.addProject.__id)
       },
-      onError: err => console.error(err)
+      onError: err => {
+        toast.error("Failed to save project", { 
+          toastId: "FailedToAddProject" 
+        });
+        console.error(err);
+        callback(undefined, err);
+      }
     }
   )
 }

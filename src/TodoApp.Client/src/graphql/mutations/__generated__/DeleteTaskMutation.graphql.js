@@ -1,6 +1,6 @@
 /**
  * @flow
- * @relayHash 098dfc23c60a23d6ef24f347b2e5a906
+ * @relayHash 40adc1ab3666716e51c8eb07e1ac862e
  */
 
 /* eslint-disable */
@@ -14,9 +14,10 @@ export type DeleteTaskMutationVariables = {|
 |};
 export type DeleteTaskMutationResponse = {|
   +deleteTask: ?{|
+    +deletedTaskId: ?string,
     +project: ?{|
       +uncompletedTaskCount: number
-    |}
+    |},
   |}
 |};
 export type DeleteTaskMutation = {|
@@ -31,6 +32,7 @@ mutation DeleteTaskMutation(
   $id: ID!
 ) {
   deleteTask(id: $id) {
+    deletedTaskId
     project {
       uncompletedTaskCount
       id
@@ -58,6 +60,13 @@ v1 = [
 v2 = {
   "kind": "ScalarField",
   "alias": null,
+  "name": "deletedTaskId",
+  "args": null,
+  "storageKey": null
+},
+v3 = {
+  "kind": "ScalarField",
+  "alias": null,
   "name": "uncompletedTaskCount",
   "args": null,
   "storageKey": null
@@ -80,6 +89,7 @@ return {
         "concreteType": "TaskDeletePayloadType",
         "plural": false,
         "selections": [
+          (v2/*: any*/),
           {
             "kind": "LinkedField",
             "alias": null,
@@ -89,7 +99,7 @@ return {
             "concreteType": "ProjectType",
             "plural": false,
             "selections": [
-              (v2/*: any*/)
+              (v3/*: any*/)
             ]
           }
         ]
@@ -110,6 +120,7 @@ return {
         "concreteType": "TaskDeletePayloadType",
         "plural": false,
         "selections": [
+          (v2/*: any*/),
           {
             "kind": "LinkedField",
             "alias": null,
@@ -119,7 +130,7 @@ return {
             "concreteType": "ProjectType",
             "plural": false,
             "selections": [
-              (v2/*: any*/),
+              (v3/*: any*/),
               {
                 "kind": "ScalarField",
                 "alias": null,
@@ -137,11 +148,11 @@ return {
     "operationKind": "mutation",
     "name": "DeleteTaskMutation",
     "id": null,
-    "text": "mutation DeleteTaskMutation(\n  $id: ID!\n) {\n  deleteTask(id: $id) {\n    project {\n      uncompletedTaskCount\n      id\n    }\n  }\n}\n",
+    "text": "mutation DeleteTaskMutation(\n  $id: ID!\n) {\n  deleteTask(id: $id) {\n    deletedTaskId\n    project {\n      uncompletedTaskCount\n      id\n    }\n  }\n}\n",
     "metadata": {}
   }
 };
 })();
 // prettier-ignore
-(node/*: any*/).hash = '3dd79b2efee5a5431f08d485cc990132';
+(node/*: any*/).hash = '53db60caeb3207982d2553f28019ee6d';
 module.exports = node;

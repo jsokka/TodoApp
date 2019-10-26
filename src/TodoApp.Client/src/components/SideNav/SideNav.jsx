@@ -24,7 +24,8 @@ class SideNav extends Component {
     super(props);
 
     this.state = {
-      showAddProjectModal: false
+      showAddProjectModal: false,
+      addProjectModalSaving: false
     };
   }
 
@@ -33,26 +34,32 @@ class SideNav extends Component {
   }
 
   handleHideAddProjectModal = () => {
-    this.setState({ showAddProjectModal: false });
+    this.setState({ showAddProjectModal: false, addProjectModalSaving: false });
   };
 
   handleSaveAddProject = (project) => {
-    AddProjectMutation(project.name, project.description, project.deadline, (projectId) => {
-      console.log(`Project ${projectId} created`);
-      this.handleHideAddProjectModal();
-      setTimeout(() => { 
-        this.props.history.push(`/project/${projectId}`);
-      }, 500);
+    this.setState({ addProjectModalSaving: true});
+    AddProjectMutation(project.name, project.description, project.deadline, (projectId, errors) => {
+      this.setState({ addProjectModalSaving: false });
+      if (!errors) {
+        console.log(`Project ${projectId} created`);
+        this.handleHideAddProjectModal();
+        setTimeout(() => { 
+          this.props.history.push(`/project/${projectId}`);
+        }, 500);
+      }
     });
   };
 
   render() {
     const { onToggleNav, isToggled } = this.props;
+    const { addProjectModalSaving } = this.state;
     const toggleIcon = isToggled ? faArrowLeft : faBars;
     return (
       <Fragment>
         {this.state.showAddProjectModal &&
           <ProjectEditModal
+            saving={addProjectModalSaving}
             onCancelClick={this.handleHideAddProjectModal}
             onSaveClick={this.handleSaveAddProject}
           />

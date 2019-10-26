@@ -2,6 +2,7 @@ import React, { Component, Fragment } from "react";
 import { withRouter } from 'react-router'
 import { QueryRenderer } from "react-relay";
 import { Container, Row, Col, Spinner, Alert } from "react-bootstrap";
+import { toast } from "react-toastify";
 import TaskList from "./TaskList";
 import TaskInput from "./TaskInput";
 import TaskEditModal from "./TaskEditModal";
@@ -97,13 +98,16 @@ class Tasks extends Component {
     });
   }
 
-  handleAddTask = (title, projectId) => {
+  handleAddTask = (title, projectId, onSuccess) => {
     this.setState({ isLoading: true });
-    AddTaskMutation(title, projectId,
-      (taskId) => { 
+    AddTaskMutation(title, projectId, (taskId, errors) => { 
+      this.setState({ isLoading: false });
+      if (!errors) {
         this.setState({ isLoading: false });
-        console.log(`Task ${taskId} added`); 
-      })
+        console.log(`Task ${taskId} added`);
+        onSuccess();
+      } 
+    });
   };
 
   handleToggleTaskCompleted = (taskId, completed) => {
@@ -121,17 +125,23 @@ class Tasks extends Component {
 
   handleSaveTaskEdit = (task) => {
     this.setState({ editTaskSaving: true });
-    UpdateTaskMutation(task, () => {
-      console.log(`${task.id} updated`);
-      this.handleCloseTaskEditModal();
+    UpdateTaskMutation(task, (taskId, errors) => {
+      this.setState({ editTaskSaving: false });
+      if (!errors) {
+        console.log(`Task ${taskId} updated`);
+        this.handleCloseTaskEditModal();
+      }
     })
   };
 
   handleDeleteTask = (taskId) => {
     this.setState({ editTaskSaving: true });
-    DeleteTaskMutation(taskId, this.getProjectId(), () => {
-      console.log(`Task ${taskId} deleted`);
-      this.handleCloseTaskEditModal();
+    DeleteTaskMutation(taskId, this.getProjectId(), (deletedTaskId, errors) => {
+      this.setState({ editTaskSaving: false });
+      if (!errors) {
+        console.log(`Task ${deletedTaskId} deleted`);
+        this.handleCloseTaskEditModal();
+      }
     });
   };
 
@@ -146,20 +156,26 @@ class Tasks extends Component {
   handleSaveProject = (project) => {
     this.setState({ editProjectSaving: true });
     UpdateProjectMutation(project.id, project.name, 
-      project.description, project.deadline, () => {
-        console.log(`${project.id} updated`);
-        this.handleCloseProjectEditModal();
+      project.description, project.deadline, (projectId, errors) => {
+        this.setState({ editProjectSaving: false });
+        if (!errors) {
+          console.log(`${projectId} updated`);
+          this.handleCloseProjectEditModal();
+        }
       });
   };
 
   handleDeleteProject = (projectId) => {
     this.setState({ editProjectSaving: true });
-    DeleteProjectMutation(projectId, () => {
-      console.log(`Project ${projectId} deleted`);
-      this.handleCloseProjectEditModal();
-      setTimeout(() => {
-        this.props.history.push('/');
-      }, 500);
+    DeleteProjectMutation(projectId, (id, errors) => {
+      this.setState({ editProjectSaving: false });
+      if (!errors) {
+        console.log(`Project ${id} deleted`);
+        this.handleCloseProjectEditModal();
+        setTimeout(() => {
+          this.props.history.push('/');
+        }, 500);
+      }
     });
   };
 
@@ -199,10 +215,15 @@ class Tasks extends Component {
               id: this.state.editTaskId
             }}
             render={({error, props}) => {
+              if (error) {
+                toast.error(error.message);
+                return null;
+              }
               if (props && props.task) {
                 const priorities = this.getPriorities();
                 return (
                   <TaskEditModal 
+                    saving={this.state.editTaskSaving}
                     task={props.task}
                     priorities={priorities}
                     projects={props.projects}
@@ -223,9 +244,14 @@ class Tasks extends Component {
               projectId: projectId
             }}
             render={({ error, props }) => {
+              if (error) {
+                toast.error(error.message);
+                return null;
+              }
               if (props && props.project) {
                 return (
                   <ProjectEditModalWithFragment 
+                    saving={this.state.editProjectSaving}
                     project={props.project} 
                     onCancelClick={this.handleCloseProjectEditModal}
                     onSaveClick={this.handleSaveProject}

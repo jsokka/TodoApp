@@ -12,8 +12,7 @@ const TaskInput = ({ projectId, onAdd, isLoading }) => {
     if (value.trim().length === 0) {
       return;
     }
-    onAdd(value.trim(), projectId);
-    setValue("");
+    onAdd(value.trim(), projectId, () => setValue(""));
   };
 
   const handleKeyDown = (e) => {

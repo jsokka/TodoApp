@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
+import { ToastContainer } from "react-toastify";
 import SideNav from './components/SideNav/SideNav';
+import 'react-toastify/dist/ReactToastify.css';
 
 export default class Layout extends Component {
   constructor(props) {
@@ -37,6 +39,15 @@ export default class Layout extends Component {
         <div id="page-content-wrapper">
           {this.props.children}
         </div>
+        <ToastContainer
+          position="bottom-center"
+          autoClose={3000}
+          hideProgressBar
+          newestOnTop={false}
+          closeOnClick
+          pauseOnVisibilityChange
+          pauseOnHover
+        />
       </div>
     );
   }

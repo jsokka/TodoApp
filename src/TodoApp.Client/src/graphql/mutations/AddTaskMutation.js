@@ -1,5 +1,6 @@
 import { commitMutation } from 'react-relay'
 import graphql from "babel-plugin-relay/macro";
+import { toast } from "react-toastify";
 import environment from '../environment'
 
 const mutation = graphql`
@@ -48,7 +49,13 @@ export default (title, projectId, callback) => {
       onCompleted: (response) => {
         callback(response.addTask.__id)
       },
-      onError: err => console.error(err)
+      onError: err => {
+        console.error(err);
+        toast.error("Failed to save task", { 
+          toastId: "FailedToAddTask" 
+        });
+        callback(undefined, err);
+      }
     }
   )
 }

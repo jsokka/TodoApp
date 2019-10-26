@@ -1,5 +1,6 @@
 import { commitMutation } from 'react-relay'
 import graphql from "babel-plugin-relay/macro";
+import { toast } from "react-toastify";
 import environment from '../environment'
 
 const mutation = graphql`
@@ -23,8 +24,8 @@ export default (taskId, completed, callback) => {
   }
 
   const optimisticUpdater = (store) => {
-    var task = store.get(taskId);
-    var project = task.getLinkedRecord("project");
+    const task = store.get(taskId);
+    const project = task.getLinkedRecord("project");
 
     task.setValue(completed, "isCompleted");
     task.setValue(completed ? new Date().toISOString() : null, "completedOn");
@@ -46,7 +47,12 @@ export default (taskId, completed, callback) => {
       onCompleted: () => {
         callback()
       },
-      onError: err => console.error(err)
+      onError: err => {
+        console.error(err);
+        toast.error("Failed to toggle task completed", { 
+          toastId: "FailedToToggleTaskCompleted" 
+        });
+      }
     }
   )
 }
