@@ -1,6 +1,6 @@
 /**
  * @flow
- * @relayHash 40adc1ab3666716e51c8eb07e1ac862e
+ * @relayHash 283af37598285ca0ef2562866bd52abd
  */
 
 /* eslint-disable */
@@ -9,6 +9,7 @@
 
 /*::
 import type { ConcreteRequest } from 'relay-runtime';
+type ProjectNav_projects$ref = any;
 export type DeleteTaskMutationVariables = {|
   id: string
 |};
@@ -16,7 +17,7 @@ export type DeleteTaskMutationResponse = {|
   +deleteTask: ?{|
     +deletedTaskId: ?string,
     +project: ?{|
-      +uncompletedTaskCount: number
+      +$fragmentRefs: ProjectNav_projects$ref
     |},
   |}
 |};
@@ -34,10 +35,22 @@ mutation DeleteTaskMutation(
   deleteTask(id: $id) {
     deletedTaskId
     project {
-      uncompletedTaskCount
+      ...ProjectNav_projects
       id
     }
   }
+}
+
+fragment ProjectNavItem_project on ProjectType {
+  id
+  name
+  taskCount
+  uncompletedTaskCount
+}
+
+fragment ProjectNav_projects on ProjectType {
+  id
+  ...ProjectNavItem_project
 }
 */
 
@@ -61,13 +74,6 @@ v2 = {
   "kind": "ScalarField",
   "alias": null,
   "name": "deletedTaskId",
-  "args": null,
-  "storageKey": null
-},
-v3 = {
-  "kind": "ScalarField",
-  "alias": null,
-  "name": "uncompletedTaskCount",
   "args": null,
   "storageKey": null
 };
@@ -99,7 +105,11 @@ return {
             "concreteType": "ProjectType",
             "plural": false,
             "selections": [
-              (v3/*: any*/)
+              {
+                "kind": "FragmentSpread",
+                "name": "ProjectNav_projects",
+                "args": null
+              }
             ]
           }
         ]
@@ -130,11 +140,31 @@ return {
             "concreteType": "ProjectType",
             "plural": false,
             "selections": [
-              (v3/*: any*/),
               {
                 "kind": "ScalarField",
                 "alias": null,
                 "name": "id",
+                "args": null,
+                "storageKey": null
+              },
+              {
+                "kind": "ScalarField",
+                "alias": null,
+                "name": "name",
+                "args": null,
+                "storageKey": null
+              },
+              {
+                "kind": "ScalarField",
+                "alias": null,
+                "name": "taskCount",
+                "args": null,
+                "storageKey": null
+              },
+              {
+                "kind": "ScalarField",
+                "alias": null,
+                "name": "uncompletedTaskCount",
                 "args": null,
                 "storageKey": null
               }
@@ -148,11 +178,11 @@ return {
     "operationKind": "mutation",
     "name": "DeleteTaskMutation",
     "id": null,
-    "text": "mutation DeleteTaskMutation(\n  $id: ID!\n) {\n  deleteTask(id: $id) {\n    deletedTaskId\n    project {\n      uncompletedTaskCount\n      id\n    }\n  }\n}\n",
+    "text": "mutation DeleteTaskMutation(\n  $id: ID!\n) {\n  deleteTask(id: $id) {\n    deletedTaskId\n    project {\n      ...ProjectNav_projects\n      id\n    }\n  }\n}\n\nfragment ProjectNavItem_project on ProjectType {\n  id\n  name\n  taskCount\n  uncompletedTaskCount\n}\n\nfragment ProjectNav_projects on ProjectType {\n  id\n  ...ProjectNavItem_project\n}\n",
     "metadata": {}
   }
 };
 })();
 // prettier-ignore
-(node/*: any*/).hash = '53db60caeb3207982d2553f28019ee6d';
+(node/*: any*/).hash = '97c3dcb9233ac9b0ad21b1e74ed6a85d';
 module.exports = node;

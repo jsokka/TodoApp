@@ -1,6 +1,6 @@
 /**
  * @flow
- * @relayHash a7875bf25555b37ddc20ec6ae04838e1
+ * @relayHash d3bad137f48c56ff0cdc7a90694a2ea1
  */
 
 /* eslint-disable */
@@ -9,7 +9,7 @@
 
 /*::
 import type { ConcreteRequest } from 'relay-runtime';
-type ProjectEditModal_project$ref = any;
+type ProjectNav_projects$ref = any;
 export type ProjectInputType = {|
   name: string,
   description?: ?string,
@@ -20,7 +20,7 @@ export type AddProjectMutationVariables = {|
 |};
 export type AddProjectMutationResponse = {|
   +addProject: ?{|
-    +$fragmentRefs: ProjectEditModal_project$ref
+    +$fragmentRefs: ProjectNav_projects$ref
   |}
 |};
 export type AddProjectMutation = {|
@@ -35,16 +35,21 @@ mutation AddProjectMutation(
   $projectInput: ProjectInputType!
 ) {
   addProject(projectInput: $projectInput) {
-    ...ProjectEditModal_project
+    ...ProjectNav_projects
     id
   }
 }
 
-fragment ProjectEditModal_project on ProjectType {
+fragment ProjectNavItem_project on ProjectType {
   id
   name
-  description
-  deadline
+  taskCount
+  uncompletedTaskCount
+}
+
+fragment ProjectNav_projects on ProjectType {
+  id
+  ...ProjectNavItem_project
 }
 */
 
@@ -84,7 +89,7 @@ return {
         "selections": [
           {
             "kind": "FragmentSpread",
-            "name": "ProjectEditModal_project",
+            "name": "ProjectNav_projects",
             "args": null
           }
         ]
@@ -122,14 +127,14 @@ return {
           {
             "kind": "ScalarField",
             "alias": null,
-            "name": "description",
+            "name": "taskCount",
             "args": null,
             "storageKey": null
           },
           {
             "kind": "ScalarField",
             "alias": null,
-            "name": "deadline",
+            "name": "uncompletedTaskCount",
             "args": null,
             "storageKey": null
           }
@@ -141,11 +146,11 @@ return {
     "operationKind": "mutation",
     "name": "AddProjectMutation",
     "id": null,
-    "text": "mutation AddProjectMutation(\n  $projectInput: ProjectInputType!\n) {\n  addProject(projectInput: $projectInput) {\n    ...ProjectEditModal_project\n    id\n  }\n}\n\nfragment ProjectEditModal_project on ProjectType {\n  id\n  name\n  description\n  deadline\n}\n",
+    "text": "mutation AddProjectMutation(\n  $projectInput: ProjectInputType!\n) {\n  addProject(projectInput: $projectInput) {\n    ...ProjectNav_projects\n    id\n  }\n}\n\nfragment ProjectNavItem_project on ProjectType {\n  id\n  name\n  taskCount\n  uncompletedTaskCount\n}\n\nfragment ProjectNav_projects on ProjectType {\n  id\n  ...ProjectNavItem_project\n}\n",
     "metadata": {}
   }
 };
 })();
 // prettier-ignore
-(node/*: any*/).hash = '7bbf5a3be9e055d86e6371ef50925457';
+(node/*: any*/).hash = '99818637f78c811de1e591fee8369280';
 module.exports = node;

@@ -8,7 +8,7 @@ const mutation = graphql`
     addTask(taskInput: $taskInput) {
       ...TaskItem_task
       project {
-        uncompletedTaskCount
+        ...ProjectNav_projects
       }
     }
   }

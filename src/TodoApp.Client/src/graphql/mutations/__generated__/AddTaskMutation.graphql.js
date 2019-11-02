@@ -1,6 +1,6 @@
 /**
  * @flow
- * @relayHash e15ef0dac651e7614a43eb216aa9fd23
+ * @relayHash 2edf317a325b38b4b903b0a8973ed8ae
  */
 
 /* eslint-disable */
@@ -9,6 +9,7 @@
 
 /*::
 import type { ConcreteRequest } from 'relay-runtime';
+type ProjectNav_projects$ref = any;
 type TaskItem_task$ref = any;
 export type TaskPriority = "HIGH" | "LOW" | "NORMAL" | "VERY_HIGH" | "%future added value";
 export type TaskInputType = {|
@@ -24,7 +25,7 @@ export type AddTaskMutationVariables = {|
 export type AddTaskMutationResponse = {|
   +addTask: ?{|
     +project: ?{|
-      +uncompletedTaskCount: number
+      +$fragmentRefs: ProjectNav_projects$ref
     |},
     +$fragmentRefs: TaskItem_task$ref,
   |}
@@ -43,11 +44,23 @@ mutation AddTaskMutation(
   addTask(taskInput: $taskInput) {
     ...TaskItem_task
     project {
-      uncompletedTaskCount
+      ...ProjectNav_projects
       id
     }
     id
   }
+}
+
+fragment ProjectNavItem_project on ProjectType {
+  id
+  name
+  taskCount
+  uncompletedTaskCount
+}
+
+fragment ProjectNav_projects on ProjectType {
+  id
+  ...ProjectNavItem_project
 }
 
 fragment TaskItem_task on TaskType {
@@ -83,13 +96,6 @@ v1 = [
 v2 = {
   "kind": "ScalarField",
   "alias": null,
-  "name": "uncompletedTaskCount",
-  "args": null,
-  "storageKey": null
-},
-v3 = {
-  "kind": "ScalarField",
-  "alias": null,
   "name": "id",
   "args": null,
   "storageKey": null
@@ -121,7 +127,11 @@ return {
             "concreteType": "ProjectType",
             "plural": false,
             "selections": [
-              (v2/*: any*/)
+              {
+                "kind": "FragmentSpread",
+                "name": "ProjectNav_projects",
+                "args": null
+              }
             ]
           },
           {
@@ -147,7 +157,7 @@ return {
         "concreteType": "TaskType",
         "plural": false,
         "selections": [
-          (v3/*: any*/),
+          (v2/*: any*/),
           {
             "kind": "ScalarField",
             "alias": null,
@@ -199,8 +209,21 @@ return {
                 "args": null,
                 "storageKey": null
               },
-              (v3/*: any*/),
-              (v2/*: any*/)
+              (v2/*: any*/),
+              {
+                "kind": "ScalarField",
+                "alias": null,
+                "name": "taskCount",
+                "args": null,
+                "storageKey": null
+              },
+              {
+                "kind": "ScalarField",
+                "alias": null,
+                "name": "uncompletedTaskCount",
+                "args": null,
+                "storageKey": null
+              }
             ]
           }
         ]
@@ -211,11 +234,11 @@ return {
     "operationKind": "mutation",
     "name": "AddTaskMutation",
     "id": null,
-    "text": "mutation AddTaskMutation(\n  $taskInput: TaskInputType!\n) {\n  addTask(taskInput: $taskInput) {\n    ...TaskItem_task\n    project {\n      uncompletedTaskCount\n      id\n    }\n    id\n  }\n}\n\nfragment TaskItem_task on TaskType {\n  id\n  title\n  deadline\n  priority\n  completedOn\n  isCompleted\n  project {\n    name\n    id\n  }\n}\n",
+    "text": "mutation AddTaskMutation(\n  $taskInput: TaskInputType!\n) {\n  addTask(taskInput: $taskInput) {\n    ...TaskItem_task\n    project {\n      ...ProjectNav_projects\n      id\n    }\n    id\n  }\n}\n\nfragment ProjectNavItem_project on ProjectType {\n  id\n  name\n  taskCount\n  uncompletedTaskCount\n}\n\nfragment ProjectNav_projects on ProjectType {\n  id\n  ...ProjectNavItem_project\n}\n\nfragment TaskItem_task on TaskType {\n  id\n  title\n  deadline\n  priority\n  completedOn\n  isCompleted\n  project {\n    name\n    id\n  }\n}\n",
     "metadata": {}
   }
 };
 })();
 // prettier-ignore
-(node/*: any*/).hash = 'c89c07e35787f74423b94c9307a2ee88';
+(node/*: any*/).hash = '35f794097e1efb1c248cbe3fbab628d3';
 module.exports = node;

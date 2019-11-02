@@ -14,6 +14,7 @@ declare export opaque type ProjectNavItem_project$fragmentType: ProjectNavItem_p
 export type ProjectNavItem_project = {|
   +id: string,
   +name: string,
+  +taskCount: number,
   +uncompletedTaskCount: number,
   +$refType: ProjectNavItem_project$ref,
 |};
@@ -49,6 +50,13 @@ const node/*: ReaderFragment*/ = {
     {
       "kind": "ScalarField",
       "alias": null,
+      "name": "taskCount",
+      "args": null,
+      "storageKey": null
+    },
+    {
+      "kind": "ScalarField",
+      "alias": null,
       "name": "uncompletedTaskCount",
       "args": null,
       "storageKey": null
@@ -56,5 +64,5 @@ const node/*: ReaderFragment*/ = {
   ]
 };
 // prettier-ignore
-(node/*: any*/).hash = 'fadcfe8282db7f3be7f4f46d2d4d432f';
+(node/*: any*/).hash = 'db3b8c07b5b8fb82756119389bd86f7e';
 module.exports = node;

@@ -6,7 +6,7 @@ import environment from "../environment"
 const mutation = graphql`
   mutation AddProjectMutation($projectInput: ProjectInputType!) {
     addProject(projectInput: $projectInput) {
-      ...ProjectEditModal_project
+      ...ProjectNav_projects
     }
   }
 `

@@ -8,7 +8,7 @@ const mutation = graphql`
     deleteTask(id: $id) {
       deletedTaskId
       project {
-        uncompletedTaskCount
+        ...ProjectNav_projects
       }
     }
   }

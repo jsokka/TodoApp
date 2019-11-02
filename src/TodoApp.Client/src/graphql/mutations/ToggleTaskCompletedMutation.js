@@ -10,8 +10,7 @@ const mutation = graphql`
       completedOn
       isCompleted
       project {
-        id
-        uncompletedTaskCount
+        ...ProjectNav_projects
       }
     }
   }

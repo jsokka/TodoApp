@@ -1,6 +1,6 @@
 /**
  * @flow
- * @relayHash ba8a3e7938936c9b37f0a1c37f31b905
+ * @relayHash 078132a0ebf76a16740b40d5df66dcff
  */
 
 /* eslint-disable */
@@ -34,6 +34,7 @@ query SideNavProjectsQuery {
 fragment ProjectNavItem_project on ProjectType {
   id
   name
+  taskCount
   uncompletedTaskCount
 }
 
@@ -101,6 +102,13 @@ const node/*: ConcreteRequest*/ = {
           {
             "kind": "ScalarField",
             "alias": null,
+            "name": "taskCount",
+            "args": null,
+            "storageKey": null
+          },
+          {
+            "kind": "ScalarField",
+            "alias": null,
             "name": "uncompletedTaskCount",
             "args": null,
             "storageKey": null
@@ -113,7 +121,7 @@ const node/*: ConcreteRequest*/ = {
     "operationKind": "query",
     "name": "SideNavProjectsQuery",
     "id": null,
-    "text": "query SideNavProjectsQuery {\n  projects {\n    ...ProjectNav_projects\n    id\n  }\n}\n\nfragment ProjectNavItem_project on ProjectType {\n  id\n  name\n  uncompletedTaskCount\n}\n\nfragment ProjectNav_projects on ProjectType {\n  id\n  ...ProjectNavItem_project\n}\n",
+    "text": "query SideNavProjectsQuery {\n  projects {\n    ...ProjectNav_projects\n    id\n  }\n}\n\nfragment ProjectNavItem_project on ProjectType {\n  id\n  name\n  taskCount\n  uncompletedTaskCount\n}\n\nfragment ProjectNav_projects on ProjectType {\n  id\n  ...ProjectNavItem_project\n}\n",
     "metadata": {}
   }
 };
