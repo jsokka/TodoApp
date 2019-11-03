@@ -8,8 +8,8 @@ namespace TodoApp.Api.GraphQL.GraphTypes.InputTypes
         public ProjectInputType()
         {
             Field(p => p.Name);
-            Field(p => p.Description, nullable: true);
-            Field(p => p.Deadline, nullable: true);
+            Field(p => p.Description, nullable: true).DefaultValue(null);
+            Field(p => p.Deadline, nullable: true).DefaultValue(null);
         }
     }
 }
