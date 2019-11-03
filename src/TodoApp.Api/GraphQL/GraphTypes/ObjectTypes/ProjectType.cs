@@ -10,18 +10,24 @@ namespace TodoApp.Api.GraphQL.GraphTypes.ObjectTypes
     public class ProjectType : ObjectGraphType<Project>
     {
         public ProjectType(
-            IFactory<ITaskRepository> taskRepositoryFactory,
-            IFactory<IProjectRepository> projectRepositoryFactory,
+            IFactory<ITaskRepository> taskRepositoryFactory, 
+            IFactory<IProjectRepository> projectRepositoryFactory, 
             IDataLoaderContextAccessor dataLoderAccessor)
         {
             Field("id", p => p.Id, type: typeof(NonNullGraphType<IdGraphType>))
                 .Description("Id (guid) of the project");
-            Field("name", p => p.Name).Description("Name of the project");
+
+            Field("name", p => p.Name)
+                .Description("Name of the project");
+
             Field("description", p => p.Description, nullable: true)
                 .Description("Description of the project");
+
             Field("created", p => p.CreatedOn, type: typeof(NonNullGraphType<DateTimeGraphType>))
                 .Description("Creation time of the project");
-            Field("deadline", p => p.Deadline, nullable: true).Description("Deadline of the project");
+
+            Field("deadline", p => p.Deadline, nullable: true)
+                .Description("Deadline of the project");
 
             FieldAsync<NonNullGraphType<ListGraphType<NonNullGraphType<TaskType>>>>("tasks",
                 arguments: new QueryArguments(
@@ -33,11 +39,10 @@ namespace TodoApp.Api.GraphQL.GraphTypes.ObjectTypes
                     var priority = context.GetArgument<TaskPriority?>("priority");
                     var openOnly = context.GetArgument("openOnly", false);
 
-                    // Provide key that takes all params into account.
                     var loaderKey = $"GetTasksByProjectIds_{priority}_{(openOnly ? "openOnly" : "all")}";
 
                     var loader = dataLoderAccessor.Context.GetOrAddCollectionBatchLoader<Guid, Task>(loaderKey,
-                        async id => await taskRepositoryFactory.Create().GetTasksByProjectIdsAsync(id, priority, openOnly));
+                        async ids => await taskRepositoryFactory.Create().GetTasksByProjectIdsAsync(ids, priority, openOnly));
 
                     return await loader.LoadAsync(context.Source.Id);
                 }
