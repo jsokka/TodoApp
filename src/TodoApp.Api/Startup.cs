@@ -1,6 +1,7 @@
 using GraphQL;
 using GraphQL.Server;
 using GraphQL.Server.Ui.Playground;
+using GraphQL.Validation.Complexity;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -50,15 +51,15 @@ namespace TodoApp.Api
 
             services.AddSingleton<TodoAppSchema>();
 
-            services.AddCors();
-
             services.AddGraphQL(x =>
             {
                 x.ExposeExceptions = HostEnvironment.IsDevelopment();
+                x.ComplexityConfiguration = new ComplexityConfiguration { MaxDepth = 15 };
             })
             .AddGraphTypes(ServiceLifetime.Singleton)
             .AddDataLoader();
-            //.AddUserContextBuilder(httpContext => httpContext.User)
+
+            services.AddCors();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
