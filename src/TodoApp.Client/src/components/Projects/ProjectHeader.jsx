@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Fragment } from "react";
 import { createFragmentContainer } from "react-relay";
 import { graphql } from "babel-plugin-relay/macro";
 import { FontAwesomeIcon as Icon } from '@fortawesome/react-fontawesome';
@@ -7,6 +7,10 @@ import { format } from "date-fns";
 import { fi } from 'date-fns/locale'
 
 const ProjectHeader = ({ project, onEditProjectClick }) => {
+  const description = (project.description || "").split("\n").map((item, i) => {
+    return <Fragment key={i}>{item}<br/></Fragment>
+  });
+
   return (
     <div>
       <h2 className="page-title">
@@ -23,7 +27,7 @@ const ProjectHeader = ({ project, onEditProjectClick }) => {
             {format(new Date(project.deadline), "PPP", { locale: fi })}
           </div>}  
       </h2>
-      <p>{project.description}</p>
+      <p>{description}</p>
     </div>
   );
 }
@@ -34,5 +38,4 @@ export default createFragmentContainer(ProjectHeader, { project : graphql`
     description
     deadline
   }
-`
-});
+`});
