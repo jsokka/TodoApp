@@ -1,6 +1,6 @@
 /**
  * @flow
- * @relayHash 4e16846254154553b8e59f7dea210d5f
+ * @relayHash 28503245616414fa2590d9711fee7ad7
  */
 
 /* eslint-disable */
@@ -9,7 +9,6 @@
 
 /*::
 import type { ConcreteRequest } from 'relay-runtime';
-type ProjectNav_projects$ref = any;
 export type ToggleTaskCompletedMutationVariables = {|
   taskId: string,
   completed: boolean,
@@ -20,7 +19,9 @@ export type ToggleTaskCompletedMutationResponse = {|
     +completedOn: ?any,
     +isCompleted: boolean,
     +project: ?{|
-      +$fragmentRefs: ProjectNav_projects$ref
+      +id: string,
+      +taskCount: number,
+      +uncompletedTaskCount: number,
     |},
   |}
 |};
@@ -41,22 +42,11 @@ mutation ToggleTaskCompletedMutation(
     completedOn
     isCompleted
     project {
-      ...ProjectNav_projects
       id
+      taskCount
+      uncompletedTaskCount
     }
   }
-}
-
-fragment ProjectNavItem_project on ProjectType {
-  id
-  name
-  taskCount
-  uncompletedTaskCount
-}
-
-fragment ProjectNav_projects on ProjectType {
-  id
-  ...ProjectNavItem_project
 }
 */
 
@@ -75,39 +65,78 @@ var v0 = [
     "defaultValue": null
   }
 ],
-v1 = [
-  {
-    "kind": "Variable",
-    "name": "completed",
-    "variableName": "completed"
-  },
-  {
-    "kind": "Variable",
-    "name": "taskId",
-    "variableName": "taskId"
-  }
-],
-v2 = {
+v1 = {
   "kind": "ScalarField",
   "alias": null,
   "name": "id",
   "args": null,
   "storageKey": null
 },
-v3 = {
-  "kind": "ScalarField",
-  "alias": null,
-  "name": "completedOn",
-  "args": null,
-  "storageKey": null
-},
-v4 = {
-  "kind": "ScalarField",
-  "alias": null,
-  "name": "isCompleted",
-  "args": null,
-  "storageKey": null
-};
+v2 = [
+  {
+    "kind": "LinkedField",
+    "alias": null,
+    "name": "toggleTaskCompleted",
+    "storageKey": null,
+    "args": [
+      {
+        "kind": "Variable",
+        "name": "completed",
+        "variableName": "completed"
+      },
+      {
+        "kind": "Variable",
+        "name": "taskId",
+        "variableName": "taskId"
+      }
+    ],
+    "concreteType": "TaskType",
+    "plural": false,
+    "selections": [
+      (v1/*: any*/),
+      {
+        "kind": "ScalarField",
+        "alias": null,
+        "name": "completedOn",
+        "args": null,
+        "storageKey": null
+      },
+      {
+        "kind": "ScalarField",
+        "alias": null,
+        "name": "isCompleted",
+        "args": null,
+        "storageKey": null
+      },
+      {
+        "kind": "LinkedField",
+        "alias": null,
+        "name": "project",
+        "storageKey": null,
+        "args": null,
+        "concreteType": "ProjectType",
+        "plural": false,
+        "selections": [
+          (v1/*: any*/),
+          {
+            "kind": "ScalarField",
+            "alias": null,
+            "name": "taskCount",
+            "args": null,
+            "storageKey": null
+          },
+          {
+            "kind": "ScalarField",
+            "alias": null,
+            "name": "uncompletedTaskCount",
+            "args": null,
+            "storageKey": null
+          }
+        ]
+      }
+    ]
+  }
+];
 return {
   "kind": "Request",
   "fragment": {
@@ -116,102 +145,23 @@ return {
     "type": "Mutation",
     "metadata": null,
     "argumentDefinitions": (v0/*: any*/),
-    "selections": [
-      {
-        "kind": "LinkedField",
-        "alias": null,
-        "name": "toggleTaskCompleted",
-        "storageKey": null,
-        "args": (v1/*: any*/),
-        "concreteType": "TaskType",
-        "plural": false,
-        "selections": [
-          (v2/*: any*/),
-          (v3/*: any*/),
-          (v4/*: any*/),
-          {
-            "kind": "LinkedField",
-            "alias": null,
-            "name": "project",
-            "storageKey": null,
-            "args": null,
-            "concreteType": "ProjectType",
-            "plural": false,
-            "selections": [
-              {
-                "kind": "FragmentSpread",
-                "name": "ProjectNav_projects",
-                "args": null
-              }
-            ]
-          }
-        ]
-      }
-    ]
+    "selections": (v2/*: any*/)
   },
   "operation": {
     "kind": "Operation",
     "name": "ToggleTaskCompletedMutation",
     "argumentDefinitions": (v0/*: any*/),
-    "selections": [
-      {
-        "kind": "LinkedField",
-        "alias": null,
-        "name": "toggleTaskCompleted",
-        "storageKey": null,
-        "args": (v1/*: any*/),
-        "concreteType": "TaskType",
-        "plural": false,
-        "selections": [
-          (v2/*: any*/),
-          (v3/*: any*/),
-          (v4/*: any*/),
-          {
-            "kind": "LinkedField",
-            "alias": null,
-            "name": "project",
-            "storageKey": null,
-            "args": null,
-            "concreteType": "ProjectType",
-            "plural": false,
-            "selections": [
-              (v2/*: any*/),
-              {
-                "kind": "ScalarField",
-                "alias": null,
-                "name": "name",
-                "args": null,
-                "storageKey": null
-              },
-              {
-                "kind": "ScalarField",
-                "alias": null,
-                "name": "taskCount",
-                "args": null,
-                "storageKey": null
-              },
-              {
-                "kind": "ScalarField",
-                "alias": null,
-                "name": "uncompletedTaskCount",
-                "args": null,
-                "storageKey": null
-              }
-            ]
-          }
-        ]
-      }
-    ]
+    "selections": (v2/*: any*/)
   },
   "params": {
     "operationKind": "mutation",
     "name": "ToggleTaskCompletedMutation",
     "id": null,
-    "text": "mutation ToggleTaskCompletedMutation(\n  $taskId: ID!\n  $completed: Boolean!\n) {\n  toggleTaskCompleted(taskId: $taskId, completed: $completed) {\n    id\n    completedOn\n    isCompleted\n    project {\n      ...ProjectNav_projects\n      id\n    }\n  }\n}\n\nfragment ProjectNavItem_project on ProjectType {\n  id\n  name\n  taskCount\n  uncompletedTaskCount\n}\n\nfragment ProjectNav_projects on ProjectType {\n  id\n  ...ProjectNavItem_project\n}\n",
+    "text": "mutation ToggleTaskCompletedMutation(\n  $taskId: ID!\n  $completed: Boolean!\n) {\n  toggleTaskCompleted(taskId: $taskId, completed: $completed) {\n    id\n    completedOn\n    isCompleted\n    project {\n      id\n      taskCount\n      uncompletedTaskCount\n    }\n  }\n}\n",
     "metadata": {}
   }
 };
 })();
 // prettier-ignore
-(node/*: any*/).hash = '5c63f61fccbf11c8c0873de81b3d199d';
+(node/*: any*/).hash = 'f63a0c941adef7e3b760e676c5ab16ee';
 module.exports = node;
