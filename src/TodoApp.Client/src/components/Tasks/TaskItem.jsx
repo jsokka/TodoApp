@@ -51,7 +51,9 @@ const TaskItem = ({ task, onEditClick, onToggleCompletedClick }) => {
     <Container fluid className={itemClasses.join(" ")}>
       <Row>
         <Col xs={1}>          
-          <div className="custom-control custom-checkbox">
+          <div
+            title={task.completedOn && format(new Date(task.completedOn), "Pp", { locale: fi })} 
+            className="custom-control custom-checkbox">
             <input 
               type="checkbox" 
               id={`checkbox_${task.id}`}
