@@ -8,7 +8,7 @@ namespace TodoApp.Data.Repositories
 {
     public interface ITaskRepository : IRepository<Models.Task>
     {
-        Task<IEnumerable<Models.Task>> GetTasksByPriority(TaskPriority priority);
+        Task<IEnumerable<Models.Task>> GetTasksByPriorityAsync(TaskPriority priority);
         Task<IEnumerable<Models.Task>> GetTasksByProjectIdAsync(Guid? projectId);
         Task<ILookup<Guid, Models.Task>> GetTasksByProjectIdsAsync(IEnumerable<Guid> projectIds, TaskPriority? priority = null, bool openOnly = false);
         Task<bool> TaskHasTagAsync(Guid taskId, Guid tagId);

@@ -11,7 +11,7 @@ namespace TodoApp.Data.Repositories
     {
         public TaskRepository(TodoAppContext db) : base(db) { }
 
-        public async Task<IEnumerable<Models.Task>> GetTasksByPriority(TaskPriority priority)
+        public async Task<IEnumerable<Models.Task>> GetTasksByPriorityAsync(TaskPriority priority)
         {
             return await Db.Tasks.Where(t => t.Priority == priority).ToListAsync();
         }
