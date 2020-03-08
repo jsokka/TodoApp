@@ -6,7 +6,7 @@ import {
 } from "relay-runtime";
 
 const fetchQuery = async (operation, variables) => {
-  const response = await fetch("https://localhost:44317/graphql", {
+  const response = await fetch("https://localhost:44362/graphql", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
