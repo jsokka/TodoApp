@@ -16,6 +16,8 @@ variables:
 
 jobs:
 - job: Build_Backend
+  displayName: Build Backend
+
   steps:
   - task: NuGetToolInstaller@1
 
@@ -52,8 +54,11 @@ jobs:
       pollingTimeoutSec: '300'
 
 - job: Build_Client
+  displayName: Build Client
+
   steps:
   - task: Npm@1
+    displayName: 'npm install'
     inputs:
       command: 'install'
       workingDir: 'src/TodoApp.Client'
@@ -68,10 +73,10 @@ jobs:
       cliProjectName: 'TodoApp Client'
       cliSources: 'src/TodoApp.Client'
       extraProperties: | 
-        sonar.exclusions=**/node_modules/**, **__generaded__**
+        sonar.exclusions=**/node_modules/**, **__generated__**
 
   - task: Npm@1
-    displayName: 'run Relay Compiler'
+    displayName: 'relay compiler'
     inputs:
       command: 'custom'
       workingDir: 'src/TodoApp.Client'
@@ -85,3 +90,7 @@ jobs:
       customCommand: 'run build'
       
   - task: SonarCloudAnalyze@1
+
+  - task: SonarCloudPublish@1
+    inputs:
+      pollingTimeoutSec: '300'
