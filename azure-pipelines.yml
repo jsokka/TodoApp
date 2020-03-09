@@ -27,7 +27,7 @@ steps:
     organization: 'jsokka'
     scannerMode: 'MSBuild'
     projectKey: 'jsokka_TodoApp'
-    projectName: 'TodoApp Backend'
+    projectName: 'TodoApp'
 
 - task: VSBuild@1
   inputs:
