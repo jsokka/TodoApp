@@ -28,6 +28,8 @@ steps:
     scannerMode: 'MSBuild'
     projectKey: 'jsokka_TodoApp'
     projectName: 'TodoApp'
+    extraProperties: |
+        sonar.exclusions=**/TodoApp.Data/Migrations/**
 
 - task: VSBuild@1
   inputs:
