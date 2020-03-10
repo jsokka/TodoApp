@@ -1,8 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using System;
-using System.Collections.Generic;
-using System.Text;
-using TodoApp.Data.Repositories;
 
 namespace TodoApp.Data.DependencyInjection
 {

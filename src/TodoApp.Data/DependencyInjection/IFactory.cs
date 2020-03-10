@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace TodoApp.Data.DependencyInjection
+﻿namespace TodoApp.Data.DependencyInjection
 {
-    public interface IFactory<T>
+    public interface IFactory<out T>
     {
         T Create();
     }

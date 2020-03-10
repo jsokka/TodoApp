@@ -1,12 +1,11 @@
 ﻿using GraphQL.Types;
 using System;
-using TodoApp.Api.GraphQL.GraphTypes;
-using TodoApp.Api.GraphQL.GraphTypes.ObjectTypes;
-using TodoApp.Data.Models;
-using TodoApp.Data.Repositories;
-using TodoApp.Data.DependencyInjection;
 using System.Collections.Generic;
 using System.Linq;
+using TodoApp.Api.GraphQL.GraphTypes;
+using TodoApp.Api.GraphQL.GraphTypes.ObjectTypes;
+using TodoApp.Data.DependencyInjection;
+using TodoApp.Data.Repositories;
 
 namespace TodoApp.Api.GraphQL
 {
