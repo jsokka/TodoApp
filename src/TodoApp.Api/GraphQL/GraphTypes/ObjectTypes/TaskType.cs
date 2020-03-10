@@ -45,7 +45,6 @@ namespace TodoApp.Api.GraphQL.GraphTypes.ObjectTypes
                         fetchFunc: async id => await tagRepositoryFactory.Create().GetTagsByTaskIdsAsync(id));
 
                     return await loader.LoadAsync(context.Source.Id);
-                    //return await tagRepositoryFactory.Create().GetTagsByTaskIdsAsync(context.Source.Id);
                 }
             );
         }

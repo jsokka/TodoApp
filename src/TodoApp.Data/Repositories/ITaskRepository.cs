@@ -13,7 +13,7 @@ namespace TodoApp.Data.Repositories
         Task<ILookup<Guid, Models.Task>> GetTasksByProjectIdsAsync(IEnumerable<Guid> projectIds, TaskPriority? priority = null, bool openOnly = false);
         Task<bool> TaskHasTagAsync(Guid taskId, Guid tagId);
         Task<bool> AddTagForTask(Guid taskId, Guid tagId);
-        Task<Models.Task> ToggleTaskCompleted(Guid taskId, bool complted);
+        Task<Models.Task> ToggleTaskCompleted(Guid taskId, bool completed);
         Task<IEnumerable<Models.Task>> SearchTasksAsync(string searchString);
     }
 }
