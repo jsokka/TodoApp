@@ -1,10 +1,9 @@
-﻿using GraphQL.Types;
+﻿using GraphQL.DataLoader;
+using GraphQL.Types;
 using System;
-using System.Collections;
+using TodoApp.Data.DependencyInjection;
 using TodoApp.Data.Models;
 using TodoApp.Data.Repositories;
-using TodoApp.Data.DependencyInjection;
-using GraphQL.DataLoader;
 
 namespace TodoApp.Api.GraphQL.GraphTypes.ObjectTypes
 {
@@ -46,7 +45,6 @@ namespace TodoApp.Api.GraphQL.GraphTypes.ObjectTypes
                         fetchFunc: async id => await tagRepositoryFactory.Create().GetTagsByTaskIdsAsync(id));
 
                     return await loader.LoadAsync(context.Source.Id);
-                    //return await tagRepositoryFactory.Create().GetTagsByTaskIdsAsync(context.Source.Id);
                 }
             );
         }

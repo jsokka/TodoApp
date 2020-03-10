@@ -3,9 +3,9 @@ using GraphQL.Types;
 using System;
 using TodoApp.Api.GraphQL.GraphTypes.InputTypes;
 using TodoApp.Api.GraphQL.GraphTypes.ObjectTypes;
-using TodoApp.Data.Repositories;
-using TodoApp.Data.DependencyInjection;
 using TodoApp.Api.Models;
+using TodoApp.Data.DependencyInjection;
+using TodoApp.Data.Repositories;
 
 namespace TodoApp.Api.GraphQL
 {

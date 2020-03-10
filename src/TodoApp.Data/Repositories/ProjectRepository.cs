@@ -2,8 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
 using TodoApp.Data.Models;
 
@@ -25,13 +23,13 @@ namespace TodoApp.Data.Repositories
                 .ToListAsync();
         }
 
-        public async Task<Dictionary<Guid, int>> GetTaskCountByProjects(IEnumerable<Guid> ids, bool uncompletedOnly = false)
+        public async Task<Dictionary<Guid, int>> GetTaskCountByProjects(IEnumerable<Guid> projectIds, bool uncompletedOnly = false)
         {
-            return await Db.Projects.Where(p => ids.Contains(p.Id))
+            return await Db.Projects.Where(p => projectIds.Contains(p.Id))
                 .Select(p => new 
                 { 
                     p.Id, 
-                    TaskCount = p.Tasks.Where(t => !uncompletedOnly || !t.CompletedOn.HasValue).Count() 
+                    TaskCount = p.Tasks.Count(t => !uncompletedOnly || !t.CompletedOn.HasValue)
                 }).ToDictionaryAsync(p => p.Id, p => p.TaskCount);
         }
 

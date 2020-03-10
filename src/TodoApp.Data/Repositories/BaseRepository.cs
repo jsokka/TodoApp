@@ -15,7 +15,7 @@ namespace TodoApp.Data.Repositories
         Task DeleteAsync(TEntity entity);
         Task DeleteAsync(IEnumerable<TEntity> entities);
         Task DeleteAsync(Guid id);
-        Task DeleteAsync(IEnumerable<Guid> entities);
+        Task DeleteAsync(IEnumerable<Guid> ids);
     }
 
     public abstract class BaseRepository<TEntity> : IRepository<TEntity> where TEntity : Models.BaseEntity
@@ -24,7 +24,7 @@ namespace TodoApp.Data.Repositories
 
         protected readonly TodoAppContext Db;
 
-        public BaseRepository(TodoAppContext db)
+        protected BaseRepository(TodoAppContext db)
         {
             Db = db;
             dbSet = db.Set<TEntity>();
