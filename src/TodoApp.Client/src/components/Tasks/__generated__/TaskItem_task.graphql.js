@@ -28,6 +28,7 @@ export type TaskItem_task$data = TaskItem_task;
 export type TaskItem_task$key = {
   +$data?: TaskItem_task$data,
   +$fragmentRefs: TaskItem_task$ref,
+  ...
 };
 */
 
@@ -103,4 +104,5 @@ const node/*: ReaderFragment*/ = {
 };
 // prettier-ignore
 (node/*: any*/).hash = '7cb6160642b96764e1159b832e059ba4';
+
 module.exports = node;

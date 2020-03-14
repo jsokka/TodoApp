@@ -20,6 +20,7 @@ export type TaskEditModal_projects$data = TaskEditModal_projects;
 export type TaskEditModal_projects$key = $ReadOnlyArray<{
   +$data?: TaskEditModal_projects$data,
   +$fragmentRefs: TaskEditModal_projects$ref,
+  ...
 }>;
 */
 
@@ -51,4 +52,5 @@ const node/*: ReaderFragment*/ = {
 };
 // prettier-ignore
 (node/*: any*/).hash = '4202422703bff716f940fe7cf5abdd34';
+
 module.exports = node;

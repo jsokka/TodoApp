@@ -14,7 +14,7 @@
     "react-bootstrap": "^1.0.0-beta.17",
     "react-day-picker": "^7.4.0",
     "react-dom": "^16.13.0",
-    "react-relay": "^7.1.0",
+    "react-relay": "^9.0.0",
     "react-router-dom": "^5.1.2",
     "react-scripts": "^3.4.0",
     "react-toastify": "^5.5.0",
@@ -43,9 +43,9 @@
     ]
   },
   "devDependencies": {
-    "babel-plugin-relay": "^7.1.0",
+    "babel-plugin-relay": "^9.0.0",
     "graphql": "^14.6.0",
-    "relay-compiler": "^7.1.0",
-    "relay-config": "^7.1.0"
+    "relay-compiler": "^9.0.0",
+    "relay-config": "^9.0.0"
   }
 }

@@ -22,6 +22,7 @@ export type ProjectEditModal_project$data = ProjectEditModal_project;
 export type ProjectEditModal_project$key = {
   +$data?: ProjectEditModal_project$data,
   +$fragmentRefs: ProjectEditModal_project$ref,
+  ...
 };
 */
 
@@ -65,4 +66,5 @@ const node/*: ReaderFragment*/ = {
 };
 // prettier-ignore
 (node/*: any*/).hash = 'ded632db78aec99894fccec0b39b23dc';
+
 module.exports = node;

@@ -21,6 +21,7 @@ export type ProjectHeader_project$data = ProjectHeader_project;
 export type ProjectHeader_project$key = {
   +$data?: ProjectHeader_project$data,
   +$fragmentRefs: ProjectHeader_project$ref,
+  ...
 };
 */
 
@@ -57,4 +58,5 @@ const node/*: ReaderFragment*/ = {
 };
 // prettier-ignore
 (node/*: any*/).hash = 'bda73a9b8ca4676511c5b2e73f0853cf';
+
 module.exports = node;

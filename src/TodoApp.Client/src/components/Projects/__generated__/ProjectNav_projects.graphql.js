@@ -21,6 +21,7 @@ export type ProjectNav_projects$data = ProjectNav_projects;
 export type ProjectNav_projects$key = $ReadOnlyArray<{
   +$data?: ProjectNav_projects$data,
   +$fragmentRefs: ProjectNav_projects$ref,
+  ...
 }>;
 */
 
@@ -50,4 +51,5 @@ const node/*: ReaderFragment*/ = {
 };
 // prettier-ignore
 (node/*: any*/).hash = '92934aa754cd787d1d22f5fbd0bad85a';
+
 module.exports = node;

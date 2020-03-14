@@ -27,6 +27,7 @@ export type TaskEditModal_task$data = TaskEditModal_task;
 export type TaskEditModal_task$key = {
   +$data?: TaskEditModal_task$data,
   +$fragmentRefs: TaskEditModal_task$ref,
+  ...
 };
 */
 
@@ -92,4 +93,5 @@ return {
 })();
 // prettier-ignore
 (node/*: any*/).hash = '16bfb2d069d84b9efc5868b9b3ac9684';
+
 module.exports = node;
