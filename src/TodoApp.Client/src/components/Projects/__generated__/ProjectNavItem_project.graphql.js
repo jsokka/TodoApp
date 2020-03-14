@@ -22,6 +22,7 @@ export type ProjectNavItem_project$data = ProjectNavItem_project;
 export type ProjectNavItem_project$key = {
   +$data?: ProjectNavItem_project$data,
   +$fragmentRefs: ProjectNavItem_project$ref,
+  ...
 };
 */
 
@@ -65,4 +66,5 @@ const node/*: ReaderFragment*/ = {
 };
 // prettier-ignore
 (node/*: any*/).hash = 'db3b8c07b5b8fb82756119389bd86f7e';
+
 module.exports = node;

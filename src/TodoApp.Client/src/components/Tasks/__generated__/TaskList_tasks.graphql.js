@@ -21,6 +21,7 @@ export type TaskList_tasks$data = TaskList_tasks;
 export type TaskList_tasks$key = $ReadOnlyArray<{
   +$data?: TaskList_tasks$data,
   +$fragmentRefs: TaskList_tasks$ref,
+  ...
 }>;
 */
 
@@ -50,4 +51,5 @@ const node/*: ReaderFragment*/ = {
 };
 // prettier-ignore
 (node/*: any*/).hash = '6cdd3f9024fec8daf27e1e191dce7ed1';
+
 module.exports = node;
