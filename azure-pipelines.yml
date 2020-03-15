@@ -4,7 +4,11 @@
 # https://docs.microsoft.com/azure/devops/pipelines/languages/dotnet-core
 
 trigger:
-- master
+  - master
+pr:
+  branches:
+    include:
+    - '*'
 
 pool:
   vmImage: 'windows-latest'
@@ -14,83 +18,91 @@ variables:
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
 
-jobs:
-- job: Build_Backend
+stages:
+- stage: build_backend
   displayName: Build Backend
+  dependsOn: []
+  
+  jobs:
+  - job: build_backend
+    displayName: Build and Analyze Backend
 
-  steps:
-  - task: NuGetToolInstaller@1
+    steps:
+    - task: NuGetToolInstaller@1
 
-  - task: NuGetCommand@2
-    inputs:
-      restoreSolution: '$(solution)'
+    - task: NuGetCommand@2
+      inputs:
+        restoreSolution: '$(solution)'
 
-  - task: SonarCloudPrepare@1
-    inputs:
-      SonarCloud: 'SonarCloud'
-      organization: 'jsokka'
-      scannerMode: 'MSBuild'
-      projectKey: 'jsokka_TodoApp'
-      projectName: 'TodoApp'
-      extraProperties: |
-        sonar.exclusions=**/TodoApp.Data/Migrations/**
+    - task: SonarCloudPrepare@1
+      inputs:
+        SonarCloud: 'SonarCloud'
+        organization: 'jsokka'
+        scannerMode: 'MSBuild'
+        projectKey: 'jsokka_TodoApp'
+        projectName: 'TodoApp'
+        extraProperties: |
+          sonar.exclusions=**/TodoApp.Data/Migrations/**
 
-  - task: VSBuild@1
-    inputs:
-      solution: '$(solution)'
-      msbuildArgs: '/p:DeployOnBuild=false /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:DesktopBuildPackageLocation="$(build.artifactStagingDirectory)\WebApp.zip" /p:DeployIisAppPath="Default Web Site"'
-      platform: '$(buildPlatform)'
-      configuration: '$(buildConfiguration)'
+    - task: VSBuild@1
+      inputs:
+        solution: '$(solution)'
+        msbuildArgs: '/p:DeployOnBuild=false /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:DesktopBuildPackageLocation="$(build.artifactStagingDirectory)\WebApp.zip" /p:DeployIisAppPath="Default Web Site"'
+        platform: '$(buildPlatform)'
+        configuration: '$(buildConfiguration)'
 
-  - task: VSTest@2
-    inputs:
-      platform: '$(buildPlatform)'
-      configuration: '$(buildConfiguration)'
+    - task: VSTest@2
+      inputs:
+        platform: '$(buildPlatform)'
+        configuration: '$(buildConfiguration)'
 
-  - task: SonarCloudAnalyze@1
+    - task: SonarCloudAnalyze@1
 
-  - task: SonarCloudPublish@1
-    inputs:
-      pollingTimeoutSec: '300'
+    - task: SonarCloudPublish@1
+      inputs:
+        pollingTimeoutSec: '300'
 
-- job: Build_Client
+- stage: build_client
   displayName: Build Client
+  dependsOn: []
+  jobs:
+  - job: build
+    displayName: Build and Analyze Client
+    steps:
+    - task: Npm@1
+      displayName: 'npm install'
+      inputs:
+        command: 'install'
+        workingDir: 'src/TodoApp.Client'
 
-  steps:
-  - task: Npm@1
-    displayName: 'npm install'
-    inputs:
-      command: 'install'
-      workingDir: 'src/TodoApp.Client'
+    - task: SonarCloudPrepare@1
+      inputs:
+        SonarCloud: 'SonarCloud'
+        organization: 'jsokka'
+        scannerMode: 'CLI'
+        configMode: 'manual'
+        cliProjectKey: 'jsokka_TodoApp_Client'
+        cliProjectName: 'TodoApp Client'
+        cliSources: 'src/TodoApp.Client'
+        extraProperties: | 
+          sonar.exclusions=**/node_modules/**, **__generated__**
 
-  - task: SonarCloudPrepare@1
-    inputs:
-      SonarCloud: 'SonarCloud'
-      organization: 'jsokka'
-      scannerMode: 'CLI'
-      configMode: 'manual'
-      cliProjectKey: 'jsokka_TodoApp_Client'
-      cliProjectName: 'TodoApp Client'
-      cliSources: 'src/TodoApp.Client'
-      extraProperties: | 
-        sonar.exclusions=**/node_modules/**, **__generated__**
+    - task: Npm@1
+      displayName: 'relay compiler'
+      inputs:
+        command: 'custom'
+        workingDir: 'src/TodoApp.Client'
+        customCommand: 'run relay'
 
-  - task: Npm@1
-    displayName: 'relay compiler'
-    inputs:
-      command: 'custom'
-      workingDir: 'src/TodoApp.Client'
-      customCommand: 'run relay'
+    - task: Npm@1
+      displayName: 'npm build'
+      inputs:
+        command: 'custom'
+        workingDir: 'src/TodoApp.Client'
+        customCommand: 'run build'
+        
+    - task: SonarCloudAnalyze@1
 
-  - task: Npm@1
-    displayName: 'npm build'
-    inputs:
-      command: 'custom'
-      workingDir: 'src/TodoApp.Client'
-      customCommand: 'run build'
-      
-  - task: SonarCloudAnalyze@1
-
-  - task: SonarCloudPublish@1
-    inputs:
-      pollingTimeoutSec: '300'
+    - task: SonarCloudPublish@1
+      inputs:
+        pollingTimeoutSec: '300'
