@@ -21,7 +21,8 @@ variables:
 stages: 
 - stage: build_backend
   displayName: Build backend
-
+  dependsOn: []
+  
   jobs:
   - job: Build_Backend
     displayName: Build Backend
@@ -63,6 +64,7 @@ stages:
 
 - stage: build_client
   displayName: Build Client
+  dependsOn: []
   jobs:
   - job: build
     steps:
