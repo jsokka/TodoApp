@@ -20,7 +20,7 @@ variables:
 
 stages: 
 - stage: build_backend
-  displayName: Build backend
+  displayName: Build Backend
   dependsOn: []
   
   jobs:
@@ -67,6 +67,7 @@ stages:
   dependsOn: []
   jobs:
   - job: build
+    displayName: Build client
     steps:
     - task: Npm@1
       displayName: 'npm install'
