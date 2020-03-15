@@ -18,14 +18,14 @@ variables:
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
 
-stages: 
+stages:
 - stage: build_backend
   displayName: Build Backend
   dependsOn: []
   
   jobs:
-  - job: Build_Backend
-    displayName: Build Backend
+  - job: build_backend
+    displayName: Build and Analyze Backend
 
     steps:
     - task: NuGetToolInstaller@1
@@ -67,7 +67,7 @@ stages:
   dependsOn: []
   jobs:
   - job: build
-    displayName: Build client
+    displayName: Build and Analyze Client
     steps:
     - task: Npm@1
       displayName: 'npm install'
