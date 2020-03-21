@@ -108,7 +108,7 @@ namespace TodoApp.Data.Repositories
             var dbEntity = dbSet.Find(id);
 
             if (dbEntity == null)
-                throw new InvalidOperationException($"{entity.ToString()} cannot be found with id {id}");
+                throw new InvalidOperationException($"{entity} cannot be found with id {id}");
 
             entity.Id = id;
 

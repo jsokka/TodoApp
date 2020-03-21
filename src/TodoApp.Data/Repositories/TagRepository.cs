@@ -20,7 +20,7 @@ namespace TodoApp.Data.Repositories
         {
             if (string.IsNullOrEmpty(entity?.Name))
             {
-                throw new ArgumentNullException("tag.Name");
+                throw new ArgumentNullException("entity.Name");
             }
 
             return AddTagAsync(entity);
