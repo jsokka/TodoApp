@@ -16,13 +16,18 @@ namespace TodoApp.Data.Repositories
             return await Db.Tags.SingleOrDefaultAsync(t => t.Name == name);
         }
 
-        public override async Task<Tag> AddAsync(Tag tag)
+        public override Task<Tag> AddAsync(Tag entity)
         {
-            if (string.IsNullOrEmpty(tag?.Name))
+            if (string.IsNullOrEmpty(entity?.Name))
             {
                 throw new ArgumentNullException("tag.Name");
             }
 
+            return AddTagAsync(entity);
+        }
+
+        async Task<Tag> AddTagAsync(Tag tag)
+        {
             if (await Db.Tags.AnyAsync(t => t.Name == tag.Name))
             {
                 throw new InvalidOperationException($"Tag named {tag.Name} already exists");
