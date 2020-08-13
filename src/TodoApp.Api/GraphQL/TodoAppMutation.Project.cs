@@ -12,7 +12,7 @@ namespace TodoApp.Api.GraphQL
 {
     public partial class TodoAppMutation
     {
-        partial void AddProjectFields(IFactory<IProjectRepository> projectRepositoryFactory)
+        partial void AddProjectFields(IFactory<IRepository<Project>> projectRepositoryFactory)
         {
             FieldAsync<ProjectType>(
                 "addProject",

@@ -8,6 +8,7 @@ namespace TodoApp.Data.Repositories
 {
     public interface IRepository<TEntity> where TEntity : Models.BaseEntity
     {
+        DbSet<TEntity> DbSet { get; }
         Task<TEntity> FindAsync(Guid id);
         Task<IEnumerable<TEntity>> GetAllAsync();
         Task<TEntity> AddAsync(TEntity entity);
@@ -18,38 +19,40 @@ namespace TodoApp.Data.Repositories
         Task DeleteAsync(IEnumerable<Guid> ids);
     }
 
-    public abstract class BaseRepository<TEntity> : IRepository<TEntity> where TEntity : Models.BaseEntity
+    public class EntityRepository<TDbContext, TEntity> : IRepository<TEntity>
+        where TDbContext : DbContext
+        where TEntity : Models.BaseEntity
     {
-        readonly DbSet<TEntity> dbSet;
+        private readonly TDbContext Db;
 
-        protected readonly TodoAppContext Db;
+        public DbSet<TEntity> DbSet { get; }
 
-        protected BaseRepository(TodoAppContext db)
+        public EntityRepository(TDbContext db)
         {
             Db = db;
-            dbSet = db.Set<TEntity>();
+            DbSet = db.Set<TEntity>();
         }
 
         public virtual async Task<TEntity> FindAsync(Guid id)
         {
-            return await dbSet.FindAsync(id);
+            return await DbSet.FindAsync(id);
         }
 
         public virtual async Task<IEnumerable<TEntity>> FindAsync(IEnumerable<Guid> ids)
         {
             var guids = ids.ToList();
 
-            return await dbSet.Where(e => guids.Contains(e.Id)).ToListAsync();
+            return await DbSet.Where(e => guids.Contains(e.Id)).ToListAsync();
         }
 
         public virtual async Task<IEnumerable<TEntity>> GetAllAsync()
         {
-            return await dbSet.ToListAsync();
+            return await DbSet.ToListAsync();
         }
 
         public virtual async Task<TEntity> AddAsync(TEntity entity)
         {
-            await dbSet.AddAsync(entity);
+            await DbSet.AddAsync(entity);
             await Db.SaveChangesAsync();
 
             return entity;
@@ -65,9 +68,9 @@ namespace TodoApp.Data.Repositories
             foreach (var entity in entities)
             {
                 if (Db.Entry(entity).State == EntityState.Detached)
-                    dbSet.Attach(entity);
+                    DbSet.Attach(entity);
 
-                dbSet.Remove(entity);
+                DbSet.Remove(entity);
             }
 
             await Db.SaveChangesAsync();
@@ -105,10 +108,12 @@ namespace TodoApp.Data.Repositories
 
         public virtual async Task<TEntity> UpdateAsync(Guid id, TEntity entity)
         {
-            var dbEntity = dbSet.Find(id);
+            var dbEntity = DbSet.Find(id);
 
             if (dbEntity == null)
+            {
                 throw new InvalidOperationException($"{entity} cannot be found with id {id}");
+            }
 
             entity.Id = id;
 

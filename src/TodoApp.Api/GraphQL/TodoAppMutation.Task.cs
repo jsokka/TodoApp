@@ -5,14 +5,17 @@ using TodoApp.Api.GraphQL.GraphTypes.InputTypes;
 using TodoApp.Api.GraphQL.GraphTypes.ObjectTypes;
 using TodoApp.Api.Models;
 using TodoApp.Data.DependencyInjection;
+using TodoApp.Data.Models;
+using TodoApp.Data.QueryExtensions;
 using TodoApp.Data.Repositories;
 
 namespace TodoApp.Api.GraphQL
 {
     public partial class TodoAppMutation
     {
-        partial void AddTaskFields(IFactory<ITaskRepository> taskRepositoryFactory,
-            IFactory<IProjectRepository> projectRepositoryFactory)
+        partial void AddTaskFields(
+            IFactory<IRepository<Task>> taskRepositoryFactory,
+            IFactory<IRepository<Project>> projectRepositoryFactory)
         {
             FieldAsync<TaskType>(
                 "addTask",
