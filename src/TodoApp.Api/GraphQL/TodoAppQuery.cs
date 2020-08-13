@@ -5,14 +5,16 @@ using System.Linq;
 using TodoApp.Api.GraphQL.GraphTypes;
 using TodoApp.Api.GraphQL.GraphTypes.ObjectTypes;
 using TodoApp.Data.DependencyInjection;
+using TodoApp.Data.Models;
+using TodoApp.Data.QueryExtensions;
 using TodoApp.Data.Repositories;
 
 namespace TodoApp.Api.GraphQL
 {
     public class TodoAppQuery : ObjectGraphType
     {
-        public TodoAppQuery(IFactory<IProjectRepository> projectRepositoryFactory,
-            IFactory<ITaskRepository> taskRepositoryFactory, IFactory<ITagRepository> tagRepositoryFactory)
+        public TodoAppQuery(IFactory<IRepository<Project>> projectRepositoryFactory,
+            IFactory<IRepository<Task>> taskRepositoryFactory, IFactory<IRepository<Tag>> tagRepositoryFactory)
         {
             Name = "Query";
 

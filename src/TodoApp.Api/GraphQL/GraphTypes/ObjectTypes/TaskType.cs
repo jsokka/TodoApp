@@ -3,6 +3,7 @@ using GraphQL.Types;
 using System;
 using TodoApp.Data.DependencyInjection;
 using TodoApp.Data.Models;
+using TodoApp.Data.QueryExtensions;
 using TodoApp.Data.Repositories;
 
 namespace TodoApp.Api.GraphQL.GraphTypes.ObjectTypes
@@ -10,8 +11,8 @@ namespace TodoApp.Api.GraphQL.GraphTypes.ObjectTypes
     public class TaskType : ObjectGraphType<Task>
     {
         public TaskType(IDataLoaderContextAccessor dataLoaderAccessor,
-            IFactory<IProjectRepository> projectRepositoryFactory, 
-            IFactory<ITagRepository> tagRepositoryFactory)
+            IFactory<IRepository<Project>> projectRepositoryFactory, 
+            IFactory<IRepository<Tag>> tagRepositoryFactory)
         {
             Field("id", t => t.Id, type: typeof(NonNullGraphType<IdGraphType>), nullable: false).Description("Id of the task");
             Field("title", t => t.Title).Description("Title of the task");
