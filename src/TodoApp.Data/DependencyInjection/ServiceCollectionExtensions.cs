@@ -10,7 +10,11 @@ namespace TodoApp.Data.DependencyInjection
             where TImplementation : class, TService
         {
             services.AddTransient<TService, TImplementation>();
-            services.AddSingleton<Func<TService>>(sp => () => sp.GetService<TService>());
+            services.AddSingleton<Func<TService>>(sp => () =>
+            {
+                var scope = sp.CreateScope();
+                return scope.ServiceProvider.GetRequiredService<TService>();
+            });
             services.AddSingleton<IFactory<TService>, Factory<TService>>();
         }
     }
