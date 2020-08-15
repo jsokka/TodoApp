@@ -1,14 +1,15 @@
-﻿using GraphQL;
-using GraphQL.Types;
+﻿using GraphQL.Types;
+using GraphQL.Utilities;
+using System;
 
 namespace TodoApp.Api.GraphQL
 {
     public class TodoAppSchema : Schema
     {
-        public TodoAppSchema(IDependencyResolver resolver) : base(resolver)
+        public TodoAppSchema(IServiceProvider serviceProvider) : base(serviceProvider)
         {
-            Query = resolver.Resolve<TodoAppQuery>();
-            Mutation = resolver.Resolve<TodoAppMutation>();
+            Query = serviceProvider.GetRequiredService<TodoAppQuery>();
+            Mutation = serviceProvider.GetRequiredService<TodoAppMutation>();
         }
     }
 }

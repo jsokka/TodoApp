@@ -1,4 +1,3 @@
-using GraphQL;
 using GraphQL.Server;
 using GraphQL.Server.Ui.Playground;
 using GraphQL.Validation.Complexity;
@@ -6,7 +5,6 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -34,10 +32,7 @@ namespace TodoApp.Api
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
 
-            services.Configure<IISServerOptions>(opt => { opt.AllowSynchronousIO = true; });
-            services.Configure<KestrelServerOptions>(opt => { opt.AllowSynchronousIO = true; });
-
-            services.AddDbContext<TodoAppContext>(options => 
+            services.AddDbContext<TodoAppContext>(options =>
             {
                 options.UseSqlServer(Configuration.GetConnectionString("TodoApp"));
             }, contextLifetime: ServiceLifetime.Transient, optionsLifetime: ServiceLifetime.Transient);
@@ -46,17 +41,16 @@ namespace TodoApp.Api
             services.AddRepositoryFactory<ITaskRepository, TaskRepository>();
             services.AddRepositoryFactory<ITagRepository, TagRepository>();
 
-            services.AddSingleton<IDependencyResolver>(s =>
-                new FuncDependencyResolver(s.GetRequiredService));
-
             services.AddSingleton<TodoAppSchema>();
 
             services.AddGraphQL(x =>
             {
                 x.ExposeExceptions = HostEnvironment.IsDevelopment();
+                x.EnableMetrics = false;
                 x.ComplexityConfiguration = new ComplexityConfiguration { MaxDepth = 15 };
             })
             .AddGraphTypes(ServiceLifetime.Singleton)
+            .AddSystemTextJson()
             .AddDataLoader();
 
             services.AddCors();
