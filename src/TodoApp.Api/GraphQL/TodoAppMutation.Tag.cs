@@ -5,13 +5,14 @@ using TodoApp.Api.GraphQL.GraphTypes.ObjectTypes;
 using TodoApp.Api.Models;
 using TodoApp.Data.DependencyInjection;
 using TodoApp.Data.Models;
+using TodoApp.Data.QueryExtensions;
 using TodoApp.Data.Repositories;
 
 namespace TodoApp.Api.GraphQL
 {
     public partial class TodoAppMutation
     {
-        partial void AddTagFields(IFactory<ITagRepository> tagRepositoryFactory)
+        partial void AddTagFields(IFactory<IRepository<Tag>> tagRepositoryFactory)
         {
             FieldAsync<TagType>(
                 "addTag",

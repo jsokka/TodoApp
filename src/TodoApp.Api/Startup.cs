@@ -12,6 +12,7 @@ using Microsoft.Extensions.Hosting;
 using TodoApp.Api.GraphQL;
 using TodoApp.Data;
 using TodoApp.Data.DependencyInjection;
+using TodoApp.Data.Models;
 using TodoApp.Data.Repositories;
 
 namespace TodoApp.Api
@@ -37,9 +38,9 @@ namespace TodoApp.Api
                 options.UseSqlServer(Configuration.GetConnectionString("TodoApp"));
             }, contextLifetime: ServiceLifetime.Transient, optionsLifetime: ServiceLifetime.Transient);
 
-            services.AddRepositoryFactory<IProjectRepository, ProjectRepository>();
-            services.AddRepositoryFactory<ITaskRepository, TaskRepository>();
-            services.AddRepositoryFactory<ITagRepository, TagRepository>();
+            services.AddRepositoryFactory<IRepository<Project>, EntityRepository<TodoAppContext, Project>>();
+            services.AddRepositoryFactory<IRepository<Task>, EntityRepository<TodoAppContext, Task>>();
+            services.AddRepositoryFactory<IRepository<Tag>, EntityRepository<TodoAppContext, Tag>>();
 
             services.AddSingleton<TodoAppSchema>();
 
