@@ -7,15 +7,12 @@ using TodoApp.Api.Models;
 using TodoApp.Data.DependencyInjection;
 using TodoApp.Data.Models;
 using TodoApp.Data.QueryExtensions;
-using TodoApp.Data.Repositories;
 
 namespace TodoApp.Api.GraphQL
 {
     public partial class TodoAppMutation
     {
-        partial void AddTaskFields(
-            IFactory<IRepository<Task>> taskRepositoryFactory,
-            IFactory<IRepository<Project>> projectRepositoryFactory)
+        partial void AddTaskFields(IRepositoryFactory repositoryFactory)
         {
             FieldAsync<TaskType>(
                 "addTask",
@@ -26,7 +23,7 @@ namespace TodoApp.Api.GraphQL
                 {
                     var task = context.GetArgument<Data.Models.Task>("taskInput");
 
-                    return await taskRepositoryFactory.Create().AddAsync(task);
+                    return await repositoryFactory.Create<Task>().AddAsync(task);
                 }
             );
 
@@ -41,9 +38,9 @@ namespace TodoApp.Api.GraphQL
 
                     try
                     {
-                        var project = await projectRepositoryFactory.Create().GetProjectByTaskId(id);
+                        var project = await repositoryFactory.Create<Project>().GetProjectByTaskId(id);
 
-                        await taskRepositoryFactory.Create().DeleteAsync(id);
+                        await repositoryFactory.Create<Task>().DeleteAsync(id);
 
                         return new TaskDeletePayload
                         {
@@ -70,7 +67,7 @@ namespace TodoApp.Api.GraphQL
                     var taskId = context.GetArgument<Guid>("taskId");
                     var completed = context.GetArgument<bool>("completed");
 
-                    return await taskRepositoryFactory.Create().ToggleTaskCompleted(taskId, completed);
+                    return await repositoryFactory.Create<Task>().ToggleTaskCompleted(taskId, completed);
                 }
             );
 
@@ -85,7 +82,7 @@ namespace TodoApp.Api.GraphQL
                     var taskId = context.GetArgument<Guid>("taskId");
                     var taskInput = context.GetArgument<Data.Models.Task>("taskInput");
 
-                    var taskRepository = taskRepositoryFactory.Create();
+                    var taskRepository = repositoryFactory.Create<Task>();
 
                     var task = await taskRepository.FindAsync(taskId);
 
@@ -116,7 +113,7 @@ namespace TodoApp.Api.GraphQL
                     var taskId = context.GetArgument<Guid>("taskId");
                     var tagId = context.GetArgument<Guid>("tagId");
 
-                    var taskRepository = taskRepositoryFactory.Create();
+                    var taskRepository = repositoryFactory.Create<Task>();
 
                     try
                     {

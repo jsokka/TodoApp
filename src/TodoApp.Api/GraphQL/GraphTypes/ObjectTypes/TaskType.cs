@@ -4,15 +4,14 @@ using System;
 using TodoApp.Data.DependencyInjection;
 using TodoApp.Data.Models;
 using TodoApp.Data.QueryExtensions;
-using TodoApp.Data.Repositories;
 
 namespace TodoApp.Api.GraphQL.GraphTypes.ObjectTypes
 {
     public class TaskType : ObjectGraphType<Task>
     {
-        public TaskType(IDataLoaderContextAccessor dataLoaderAccessor,
-            IFactory<IRepository<Project>> projectRepositoryFactory, 
-            IFactory<IRepository<Tag>> tagRepositoryFactory)
+        public TaskType(
+            IRepositoryFactory repositoryFactory,
+            IDataLoaderContextAccessor dataLoaderAccessor)
         {
             Field("id", t => t.Id, type: typeof(NonNullGraphType<IdGraphType>), nullable: false).Description("Id of the task");
             Field("title", t => t.Title).Description("Title of the task");
@@ -25,7 +24,7 @@ namespace TodoApp.Api.GraphQL.GraphTypes.ObjectTypes
                 .Description("Creation time of the task");
 
             FieldAsync<ProjectType>("project",
-                resolve: async context => 
+                resolve: async context =>
                 {
                     if (!context.Source.ProjectId.HasValue)
                     {
@@ -33,17 +32,17 @@ namespace TodoApp.Api.GraphQL.GraphTypes.ObjectTypes
                     }
 
                     var loader = dataLoaderAccessor.Context.GetOrAddBatchLoader<Guid, Project>("GetProjectsByIds",
-                        fetchFunc: async ids => await projectRepositoryFactory.Create().GetProjectsByIdsAsync(ids));
-                    
+                        fetchFunc: async ids => await repositoryFactory.Create<Project>().GetProjectsByIdsAsync(ids));
+
                     return await loader.LoadAsync(context.Source.ProjectId.Value);
                 }
             );
 
             FieldAsync<NonNullGraphType<ListGraphType<NonNullGraphType<TagType>>>>("tags",
-                resolve: async context => 
+                resolve: async context =>
                 {
                     var loader = dataLoaderAccessor.Context.GetOrAddCollectionBatchLoader<Guid, Tag>("GetTagsByTaskIds",
-                        fetchFunc: async id => await tagRepositoryFactory.Create().GetTagsByTaskIdsAsync(id));
+                        fetchFunc: async id => await repositoryFactory.Create<Tag>().GetTagsByTaskIdsAsync(id));
 
                     return await loader.LoadAsync(context.Source.Id);
                 }

@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using TodoApp.Data.Models;
-using TodoApp.Data.Repositories;
 
 namespace TodoApp.Data.QueryExtensions
 {

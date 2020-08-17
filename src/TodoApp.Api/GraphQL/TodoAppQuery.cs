@@ -8,14 +8,12 @@ using TodoApp.Api.GraphQL.GraphTypes.ObjectTypes;
 using TodoApp.Data.DependencyInjection;
 using TodoApp.Data.Models;
 using TodoApp.Data.QueryExtensions;
-using TodoApp.Data.Repositories;
 
 namespace TodoApp.Api.GraphQL
 {
     public class TodoAppQuery : ObjectGraphType
     {
-        public TodoAppQuery(IFactory<IRepository<Project>> projectRepositoryFactory,
-            IFactory<IRepository<Task>> taskRepositoryFactory, IFactory<IRepository<Tag>> tagRepositoryFactory)
+        public TodoAppQuery(IRepositoryFactory repositoryFactory)
         {
             Name = "Query";
 
@@ -27,7 +25,7 @@ namespace TodoApp.Api.GraphQL
                 ),
                 resolve: async context =>
                 {
-                    var taskRepository = taskRepositoryFactory.Create();
+                    var taskRepository = repositoryFactory.Create<Task>();
 
                     var projectId = context.GetArgument<Guid?>("projectId");
 
@@ -50,12 +48,12 @@ namespace TodoApp.Api.GraphQL
                 arguments: new QueryArguments(
                     new QueryArgument<NonNullGraphType<IdGraphType>> { Name = "id" }
                 ),
-                resolve: async context => await taskRepositoryFactory.Create().FindAsync(context.GetArgument<Guid>("id"))
+                resolve: async context => await repositoryFactory.Create<Task>().FindAsync(context.GetArgument<Guid>("id"))
             );
 
             FieldAsync<NonNullGraphType<ListGraphType<NonNullGraphType<ProjectType>>>>(
                 "projects",
-                resolve: async context => await projectRepositoryFactory.Create().GetAllAsync()
+                resolve: async context => await repositoryFactory.Create<Project>().GetAllAsync()
             );
 
             FieldAsync<NonNullGraphType<ProjectType>>(
@@ -63,12 +61,12 @@ namespace TodoApp.Api.GraphQL
                 arguments: new QueryArguments(
                     new QueryArgument<NonNullGraphType<IdGraphType>> { Name = "id" }
                 ),
-                resolve: async context => await projectRepositoryFactory.Create().FindAsync(context.GetArgument<Guid>("id"))
+                resolve: async context => await repositoryFactory.Create<Project>().FindAsync(context.GetArgument<Guid>("id"))
             );
 
             FieldAsync<NonNullGraphType<ListGraphType<NonNullGraphType<TagType>>>>(
                 "tags",
-                resolve: async context => await tagRepositoryFactory.Create().GetAllAsync()
+                resolve: async context => await repositoryFactory.Create<Tag>().GetAllAsync()
             );
 
             FieldAsync<NonNullGraphType<ListGraphType<NonNullGraphType<SearchResult>>>>(
@@ -76,7 +74,7 @@ namespace TodoApp.Api.GraphQL
                 arguments: new QueryArguments(
                     new QueryArgument<StringGraphType> { Name = "searchString" }
                 ),
-                resolve: async context => 
+                resolve: async context =>
                 {
                     var searchString = context.GetArgument<string>("searchString");
 
@@ -85,8 +83,8 @@ namespace TodoApp.Api.GraphQL
                         return new List<UnionGraphType>();
                     }
 
-                    var getTasksTask = taskRepositoryFactory.Create().SearchTasksAsync(searchString);
-                    var getProjectsTask = projectRepositoryFactory.Create().SearchProjects(searchString);
+                    var getTasksTask = repositoryFactory.Create<Task>().SearchTasksAsync(searchString);
+                    var getProjectsTask = repositoryFactory.Create<Project>().SearchProjects(searchString);
 
                     await System.Threading.Tasks.Task.WhenAll(getTasksTask, getProjectsTask);
 
