@@ -6,13 +6,12 @@ using TodoApp.Api.Models;
 using TodoApp.Data.DependencyInjection;
 using TodoApp.Data.Models;
 using TodoApp.Data.QueryExtensions;
-using TodoApp.Data.Repositories;
 
 namespace TodoApp.Api.GraphQL
 {
     public partial class TodoAppMutation
     {
-        partial void AddTagFields(IFactory<IRepository<Tag>> tagRepositoryFactory)
+        partial void AddTagFields(IRepositoryFactory repositoryFactory)
         {
             FieldAsync<TagType>(
                 "addTag",
@@ -31,7 +30,7 @@ namespace TodoApp.Api.GraphQL
 
                     nameInput = nameInput.Trim();
 
-                    var tagRepository = tagRepositoryFactory.Create();
+                    var tagRepository = repositoryFactory.Create<Tag>();
 
                     var existingTag = await tagRepository.GetTagByName(nameInput);
 
@@ -56,7 +55,7 @@ namespace TodoApp.Api.GraphQL
 
                     try
                     {
-                        await tagRepositoryFactory.Create().DeleteAsync(id);
+                        await repositoryFactory.Create<Tag>().DeleteAsync(id);
 
                         return new TagDeletePayload
                         {

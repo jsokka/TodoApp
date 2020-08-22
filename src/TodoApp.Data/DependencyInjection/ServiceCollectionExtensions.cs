@@ -1,5 +1,4 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using System;
 
 namespace TodoApp.Data.DependencyInjection
 {
@@ -10,12 +9,7 @@ namespace TodoApp.Data.DependencyInjection
             where TImplementation : class, TService
         {
             services.AddTransient<TService, TImplementation>();
-            services.AddSingleton<Func<TService>>(sp => () =>
-            {
-                var scope = sp.CreateScope();
-                return scope.ServiceProvider.GetRequiredService<TService>();
-            });
-            services.AddSingleton<IFactory<TService>, Factory<TService>>();
+            services.AddSingleton<IRepositoryFactory, RepositoryFactory>();
         }
     }
 }

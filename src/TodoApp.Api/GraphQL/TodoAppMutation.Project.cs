@@ -6,13 +6,12 @@ using TodoApp.Api.GraphQL.GraphTypes.ObjectTypes;
 using TodoApp.Api.Models;
 using TodoApp.Data.DependencyInjection;
 using TodoApp.Data.Models;
-using TodoApp.Data.Repositories;
 
 namespace TodoApp.Api.GraphQL
 {
     public partial class TodoAppMutation
     {
-        partial void AddProjectFields(IFactory<IRepository<Project>> projectRepositoryFactory)
+        partial void AddProjectFields(IRepositoryFactory repositoryFactory)
         {
             FieldAsync<ProjectType>(
                 "addProject",
@@ -23,7 +22,7 @@ namespace TodoApp.Api.GraphQL
                 {
                     var project = context.GetArgument<Project>("projectInput");
 
-                    return await projectRepositoryFactory.Create().AddAsync(project);
+                    return await repositoryFactory.Create<Project>().AddAsync(project);
                 }
             );
 
@@ -38,7 +37,7 @@ namespace TodoApp.Api.GraphQL
                     var projectId = context.GetArgument<Guid>("projectId");
                     var projectInput = context.GetArgument<Project>("projectInput");
 
-                    var projectRepository = projectRepositoryFactory.Create();
+                    var projectRepository = repositoryFactory.Create<Project>();
 
                     var project = await projectRepository.FindAsync(projectId);
 
@@ -67,7 +66,7 @@ namespace TodoApp.Api.GraphQL
 
                     try
                     {
-                        await projectRepositoryFactory.Create().DeleteAsync(projectId);
+                        await repositoryFactory.Create<Project>().DeleteAsync(projectId);
 
                         return new ProjectDeletePayload
                         {

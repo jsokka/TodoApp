@@ -5,15 +5,13 @@ using System;
 using TodoApp.Data.DependencyInjection;
 using TodoApp.Data.Models;
 using TodoApp.Data.QueryExtensions;
-using TodoApp.Data.Repositories;
 
 namespace TodoApp.Api.GraphQL.GraphTypes.ObjectTypes
 {
     public class ProjectType : ObjectGraphType<Project>
     {
         public ProjectType(
-            IFactory<IRepository<Task>> taskRepositoryFactory,
-            IFactory<IRepository<Project>> projectRepositoryFactory,
+            IRepositoryFactory repositoryFactory,
             IDataLoaderContextAccessor dataLoderAccessor)
         {
             Field("id", p => p.Id, type: typeof(NonNullGraphType<IdGraphType>))
@@ -44,7 +42,7 @@ namespace TodoApp.Api.GraphQL.GraphTypes.ObjectTypes
                     var loaderKey = $"GetTasksByProjectIds_{priority}_{(openOnly ? "openOnly" : "all")}";
 
                     var loader = dataLoderAccessor.Context.GetOrAddCollectionBatchLoader<Guid, Task>(loaderKey,
-                        async ids => await taskRepositoryFactory.Create().GetTasksByProjectIdsAsync(ids, priority, openOnly));
+                        async ids => await repositoryFactory.Create<Task>().GetTasksByProjectIdsAsync(ids, priority, openOnly));
 
                     return await loader.LoadAsync(context.Source.Id);
                 }
@@ -54,7 +52,7 @@ namespace TodoApp.Api.GraphQL.GraphTypes.ObjectTypes
                 resolve: async context =>
                 {
                     var loader = dataLoderAccessor.Context.GetOrAddBatchLoader<Guid, int>("GetTaskCountByProjects_all",
-                        async ids => await projectRepositoryFactory.Create().GetTaskCountByProjects(ids));
+                        async ids => await repositoryFactory.Create<Project>().GetTaskCountByProjects(ids));
 
                     return await loader.LoadAsync(context.Source.Id);
                 }
@@ -64,7 +62,7 @@ namespace TodoApp.Api.GraphQL.GraphTypes.ObjectTypes
                 resolve: async context =>
                 {
                     var loader = dataLoderAccessor.Context.GetOrAddBatchLoader<Guid, int>("GetTaskCountByProjects_uncompleted",
-                        async ids => await projectRepositoryFactory.Create().GetTaskCountByProjects(ids, true));
+                        async ids => await repositoryFactory.Create<Project>().GetTaskCountByProjects(ids, true));
 
                     return await loader.LoadAsync(context.Source.Id);
                 }

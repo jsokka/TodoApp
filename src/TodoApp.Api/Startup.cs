@@ -13,7 +13,6 @@ using TodoApp.Api.GraphQL;
 using TodoApp.Data;
 using TodoApp.Data.DependencyInjection;
 using TodoApp.Data.Models;
-using TodoApp.Data.Repositories;
 
 namespace TodoApp.Api
 {
