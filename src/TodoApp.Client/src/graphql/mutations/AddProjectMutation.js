@@ -11,6 +11,7 @@ const mutation = graphql`
   }
 `
 
+// eslint-disable-next-line import/no-anonymous-default-export
 export default (name, description, deadline, callback) => {
   const variables = {
     projectInput: {

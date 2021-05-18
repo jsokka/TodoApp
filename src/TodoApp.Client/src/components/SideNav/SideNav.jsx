@@ -1,4 +1,4 @@
-﻿import React, { Component, Fragment } from "react";
+import React, { Component, Fragment } from "react";
 import { NavLink, withRouter } from "react-router-dom";
 import { QueryRenderer } from "react-relay";
 import graphql from "babel-plugin-relay/macro";
