@@ -11,6 +11,7 @@ const mutation = graphql`
   }
 `
 
+// eslint-disable-next-line import/no-anonymous-default-export
 export default (task, callback) => {
   const variables = {
     taskId: task.id,
