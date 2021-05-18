@@ -34,7 +34,7 @@ namespace TodoApp.Data.QueryExtensions
 
         public static async Task<Project> GetProjectByTaskId(this IRepository<Project> repository, Guid taskId)
         {
-            return await repository.DbSet.Where(t => t.Tasks.Any(t => t.Id == taskId)).FirstOrDefaultAsync();
+            return await repository.DbSet.Where(p => p.Tasks.Any(t => t.Id == taskId)).FirstOrDefaultAsync();
         }
     }
 }
